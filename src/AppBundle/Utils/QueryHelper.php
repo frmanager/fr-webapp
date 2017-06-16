@@ -49,6 +49,8 @@ class QueryHelper
 
     public function getStudentsDataQuery(array $options)
     {
+        $campaign = $options['campaign'];
+
         if (isset($options['before_date'])) {
             $date = "AND d.donatedAt <= '".$this->convertToDay($options['before_date'])->format('Y-m-d H:i:s')."' ";
         } else {
@@ -79,8 +81,9 @@ class QueryHelper
       LEFT OUTER JOIN AppBundle:Grade g
                  WITH g.id = t.grade
                    %s
+                WHERE s.campaign = %s
              GROUP BY s.id
-             ORDER BY donation_amount DESC', $date, $whereId);
+             ORDER BY donation_amount DESC', $date, $whereId, $campaign->getId());
 
         $this->logger->debug('Query : '.$queryString);
 
@@ -89,8 +92,10 @@ class QueryHelper
 
     public function getTotalDonationsQuery(array $options)
     {
+        $campaign = $options['campaign'];
+
         if (isset($options['before_date'])) {
-            $date = "WHERE d.donatedAt <= '".$this->convertToDay($options['before_date'])->format('Y-m-d H:i:s')."' ";
+            $date = "AND d.donatedAt <= '".$this->convertToDay($options['before_date'])->format('Y-m-d H:i:s')."' ";
         } else {
             $date = '';
         }
@@ -98,7 +103,8 @@ class QueryHelper
         $queryString = sprintf('SELECT sum(d.amount) as donation_amount,
                                        count(d.amount) as total_donations
                                   FROM AppBundle:Donation d
-                                  %s', $date);
+                                 WHERE d.campaign = %s
+                                  %s', $campaign->getId(), $date);
 
         $this->logger->debug('Query : '.$queryString);
 
@@ -107,6 +113,8 @@ class QueryHelper
 
     public function getTeachersDataQuery(array $options)
     {
+        $campaign = $options['campaign'];
+
         if (isset($options['before_date'])) {
             $date = "AND d.donatedAt <= '".$this->convertToDay($options['before_date'])->format('Y-m-d H:i:s')."' ";
         } else {
@@ -114,7 +122,7 @@ class QueryHelper
         }
 
         if (isset($options['id'])) {
-            $whereId = 'WHERE t.id = '.$options['id'];
+            $whereId = 'AND t.id = '.$options['id'];
         } else {
             $whereId = '';
         }
@@ -133,8 +141,9 @@ class QueryHelper
                                   JOIN AppBundle:Grade g
                                   WITH g.id = t.grade
                                     %s
+                                 WHERE t.campaign = %s
                               GROUP BY t.id
-                              ORDER BY donation_amount DESC', $date, $whereId);
+                              ORDER BY donation_amount DESC', $date, $whereId, $campaign->getId());
 
         $this->logger->debug('Query : '.$queryString);
 
@@ -143,6 +152,8 @@ class QueryHelper
 
     public function getTeacherDonationsByDayQuery(array $options)
     {
+        $campaign = $options['campaign'];
+
         if (isset($options['before_date'])) {
             $date = "AND d.donatedAt <= '".$this->convertToDay($options['before_date'])->format('Y-m-d H:i:s')."' ";
         } else {
@@ -150,7 +161,7 @@ class QueryHelper
         }
 
         if (isset($options['id'])) {
-            $whereId = 'WHERE t.id = '.$options['id'];
+            $whereId = 'AND t.id = '.$options['id'];
         } else {
             $whereId = '';
         }
@@ -170,8 +181,9 @@ class QueryHelper
                    JOIN AppBundle:Grade g
                    WITH g.id = t.grade
                       %s
+                  WHERE t.campaign = %s
                GROUP BY d.donatedAt, t.id
-               ORDER BY t.id ASC, d.donatedAt ASC', $date, $whereId);
+               ORDER BY t.id ASC, d.donatedAt ASC', $date, $whereId, $campaign->getId());
 
         $this->logger->debug('Query : '.$queryString);
 
@@ -187,7 +199,7 @@ class QueryHelper
     public function sortObject(array $objects, array $settings)
     {
 
-        $this->logger->debug('sortObject Settings: '.print_r($settings, true));
+        $this->logger->debug('sortObject Settings: '.dump($settings));
         if (isset($settings['order_by'])) {
             $order_by = $settings['order_by'];
 
@@ -306,14 +318,17 @@ class QueryHelper
         return false;
     }
 
-    public function getCampaignAwards($type, $style)
+    public function getCampaignAwards($campaign, $type, $style)
     {
+
         $campaignawardtype = $this->em->getRepository('AppBundle:Campaignawardtype')->findOneByValue('teacher');
         $campaignawardstyle = $this->em->getRepository('AppBundle:Campaignawardstyle')->findOneByValue('level');
         $qb = $this->em->createQueryBuilder()->select('u')
              ->from('AppBundle:Campaignaward', 'u')
              ->andWhere('u.campaignawardtype = :awardType')
              ->andWhere('u.campaignawardstyle = :awardStyle')
+             ->andWhere('u.campaign = :campaignId')
+             ->setParameter('campaignId', $campaign->getId())
              ->setParameter('awardStyle', $campaignawardstyle->getId())
              ->setParameter('awardType', $campaignawardtype->getId())
              ->orderBy('u.amount', 'ASC');
@@ -408,7 +423,7 @@ class QueryHelper
     {
 
         $teacherDonationAmountsByDay = $this->getTeacherDonationsByDay($options);
-        $teacherCampaignawards = $this->getCampaignAwards('teacher', 'level');
+        $teacherCampaignawards = $this->getCampaignAwards($options['campaign'], 'teacher', 'level');
 
           //ADDING AWARD DATA TO $teacherDonationAmountsByDay. WE WILL COMPARE THIS AGAINST TODAYS TOTALS
           $loaddedAwardArray = [];
@@ -448,16 +463,17 @@ class QueryHelper
 
           $this->logger->debug('Classes with Awards before today!');
           foreach ($loaddedAwardArray as $outerLoop) {
-              $this->logger->debug(print_r($outerLoop, true));
+              //$this->logger->debug(print_r($outerLoop, true));
           }
 
-
+          $this->logger->debug('Ordering $loaddedAwardArray');
           if (isset($options['order_by'])) {
               $loaddedAwardArray = $this->sortObject($loaddedAwardArray, $options);
           } else {
               $order_by = [];
           }
 
+          $this->logger->debug('Applying limit');
           if (isset($options['limit'])) {
               $limit = $options['limit'];
           } else {

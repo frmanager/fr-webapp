@@ -31,17 +31,17 @@ class TeacherController extends Controller
   {
       $logger = $this->get('logger');
       $entity = 'Teacher';
-
       $em = $this->getDoctrine()->getManager();
+      $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);  
       $queryHelper = new QueryHelper($em, $logger);
       $tempDate = new DateTime();
       $dateString = $tempDate->format('Y-m-d').' 00:00:00';
       $reportDate = DateTime::createFromFormat('Y-m-d H:i:s', $dateString);
       // replace this example code with whatever you need
       return $this->render('campaign/teacher.index.html.twig', array(
-        'teachers' => $queryHelper->getTeacherRanks(array('limit'=> 0)),
+        'teachers' => $queryHelper->getTeacherRanks(array('campaign' => $campaign, 'limit'=> 0)),
         'entity' => strtolower($entity),
-        'campaign' => $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl),
+        'campaign' => $campaign,
       ));
 
   }

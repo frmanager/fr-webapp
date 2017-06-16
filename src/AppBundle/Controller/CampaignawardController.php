@@ -79,6 +79,36 @@ class CampaignawardController extends Controller
     }
 
 
+
+
+
+    /**
+     * Lists all Awards for teachers.
+     *
+     * @Route("/awards", name="public_teacher_awards")
+     * @Method({"GET", "POST"})
+     */
+    public function TeacherAwardsAction()
+    {
+      $logger = $this->get('logger');
+      $limit = 3;
+      $em = $this->getDoctrine()->getManager();
+      $queryHelper = new QueryHelper($em, $logger);
+      $campaignSettings = new CampaignHelper($this->getDoctrine()->getRepository('AppBundle:Campaignsetting')->findAll());
+      $reportDate = $queryHelper->convertToDay(new DateTime());
+      $reportDate->modify('-1 day');
+
+      // replace this example code with whatever you need
+      return $this->render('default/teacherAwards.html.twig', array(
+        'campaign_settings' => $campaignSettings->getCampaignSettings(),
+        'teachers' => $queryHelper->getTeacherAwards(array('campaign' => $campaign, 'before_date' => $reportDate)),
+        'report_date' => $reportDate,
+      ));
+
+    }
+
+
+
     /**
      * Finds and displays a Campaignaward entity.
      *

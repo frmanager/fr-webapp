@@ -1,4 +1,4 @@
-{% extends 'campaign.html.twig' %}
+{% extends 'template.html.twig' %}
 {% use 'bootstrap_3_layout.html.twig' %}
 
 {% block body %}
@@ -25,7 +25,7 @@
                 {% set difference = date(campaign.startDate|date('Y/m/d')).diff(date('now'|date('Y/m/d'))) %}
                 {% set startDays = difference.days %}
               {% endif %}
-              <a href="{{ path(entity|lower ~ '_show', { 'campaignUrl': campaign.url }) }}" class="list-group-item">
+              <a href="{{ path(entity|lower ~ '_index', { 'campaignUrl': campaign.url }) }}" class="list-group-item">
               <div class="media">
                 <div class="media-left">
                     <img class="media-object" src="/assets/img/shoeprints48.png"  alt="...">

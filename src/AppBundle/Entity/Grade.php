@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="grade",uniqueConstraints={@ORM\UniqueConstraint(columns={"name"})})
+ * @ORM\Table(name="grade",uniqueConstraints={@ORM\UniqueConstraint(columns={"name", "campaign_id"})})
  */
 class Grade
 {
@@ -28,6 +28,18 @@ class Grade
      * @Assert\NotNull()
      */
     private $name;
+
+
+
+    /**
+     * @var Campaign
+     *
+     * @ORM\ManyToOne(targetEntity="Campaign", inversedBy="students")
+     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     * @Assert\NotNull()
+     */
+    private $campaign;
+
 
     /**
      * Get id.
@@ -102,5 +114,29 @@ class Grade
     public function getTeachers()
     {
         return $this->teachers;
+    }
+
+    /**
+     * Set campaign
+     *
+     * @param \AppBundle\Entity\Campaign $campaign
+     *
+     * @return Grade
+     */
+    public function setCampaign(\AppBundle\Entity\Campaign $campaign = null)
+    {
+        $this->campaign = $campaign;
+
+        return $this;
+    }
+
+    /**
+     * Get campaign
+     *
+     * @return \AppBundle\Entity\Campaign
+     */
+    public function getCampaign()
+    {
+        return $this->campaign;
     }
 }

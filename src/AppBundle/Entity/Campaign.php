@@ -55,6 +55,11 @@ class Campaign
    */
   private $campaignUsers;
 
+  /**
+   * @ORM\OneToMany(targetEntity="Grade", mappedBy="campaign", cascade={"remove"})
+   */
+  private $grades;
+
 
     /**
      * @var User
@@ -661,5 +666,39 @@ private $causevoxteams;
     public function getCreatedBy()
     {
         return $this->createdBy;
+    }
+
+    /**
+     * Add grade
+     *
+     * @param \AppBundle\Entity\Grade $grade
+     *
+     * @return Campaign
+     */
+    public function addGrade(\AppBundle\Entity\Grade $grade)
+    {
+        $this->grades[] = $grade;
+
+        return $this;
+    }
+
+    /**
+     * Remove grade
+     *
+     * @param \AppBundle\Entity\Grade $grade
+     */
+    public function removeGrade(\AppBundle\Entity\Grade $grade)
+    {
+        $this->grades->removeElement($grade);
+    }
+
+    /**
+     * Get grades
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGrades()
+    {
+        return $this->grades;
     }
 }

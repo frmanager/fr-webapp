@@ -25,7 +25,7 @@ class CampaignsettingController extends Controller
     {
         $entity = 'Campaignsetting';
         $em = $this->getDoctrine()->getManager();
-
+        $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
         $campaignsettings = $em->getRepository('AppBundle:Campaignsetting')->findAll();
 
         if (empty($campaignsettings)) {
@@ -61,6 +61,7 @@ class CampaignsettingController extends Controller
         return $this->render(strtolower($entity).'/index.html.twig', array(
             'campaignsettings' => $campaignsettings,
             'entity' => $entity,
+            'campaign' => $campaign
         ));
     }
 
