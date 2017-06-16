@@ -12,7 +12,7 @@
             <p class="well-sm bg-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
         {% endif %}
 
-        <form action="{{ path("fos_user_security_check") }}" method="post" class="form-horizontal" role="form-horizontal">
+        <form action="{{ path("fos_user_security_check", {'campaignUrl': campaign.url}) }}" method="post" class="form-horizontal" role="form-horizontal">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
 
             <div class="form-group">

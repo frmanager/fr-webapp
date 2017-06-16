@@ -18,9 +18,11 @@ security:
                 login_path: fos_user_security_login
                 check_path: fos_user_security_check
                 provider: fos_userbundle
+                default_target_path: campaign_index
                 csrf_token_generator: security.csrf.token_manager # Use form.csrf_provider instead for Symfony <2.4
             logout:
-                path: /account/logout
+                path: fos_user_security_logout
+                target: /{campaignUrl}
             anonymous:    true
 
 
@@ -29,7 +31,8 @@ security:
             security: false
 
     access_control:
-        - { path: ^/account/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/account/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/account/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }

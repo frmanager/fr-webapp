@@ -28,7 +28,6 @@ class DefaultController extends Controller
 
 
             if($action === 'list_campaigns'){
-                $logger = $this->get('logger');
                 $entity = 'Campaign';
                 $em = $this->getDoctrine()->getManager();
 

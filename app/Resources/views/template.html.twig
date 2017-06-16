@@ -84,13 +84,13 @@
 			</a>
 			<ul class="dropdown-menu" aria-labelledby="drop3">
 				<li>
-				<a href="/logout">Logout</a>
+				<a href="{{ path('fos_user_security_logout', {'campaignUrl':campaign.url}) }}">Logout</a>
 				</li>
 			</ul>
 			</li>
-			 {% else %}
+			 {% elseif(app.request.attributes.get('_route') not in ['homepage']) %}
 			<li>
-			<a href="{{ path('fos_user_security_login') }}" role="button">Login</a>
+			<a href="{{ path('fos_user_security_login', {'campaignUrl':campaign.url}) }}" role="button">Login</a>
 			</li>
 			 {% endif %}
 		</ul>

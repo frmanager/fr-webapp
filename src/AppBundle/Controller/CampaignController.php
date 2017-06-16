@@ -33,11 +33,7 @@ class CampaignController extends Controller
      $campaign =  $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
 
      if(count($campaign) == 0){
-       $this->addFlash(
-           'warning',
-           'Could not find Campaign'
-       );
-       return $this->redirectToRoute('campaign_list');
+       return $this->redirectToRoute('homepage', array('action' => 'list_campaigns'));
      }
 
 

@@ -4,7 +4,7 @@ app:
 
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
-    prefix: /account
+    prefix: /{campaignUrl}
 
 fos_user_profile:
     resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
