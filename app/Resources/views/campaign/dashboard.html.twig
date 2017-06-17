@@ -1,5 +1,9 @@
 {% extends 'template.html.twig' %}
 
+{% block css %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.12/fh-3.1.2/r-2.1.0/sc-1.4.2/datatables.min.css"/>
+{% endblock %}
+
 {% block body %}
     <div class="container">
     <div class="row">
@@ -190,6 +194,10 @@
 {% endblock %}
 
 {% block javascripts %}
+<script type='application/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.min.js"></script>
+<script type="application/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.12/fh-3.1.2/r-2.1.0/sc-1.4.2/datatables.min.js"></script>
+<script type='application/javascript' src="{{ asset('assets/vendor/jquery.countdown/dist/jquery.countdown.min.js') }}"></script>
+
     <script>
         $('[data-countdown]').each(function() {
             var $this = $(this),

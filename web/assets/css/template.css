@@ -21,13 +21,6 @@ body {
     color: #555;
 }
 
-.body-container h1 {
-    color: #555;
-}
-
-.body-container .panel .panel-heading a {
-    color: #fff;
-}
 
 .back-to-top {
     cursor: pointer;
@@ -37,27 +30,9 @@ body {
     display:none;
 }
 
-.footer {
-  text-align:center;
-  color:#fff; !important;
-  text-shadow: 1px 1px 2px rgba(150, 150, 150, 1);
-}
-
-.footer a {
-  color:#fff; !important;
-}
-
 .dashboard-ticker, .dashboard-ticker .progress{
   margin-bottom:0px;
 
-}
-
-.dashboard{
-  /*line-height:32px;*/
-}
-
-#content .panel-heading {
-    padding: 5px 5px;
 }
 
 #track span{

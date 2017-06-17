@@ -2,6 +2,10 @@
 
 {% block body %}
 
+{% block css %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.12/fh-3.1.2/r-2.1.0/sc-1.4.2/datatables.min.css"/>
+{% endblock %}
+
 <div class="row" style="border-bottom:1px;">
     <div class="col-md-4">
         <h1>Students</h1>
@@ -43,7 +47,9 @@
         </div>
     </div>
 {% endblock %}
+
 {% block javascripts %}
+    <script type="application/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.12/fh-3.1.2/r-2.1.0/sc-1.4.2/datatables.min.js"></script>
     <script>
         $(document).ready(function() {
             $('.table').DataTable({ "pageLength": 50, "order": [[ 4, "desc" ]]});
