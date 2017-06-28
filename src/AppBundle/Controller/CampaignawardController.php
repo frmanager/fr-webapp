@@ -9,11 +9,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\Campaignaward;
 use AppBundle\Entity\Campaignawardtype;
 use AppBundle\Entity\Campaignawardstyle;
-
+use AppBundle\Utils\CampaignHelper;
+use AppBundle\Entity\Teacher;
+use AppBundle\Utils\QueryHelper;
+use DateTime;
 /**
  * Campaignaward controller.
  *
- * @Route("/manage/campaignaward")
+ * @Route("/{campaignUrl}/campaignaward")
  */
 class CampaignawardController extends Controller
 {
@@ -88,11 +91,12 @@ class CampaignawardController extends Controller
      * @Route("/awards", name="public_teacher_awards")
      * @Method({"GET", "POST"})
      */
-    public function TeacherAwardsAction()
+    public function TeacherAwardsAction($campaignUrl)
     {
       $logger = $this->get('logger');
       $limit = 3;
       $em = $this->getDoctrine()->getManager();
+      $campaign =  $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
       $queryHelper = new QueryHelper($em, $logger);
       $campaignSettings = new CampaignHelper($this->getDoctrine()->getRepository('AppBundle:Campaignsetting')->findAll());
       $reportDate = $queryHelper->convertToDay(new DateTime());
@@ -103,6 +107,7 @@ class CampaignawardController extends Controller
         'campaign_settings' => $campaignSettings->getCampaignSettings(),
         'teachers' => $queryHelper->getTeacherAwards(array('campaign' => $campaign, 'before_date' => $reportDate)),
         'report_date' => $reportDate,
+        'campaign' => $campaign
       ));
 
     }

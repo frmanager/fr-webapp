@@ -48,8 +48,8 @@
                                 <a href="{{ path(entity|lower ~ '_show', { 'id': donation.id }) }}">{{ donation.id }}</a>
                             </td>
                             <td>{{ donation.donatedAt|date("m/d/Y")  }}</td>
-                            <td>{% if donation.teacher.id is defined %}<a href="{{ path('teacher_show', { 'id': donation.teacher.id }) }}">{{ donation.teacher.teacherName }}</a>{% endif %}</td>
-                            <td>{% if donation.student.id is defined %}<a href="{{ path('student_show', { 'id': donation.student.id }) }}">{{ donation.student.name }}</a>{% endif %}</td>
+                            <td>{% if donation.teacher.id is defined %}<a href="{{ path('teacher_show', {'campaignUrl':campaign.url, 'id': donation.teacher.id }) }}">{{ donation.teacher.teacherName }}</a>{% endif %}</td>
+                            <td>{% if donation.student.id is defined %}<a href="{{ path('student_show', {'campaignUrl':campaign.url, 'id': donation.student.id }) }}">{{ donation.student.name }}</a>{% endif %}</td>
                             <td>{% if donation.type is defined %}{{ donation.type }}{% endif %}</td>
                             <td style="text-align:right;">${{ donation.amount|number_format(2, '.', ',')  }}</td>
                             <td style="text-align:center;">

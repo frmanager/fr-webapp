@@ -63,8 +63,8 @@
 			<span class="glyphicon glyphicon-apple"></span>
 			Grade Rankings</a>
 			</li>
-			<li {% if app.request.attributes.get('_route')=='manageTeacher_index'%} class="active" {% endif %}>
-			<a href="{{ path('manageTeacher_index') }}">
+			<li {% if app.request.attributes.get('_route')=='teacher_index'%} class="active" {% endif %}>
+			<a href="{{ path('teacher_index', {'campaignUrl':campaign.url}) }}">
 			<span class="glyphicon glyphicon-apple"></span>
 			Teacher Rankings</a>
 			</li>

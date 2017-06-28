@@ -27,7 +27,7 @@
                     {% for teacher in teachers %}
                         <tr>
                             <td>{% if is_granted('ROLE_USER') %}<a href="{{ path('grade_show', { 'id': teacher.grade_id }) }}">{{ teacher.grade_name}}</a>{% else %}{{ teacher.grade_name}}{% endif %}</td>
-                            <td><a href="{{ path('public_teacher_show', { 'id': teacher.id }) }}">{{ teacher.teacher_name }}</a></td>
+                            <td><a href="{{ path('teacher_show', {'campaignUrl':campaign.url, 'id': teacher.id }) }}">{{ teacher.teacher_name }}</a></td>
                             <td style="text-align:right;">{% if not teacher.donation_amount == 0 %}${{ teacher.donation_amount|number_format(2, '.', ',')}}</span>{% endif %}</td>
                             <td style="text-align:center;vertical-align: middle;"><span class="label label-{% if teacher.rank == 1 %}success{% elseif teacher.rank == 2 %}warning{% elseif teacher.rank == 3 %}primary{% else %}default{% endif %}">{{ teacher.rank}}</span></td>
                             </td>

@@ -28,7 +28,7 @@
                     {% endif %}
                     <div class="panel panel-info">
                         <div class="panel-heading">
-                            <a href="{{ path('public_teacher_show', { 'id': teacher.id }) }}">
+                            <a href="{{ path('teacher_show', {'campaignUrl':campaign.url, 'id': teacher.id }) }}">
                                 <span class="hidden-xs">{{ teacher.grade_name }}
                                     -</span>
                                 {{ teacher.teacher_name }}</a>

@@ -59,19 +59,20 @@
 	<div class="collapse navbar-collapse navbar-x-collapse">
     {% if campaign is defined %}
 		<ul class="nav navbar-nav">
+      <li><span class="navbar-text">{{campaign.name}}</a></li>
 			<li {% if app.request.attributes.get('_route')=='campaign_index'%} class="active" {% endif %}>
-			<a href="{{ path('campaign_index', { 'campaignUrl': campaign.url }) }}">
-			{{campaign.name}} </a>
+			<a href="{{ path('campaign_index', { 'campaignUrl': campaign.url }) }}" class="">
+			HOME </a>
 			</li>
 			<li {% if app.request.attributes.get('_route')=='grade_index'%} class="active" {% endif %}>
 			<a href="{{ path('grade_index', {'campaignUrl': campaign.url}) }}">
 			<span class="glyphicon glyphicon-apple"></span>
-			Grade Rankings</a>
+			GRADE RANKINGS</a>
 			</li>
 			<li {% if app.request.attributes.get('_route')=='teacher_index'%} class="active" {% endif %}>
 			<a href="{{ path('teacher_index', {'campaignUrl': campaign.url}) }}">
 			<span class="glyphicon glyphicon-apple"></span>
-			Teacher Rankings</a>
+			TEACHER RANKINGS</a>
 			</li>
 			</li>
 		</ul>
@@ -89,13 +90,15 @@
 			</a>
 			<ul class="dropdown-menu" aria-labelledby="drop3">
 				<li>
-				<a href="{{ path('fos_user_security_logout', {'campaignUrl':campaign.url}) }}">Logout</a>
+				<a href="{{ path('fos_user_security_logout', {'campaignUrl':campaign.url}) }}">LOGOUT</a>
 				</li>
 			</ul>
 			</li>
 			 {% elseif(app.request.attributes.get('_route') not in ['homepage']) %}
-			<li>
-			<a href="{{ path('fos_user_security_login', {'campaignUrl':campaign.url}) }}" role="button">Login</a>
+       <li>
+ 			<a href="{{ path('fos_user_security_login', {'campaignUrl':campaign.url}) }}" role="button">REGISTER</a>
+ 			</li>			<li>
+			<a href="{{ path('fos_user_security_login', {'campaignUrl':campaign.url}) }}" role="button">LOGIN</a>
 			</li>
 			 {% endif %}
 		</ul>
@@ -157,7 +160,8 @@
 	<i class="fa fa-chevron-up"></i>
 	</a>
 </div>
-<script type='application/javascript' src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
+
+<script type='application/javascript' src="{{ asset('assets/js/libs/jquery-3.2.1.min.js') }}"></script>
 <script type='application/javascript' src="{{ asset('assets/vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 <script type='application/javascript' src="{{ asset('assets/vendor/fastclick/lib/fastclick.js') }}"></script>
 <script type='application/javascript' src="{{ asset('assets/vendor/moment/min/moment.min.js') }}"></script>

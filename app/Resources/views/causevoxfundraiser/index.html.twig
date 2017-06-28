@@ -39,7 +39,7 @@
                             <td>
                                 <a href="{{ path(entity|lower ~ '_show', { 'id': causevoxfundraiser.id }) }}">{{ causevoxfundraiser.url }}</a>
                             </td>
-                            <td><a href="{{ path('teacher_show', { 'id': causevoxfundraiser.student.teacher.id }) }}">{{ causevoxfundraiser.teacher.grade.name }} - {{ causevoxfundraiser.teacher.teachername }}</a></td>
+                            <td><a href="{{ path('teacher_show', {'campaignUrl':campaign.url, 'id': causevoxfundraiser.student.teacher.id }) }}">{{ causevoxfundraiser.teacher.grade.name }} - {{ causevoxfundraiser.teacher.teachername }}</a></td>
                             <td>
                                 {% if causevoxfundraiser.student is not null %}<a href="{{ path('student_show', { 'id': causevoxfundraiser.student.id }) }}">{{ causevoxfundraiser.student.name }}</a>{% endif %}
                             </td>

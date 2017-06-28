@@ -46,6 +46,9 @@ twig:
         # Bootstrap:
         - bootstrap_3_layout.html.twig
         - bootstrap_3_horizontal_layout.html.twig
+    globals:
+        main_app_url: "%main_app_url%"
+        admin_app_url: "%admin_app_url%"        
 
 # Doctrine Configuration
 doctrine:

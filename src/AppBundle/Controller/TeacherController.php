@@ -32,7 +32,7 @@ class TeacherController extends Controller
       $logger = $this->get('logger');
       $entity = 'Teacher';
       $em = $this->getDoctrine()->getManager();
-      $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);  
+      $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
       $queryHelper = new QueryHelper($em, $logger);
       $tempDate = new DateTime();
       $dateString = $tempDate->format('Y-m-d').' 00:00:00';
@@ -94,16 +94,16 @@ class TeacherController extends Controller
 
         $campaignAwards = $qb->getQuery()->getResult();
         $campaignSettings = new CampaignHelper($this->getDoctrine()->getRepository('AppBundle:Campaignsetting')->findAll());
-
+        $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
         $queryHelper = new QueryHelper($em, $logger);
 
         return $this->render('/campaign/teacher.show.html.twig', array(
             'teacher' => $teacher,
-            'teacher_rank' => $queryHelper->getTeacherRank($teacher->getId(),array('limit' => 0)),
+            'teacher_rank' => $queryHelper->getTeacherRank($teacher->getId(),array('campaign' => $campaign, 'limit' => 0)),
             'campaign_awards' => $campaignAwards,
             'campaignsettings' => $campaignSettings->getCampaignSettings(),
             'entity' => $entity,
-            'campaign' => $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl),
+            'campaign' => $campaign,
         ));
     }
 
