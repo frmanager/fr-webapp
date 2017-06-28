@@ -34,6 +34,10 @@ class Campaign
    */
   private $description;
 
+  /**
+   * @ORM\Column(type="string", length=255, nullable=true)
+   */
+  private $theme;
 
   /**
    * @var string
@@ -700,5 +704,29 @@ private $causevoxteams;
     public function getGrades()
     {
         return $this->grades;
+    }
+
+    /**
+     * Set theme
+     *
+     * @param string $theme
+     *
+     * @return Campaign
+     */
+    public function setTheme($theme)
+    {
+        $this->theme = $theme;
+
+        return $this;
+    }
+
+    /**
+     * Get theme
+     *
+     * @return string
+     */
+    public function getTheme()
+    {
+        return $this->theme;
     }
 }

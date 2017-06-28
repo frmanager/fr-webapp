@@ -7,8 +7,7 @@
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 <title>
 {% block title %}{% endblock %} </title>
-
-<link rel="stylesheet" href="{{ asset('assets/css/bootswatch/united.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/bootswatch/' ~ campaign.theme ~ '.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/template.css') }}">
 <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
 
