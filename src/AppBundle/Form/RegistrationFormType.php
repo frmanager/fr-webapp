@@ -10,8 +10,6 @@ class RegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('invitation', 'AppBundle\Form\InvitationFormType');
-
         // Or for Symfony < 2.8
         // $builder->add('invitation', 'app_invitation_type');
     }
