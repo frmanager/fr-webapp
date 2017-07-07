@@ -1,0 +1,37 @@
+{% extends 'template.html.twig' %}
+{% use 'bootstrap_3_layout.html.twig' %}
+
+{% block body %}
+  {% set campaignUrl = null %}
+  {% set campaignUrl = app.request.attributes.get('_route_params')['campaignUrl'] %}
+
+  <p style="text-align:left;">
+    Join the Campaign!
+    <hr/>
+    {% if error is defined %}
+      <p class="well-sm bg-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+    {% endif %}
+
+    <form action="{{ path("fos_user_registration_register", {'campaignUrl': campaign.url}) }}" method="post" class="form-horizontal" role="form-horizontal">
+      <div class="form-group">
+        <label class="col-sm-2 control-label required" for="fos_user_registration_form_email">Email Address</label>
+        <div class="col-sm-10"><input type="email" id="email" name="fos_user_registration_form[email]" required="required" class="form-control"/></div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label required" for="fos_user_registration_form_username">Username</label>
+        <div class="col-sm-10"><input type="text" id="username" name="fos_user_registration_form[username]" required="required" maxlength="180" pattern=".{2,}" class="form-control"/></div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label required" for="fos_user_registration_form_plainPassword_first">Password</label>
+        <div class="col-sm-10"><input type="password" id="plainPassword_first" name="fos_user_registration_form[plainPassword][first]" required="required" class="form-control"/></div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label required" for="fos_user_registration_form_plainPassword_second">Confirm Password</label>
+        <div class="col-sm-10"><input type="password" id="plainPassword_second" name="fos_user_registration_form[plainPassword][second]" required="required" class="form-control"/></div>
+      </div>
+        <div style="text-align:center">
+          <a href="{{ path('homepage') }}" class="btn btn-info">Back</a>
+          <input class="btn btn-primary" type="submit" id="_submit" name="_submit" value="Register Now!"/>
+        </div>
+      </form>
+  {% endblock body %}

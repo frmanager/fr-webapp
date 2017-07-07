@@ -1,0 +1,50 @@
+{% extends 'template.html.twig' %}
+
+{% block body %}
+<div class="row">
+  <div class="col-md-12">
+    <p style="text-align:left;">
+      <strong>NOTE:</strong>
+      Please contact
+      <a href="mailto:funrun@lrespto.org">funrun@lrespto.org</a>
+      if you have any issues logging into the system.</p>
+    <hr/>
+    <div class="">
+      {% if error %}
+        <p class="well-sm bg-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+      {% endif %}
+
+      <form action="{{ path("login", {'campaignUrl': campaign.url}) }}" method="post" class="form-horizontal" role="form-horizontal">
+
+        <div class="form-group">
+          <label for="username" class="col-sm-3 control-label">Username/email</label>
+          <div class="col-sm-9">
+            <input class="form-control" type="text" id="username" name="_username" value="{{ last_username }}" required="required"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password" class="col-sm-3 control-label">Password</label>
+          <div class="col-sm-9">
+            <input class="form-control" type="password" id="password" name="_password" required="required"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-3 col-sm-9">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" id="remember_me" name="_remember_me" value="on"/>
+                Remember Me
+              </label>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center">
+          <a href="{{ path('homepage') }}" class="btn btn-info">Back</a>
+          <input class="btn btn-primary" type="submit" id="_submit" name="_submit" value="Log in"/>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock body %}
