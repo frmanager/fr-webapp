@@ -87,7 +87,7 @@
 		</ul>
     {% endif %}
 		<ul class="nav navbar-nav navbar-right">
-      {% if is_granted('ROLE_USER') %}
+      {% if is_granted('ROLE_USER') and campaign is defined %}
 			<li class="dropdown">
 			<a href="#" class="dropdown-toggle" id="dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 			<i class="fa fa-user"></i>&nbsp; {{ app.user.username }}&nbsp; <span class="caret"></span>

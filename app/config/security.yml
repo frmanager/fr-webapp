@@ -22,6 +22,7 @@ security:
                 provider: our_db_provider
                 login_path: login
                 check_path: login
+                default_target_path: loginRedirect
             logout:
                 path: logout
                 target: campaign_index
