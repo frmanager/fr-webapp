@@ -28,15 +28,10 @@ class User implements UserInterface
 
 
     /**
-     * @Assert\NotBlank()
-     * @Assert\Length(max=4096)
-     */
-    private $plainPassword;
-
-    /**
      * The below length depends on the "algorithm" you use for encoding
      * the password, but this works well with bcrypt.
      *
+     * @Assert\NotBlank()
      * @ORM\Column(type="string", length=64)
      */
     private $password;
@@ -78,10 +73,10 @@ class User implements UserInterface
     private $lastName;
 
     /**
-     * @var integer
-     * @ORM\Column(type="integer")
+     *
+     * @ORM\Column(type="integer", nullable = true)
      */
-    protected $defaultCampaignId;
+    private $defaultCampaignId = null;
 
 
     /**
@@ -98,7 +93,7 @@ class User implements UserInterface
 
     public function getUsername()
     {
-        return $this->username;
+        return $this->email;
     }
 
     public function getSalt()
@@ -395,4 +390,6 @@ class User implements UserInterface
     {
         return $this->campaigns;
     }
+
+
 }
