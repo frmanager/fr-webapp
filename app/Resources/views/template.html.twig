@@ -100,7 +100,7 @@
 			</li>
 			 {% elseif(app.request.attributes.get('_route') not in ['homepage']) %}
        <li>
- 			<a href="{{ path('login', {'campaignUrl': campaignUrl}) }}" role="button">SIGN UP!</a>
+ 			<a href="{{ path('user_registration', {'campaignUrl': campaignUrl}) }}" role="button">SIGN UP!</a>
  			</li>			<li>
 			<a href="{{ path('login', {'campaignUrl': campaignUrl}) }}" role="button">LOGIN</a>
 			</li>

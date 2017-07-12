@@ -1,0 +1,10 @@
+parameters:
+    app.alice.parameters.password: "$2y$13$ShcYLXfZhYpGLoM.iXqKnesy9/iXcxCJCBa.BhU5bIAuf9jrHrEMm"
+    app.alice.parameters.grades:
+        - 'Kindergarten'
+        - '1st Grade'
+        - '2nd Grade'
+        - '3rd Grade'
+        - '4th Grade'
+        - '5th Grade'
+        - 'Special Eduation'

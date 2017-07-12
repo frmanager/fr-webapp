@@ -1,0 +1,4 @@
+AppBundle\Entity\Grade:
+    grade{1..50}:
+        campaign: '@campaign*'
+        name: <randomElement(<{app.alice.parameters.grades}>)>

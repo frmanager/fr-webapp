@@ -25,7 +25,7 @@
         "google/apiclient": "^2.0",
         "beelab/bowerphp": "^0.4.0",
         "guzzlehttp/guzzle": "^6.2",
-        "ocramius/proxy-manager": "^1.0"
+        "ocramius/proxy-manager": "^2.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
@@ -33,7 +33,10 @@
         "laravel/homestead": "^3.0",
         "phpunit/phpunit": "5.5.*",
         "doctrine/data-fixtures": "^1.2",
-        "doctrine/doctrine-fixtures-bundle": "^2.3"
+        "doctrine/doctrine-fixtures-bundle": "^2.3",
+        "hautelook/alice-bundle": "^2.0@beta",
+        "nelmio/alice": "^3.0@beta",
+        "theofidry/alice-data-fixtures": "^1.0@beta"
     },
     "scripts": {
         "symfony-scripts": [

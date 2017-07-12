@@ -34,7 +34,7 @@ class Grade
     /**
      * @var Campaign
      *
-     * @ORM\ManyToOne(targetEntity="Campaign", inversedBy="students")
+     * @ORM\ManyToOne(targetEntity="Campaign", inversedBy="grades")
      * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
      * @Assert\NotNull()
      */

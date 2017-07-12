@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="user")
+ * @ORM\Table(name="user",uniqueConstraints={@ORM\UniqueConstraint(columns={"email"})})
  */
 class User implements UserInterface
 {
@@ -42,6 +42,25 @@ class User implements UserInterface
     private $apiKey;
 
     /**
+     * @ORM\Column(type="string", unique=true)
+     */
+    private $emailConfirmationCode;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $emailConfirmationCodeTimestamp;
+
+    /**
+     * @var UserStatus
+     *
+     * @ORM\ManyToOne(targetEntity="UserStatus", inversedBy="users")
+     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     * @Assert\NotNull()
+     */
+    private $userStatus;
+
+    /**
      * @ORM\OneToMany(targetEntity="CampaignUser", mappedBy="user", cascade={"remove"})
      */
     private $campaignUsers;
@@ -51,9 +70,8 @@ class User implements UserInterface
      */
     private $campaigns;
 
-
     /**
-     * @ORM\Column(type="string", length=100, nullable=true)
+     * @ORM\Column(type="string", length=100, unique=true)
      * @Assert\Email(
      *     message = "The email '{{ value }}' is not a valid email.",
      * )
@@ -392,4 +410,77 @@ class User implements UserInterface
     }
 
 
+
+    /**
+     * Set emailConfirmationCode
+     *
+     * @param string $emailConfirmationCode
+     *
+     * @return User
+     */
+    public function setEmailConfirmationCode($emailConfirmationCode)
+    {
+        $this->emailConfirmationCode = $emailConfirmationCode;
+
+        return $this;
+    }
+
+    /**
+     * Get emailConfirmationCode
+     *
+     * @return string
+     */
+    public function getEmailConfirmationCode()
+    {
+        return $this->emailConfirmationCode;
+    }
+
+    /**
+     * Set emailConfirmationCodeTimestamp
+     *
+     * @param \DateTime $emailConfirmationCodeTimestamp
+     *
+     * @return User
+     */
+    public function setEmailConfirmationCodeTimestamp($emailConfirmationCodeTimestamp)
+    {
+        $this->emailConfirmationCodeTimestamp = $emailConfirmationCodeTimestamp;
+
+        return $this;
+    }
+
+    /**
+     * Get emailConfirmationCodeTimestamp
+     *
+     * @return \DateTime
+     */
+    public function getEmailConfirmationCodeTimestamp()
+    {
+        return $this->emailConfirmationCodeTimestamp;
+    }
+
+
+    /**
+     * Set userStatus
+     *
+     * @param \AppBundle\Entity\UserStatus $userStatus
+     *
+     * @return User
+     */
+    public function setUserStatus(\AppBundle\Entity\UserStatus $userStatus = null)
+    {
+        $this->userStatus = $userStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get userStatus
+     *
+     * @return \AppBundle\Entity\UserStatus
+     */
+    public function getUserStatus()
+    {
+        return $this->userStatus;
+    }
 }
