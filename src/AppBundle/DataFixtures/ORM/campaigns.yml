@@ -3,7 +3,7 @@ AppBundle\Entity\Campaign:
         name: <sentence(6,true)>
         description: <paragraph(3,true)>
         theme: 'cerulean'
-        url: 'lrepto_funrun'
+        url: 'lrespto_funrun'
         email: '@user1->email'
         createdBy: '@user1'
         createdAt: <dateTime('now')>

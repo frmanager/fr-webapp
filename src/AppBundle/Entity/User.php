@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @ORM\Entity
@@ -25,7 +26,6 @@ class User implements UserInterface
      * @ORM\Column(type="string", unique=true)
      */
     private $username;
-
 
     /**
      * The below length depends on the "algorithm" you use for encoding
@@ -150,7 +150,7 @@ class User implements UserInterface
     /** @see \Serializable::unserialize() */
     public function unserialize($serialized)
     {
-        list (
+        list(
             $this->id,
             $this->username,
             $this->password,
@@ -483,4 +483,5 @@ class User implements UserInterface
     {
         return $this->userStatus;
     }
+
 }
