@@ -1,0 +1,25 @@
+AppBundle\Entity\Campaign:
+    campaign1:
+        name: <sentence(6,true)>
+        description: <paragraph(3,true)>
+        theme: 'cerulean'
+        url: 'lrepto_funrun'
+        email: '@user1->email'
+        createdBy: '@user1'
+        createdAt: <dateTime('now')>
+        updatedAt: <dateTime('now')>
+        startDate: <dateTimeBetween('-30 days', '+5 days')>
+        endDate: <dateTimeBetween('+15 days','+90 days')>
+        fundingGoal: <numberBetween(1000, 30000)>
+    campaign{2..10}:
+        name: <sentence(6,true)>
+        description: <paragraph(3,true)>
+        theme: 'cerulean'
+        url (unique): <slug()>
+        email: '<freeEmail()>'
+        createdBy: '@user<current()>'
+        createdAt: <dateTime('now')>
+        updatedAt: <dateTime('now')>
+        startDate: <dateTimeBetween('-30 days', '+5 days')>
+        endDate: <dateTimeBetween('+15 days','+90 days')>
+        fundingGoal: <numberBetween(1000, 30000)>

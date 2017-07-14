@@ -1,0 +1,30 @@
+AppBundle\Entity\UserStatus:
+    userStatus1:
+        name: "Registered"
+    userStatus2:
+        name: "Confirmed"
+    userStatus3:
+        name: "Locked"
+    userStatus4:
+        name: "Disabled"
+
+AppBundle\Entity\Campaignawardtype:
+    a1:
+        displayName: "Teacher/Class"
+        value: "teacher"
+        description: "Teacher/Class"
+    a2:
+        displayName: "Student/Individual"
+        value: "student"
+        description: "Student/Individual"
+
+
+AppBundle\Entity\Campaignawardstyle:
+    b1:
+        displayName: "Place"
+        value: "place"
+        description: "Students compete for first place"
+    b2:
+        displayName: "Donation Level"
+        value: "level"
+        description: "Award received if (Teacher/Student) reach donation amount"

@@ -48,7 +48,7 @@ twig:
         - bootstrap_3_horizontal_layout.html.twig
     globals:
         main_app_url: "%main_app_url%"
-        admin_app_url: "%admin_app_url%"        
+        admin_app_url: "%admin_app_url%"
 
 # Doctrine Configuration
 doctrine:
@@ -79,30 +79,3 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
-
-fos_user:
-    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
-    firewall_name: main
-    user_class: AppBundle\Entity\User
-    registration:
-        form:
-            type: AppBundle\Form\RegistrationFormType
-            # Or for Symfony < 2.8
-            # type: app_user_registration
-        confirmation:
-            template:   FOSUserBundle:Registration:email.txt.twig
-            enabled: true
-            from_email:
-                address:        davidlarrimore@gmail.com
-                sender_name:    "{fr} Manager Support"
-    from_email:
-        address:        funrun@lrespto.org
-        sender_name:    Fun Run Support
-    resetting:
-        email:
-            template:   email/password_resetting.email.twig
-            from_email:
-                address:        funrun@lrespto.org
-                sender_name:    Fun Run Support
-    service:
-        mailer: fos_user.mailer.twig_swift

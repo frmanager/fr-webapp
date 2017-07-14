@@ -553,4 +553,66 @@ class Donation
     {
         return $this->campaign;
     }
+
+    /**
+     * Get campaign
+     *
+     * @return \AppBundle\Entity\Campaign
+     */
+    public function getTeacherCampaign()
+    {
+        return $this->teacher->campaign;
+    }
+
+    /**
+     * Set campaign from provided Grade
+     *
+     * @param \AppBundle\Entity\Campaign $campaign
+     *
+     * @return Grade
+     */
+    public function setCampaignFromTeacher(\AppBundle\Entity\Campaign $campaign = null)
+    {
+        $this->campaign = $this->teacher->getCampaign();
+
+        return $this;
+    }
+
+    /**
+     * Get campaign
+     *
+     * @return \AppBundle\Entity\Campaign
+     */
+    public function getStudentCampaign()
+    {
+        return $this->student->campaign;
+    }
+
+    /**
+     * Set campaign from provided Student
+     *
+     * @param \AppBundle\Entity\Campaign $campaign
+     *
+     * @return Campaign
+     */
+    public function setCampaignFromStudent(\AppBundle\Entity\Campaign $campaign = null)
+    {
+        $this->campaign = $this->student->getCampaign();
+
+        return $this;
+    }
+
+    /**
+     * Set teacher from provided Student
+     *
+     * @param \AppBundle\Entity\Teacher $teacher
+     *
+     * @return Teacher
+     */
+    public function setTeacherFromStudent(\AppBundle\Entity\Teacher $teacher = null)
+    {
+        $this->teacher = $this->student->getTeacher();
+
+        return $this;
+    }
 }

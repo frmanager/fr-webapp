@@ -1,0 +1,22 @@
+AppBundle\Entity\Donation:
+    donation{1..500}:
+        teacher: '@teacher*'
+        student: null
+        amount: <randomFloat(2, 1, 100)>
+        donatedAt: <dateTimeBetween('-60 days', '0 days')>
+        type: "manual"
+        source: "manual"
+        __calls:
+            - setCampaignFromTeacher:
+                  0: null
+    donation{501..5000}:
+        student: '@student*'
+        amount: <randomFloat(2, 1, 100)>
+        donatedAt: <dateTimeBetween('-60 days', '0 days')>
+        type: "manual"
+        source: "manual"
+        __calls:
+            - setTeacherFromStudent:
+                  0: null
+            - setCampaignFromStudent:
+                  0: null

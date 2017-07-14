@@ -1,81 +1,107 @@
 <?php
 
-/*
- * This file is part of the FOSUserBundle package.
- *
- * (c) FriendsOfSymfony <http://friendsofsymfony.github.com/>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace AppBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Security;
-use FOS\UserBundle\Event\FilterUserResponseEvent;
-use FOS\UserBundle\Controller\SecurityController as BaseController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-
-
-class SecurityController extends BaseController
+/**
+ * Security controller.
+ *
+ * @Route("/{campaignUrl}")
+ */
+class SecurityController extends Controller
 {
 
+
   /**
-   * @param Request $request
-   *
-   * @return Response
+   * @Route("/login", name="login")
    */
   public function loginAction(Request $request)
   {
+      $authUtils = $this->get('security.authentication_utils');
 
+      $logger = $this->get('logger');
+      /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
+      $session = $request->getSession();
+
+      $campaign = null;
+
+      if (!empty($request->attributes->get('_route_params'))) {
+          $routeParams = $request->attributes->get('_route_params');
+          if (array_key_exists('campaignUrl', $routeParams)) {
+              $em = $this->getDoctrine()->getManager();
+              $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($routeParams['campaignUrl']);
+          }
+      }
+
+      // get the login error if there is one
+      $error = $authUtils->getLastAuthenticationError();
+
+      // last username entered by the user
+      $lastUsername = $authUtils->getLastUsername();
+
+      return $this->render('security/login.html.twig', array(
+          'last_username' => $lastUsername,
+          'error'         => $error,
+          'campaign'      => $campaign
+      ));
+  }
+
+  /**
+   * @Route("/loginRedirect", name="loginRedirect")
+   */
+  public function loginRedirectAction(Request $request)
+  {
+      $authUtils = $this->get('security.authentication_utils');
+
+      $logger = $this->get('logger');
+      /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
+      $session = $request->getSession();
+
+      $campaign = null;
+
+      if (!empty($request->attributes->get('_route_params'))) {
+          $routeParams = $request->attributes->get('_route_params');
+          if (array_key_exists('campaignUrl', $routeParams)) {
+              $em = $this->getDoctrine()->getManager();
+              $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($routeParams['campaignUrl']);
+          }
+      }
+
+      if (count($campaign) == 0) {
+          return $this->redirectToRoute('homepage', array('action' => 'list_campaigns'));
+      } else {
+          return $this->redirectToRoute('campaign_index', array('campaignUrl' => $campaign->getUrl()));
+      }
+  }
+
+
+  /**
+   * @Route("/logout", name="logout")
+   */
+  public function logoutAction(Request $request)
+  {
+      $authUtils = $this->get('security.authentication_utils');
 
       $logger = $this->get('logger');
       /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
       $session = $request->getSession();
       $campaign = null;
 
-      if(!empty($request->attributes->get('_route_params'))){
-        $routeParams = $request->attributes->get('_route_params');
-        if (array_key_exists('campaignUrl', $routeParams)){
-          $em = $this->getDoctrine()->getManager();
-          $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($routeParams['campaignUrl']);
-        }
+      if (!empty($request->attributes->get('_route_params'))) {
+          $routeParams = $request->attributes->get('_route_params');
+          if (array_key_exists('campaignUrl', $routeParams)) {
+              $em = $this->getDoctrine()->getManager();
+              $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($routeParams['campaignUrl']);
+          }
       }
 
-      $authErrorKey = Security::AUTHENTICATION_ERROR;
-      $lastUsernameKey = Security::LAST_USERNAME;
 
-      // get the error if any (works with forward and redirect -- see below)
-      if ($request->attributes->has($authErrorKey)) {
-          $error = $request->attributes->get($authErrorKey);
-      } elseif (null !== $session && $session->has($authErrorKey)) {
-          $error = $session->get($authErrorKey);
-          $session->remove($authErrorKey);
-      } else {
-          $error = null;
-      }
-
-      if (!$error instanceof AuthenticationException) {
-          $error = null; // The value does not come from the security component.
-      }
-
-      // last username entered by the user
-      $lastUsername = (null === $session) ? '' : $session->get($lastUsernameKey);
-
-      $csrfToken = $this->has('security.csrf.token_manager')
-          ? $this->get('security.csrf.token_manager')->getToken('authenticate')->getValue()
-          : null;
-
-      return $this->renderLogin(array(
-          'last_username' => $lastUsername,
-          'error' => $error,
-          'csrf_token' => $csrfToken,
-          'campaign' => $campaign
-      ));
+      return $this->redirectToRoute('campaign_index', array('campaignUrl' => $campaign->getUrl()));
   }
-
 }

@@ -1,5 +1,7 @@
+{% if app.request.attributes.get('_route_params')['campaignUrl'] is defined %}
 {% set campaignUrl = null %}
 {% set campaignUrl = app.request.attributes.get('_route_params')['campaignUrl'] %}
+{% endif %}
 <html>
 <head>
 <base target="_parent"/>
@@ -9,10 +11,10 @@
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 <title>
 {% block title %}{% endblock %} </title>
-{% if campaign.theme is not defined %}
- {% set theme = 'superhero' %}
-{% else %}
+{% if campaign is defined and campaign.theme is not null %}
  {% set theme = campaign.theme %}
+{% else %}
+  {% set theme = 'superhero' %}
 {% endif %}
 <link rel="stylesheet" href="{{ asset('assets/css/bootswatch/' ~ theme ~ '.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/template.css') }}">
@@ -85,22 +87,22 @@
 		</ul>
     {% endif %}
 		<ul class="nav navbar-nav navbar-right">
-      {% if is_granted('ROLE_USER') %}
+      {% if is_granted('ROLE_USER') and campaign is defined %}
 			<li class="dropdown">
 			<a href="#" class="dropdown-toggle" id="dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 			<i class="fa fa-user"></i>&nbsp; {{ app.user.username }}&nbsp; <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" aria-labelledby="drop3">
 				<li>
-				<a href="{{ path('fos_user_security_logout', {'campaignUrl': campaignUrl}) }}">LOGOUT</a>
+				<a href="{{ path('logout', {'campaignUrl': campaignUrl}) }}">LOGOUT</a>
 				</li>
 			</ul>
 			</li>
 			 {% elseif(app.request.attributes.get('_route') not in ['homepage']) %}
        <li>
- 			<a href="{{ path('fos_user_security_login', {'campaignUrl': campaignUrl}) }}" role="button">SIGN UP!</a>
+ 			<a href="{{ path('user_registration', {'campaignUrl': campaignUrl}) }}" role="button">SIGN UP!</a>
  			</li>			<li>
-			<a href="{{ path('fos_user_security_login', {'campaignUrl': campaignUrl}) }}" role="button">LOGIN</a>
+			<a href="{{ path('login', {'campaignUrl': campaignUrl}) }}" role="button">LOGIN</a>
 			</li>
 			 {% endif %}
 		</ul>

@@ -30,7 +30,7 @@ class Campaign
   private $name;
 
   /**
-   * @ORM\Column(type="string", length=255, nullable=true)
+   * @ORM\Column(type="string", length=2000, nullable=true)
    */
   private $description;
 
@@ -44,7 +44,6 @@ class Campaign
    * @ORM\Column(name="url", type="string", length=100, nullable=false)
    */
   private $url;
-
 
   /**
    * @var string
@@ -65,26 +64,26 @@ class Campaign
   private $grades;
 
 
-    /**
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="campaign")
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
-     * @Assert\NotNull()
-     */
-    private $createdBy;
+  /**
+   * @var User
+   *
+   * @ORM\ManyToOne(targetEntity="User", inversedBy="campaign")
+   * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+   * @Assert\NotNull()
+   */
+  private $createdBy;
 
 
-    /**
-      * @ORM\Column(type="datetime")
-      */
-     protected $createdAt;
+  /**
+    * @ORM\Column(type="datetime")
+    */
+   protected $createdAt;
 
 
-     /**
-      * @ORM\Column(type="datetime")
-      */
-     protected $updatedAt;
+   /**
+    * @ORM\Column(type="datetime")
+    */
+   protected $updatedAt;
 
 
   /**

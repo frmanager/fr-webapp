@@ -5,15 +5,6 @@ parameters:
 
 services:
 
-
-#    service_name:
-#        class: AppBundle\Directory\ClassName
-#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
-    app.form.registration:
-        class: AppBundle\Form\RegistrationFormType
-        tags:
-            - { name: "form.type", alias: "app_user_registration" }
-
     app.CSVHelper:
         class: AppBundle\Utils\CSVHelper
 
@@ -32,3 +23,14 @@ services:
         arguments: ['@service_container']
         tags:
           - { name: kernel.event_subscriber }
+
+
+    AppBundle\Controller\RegistrationController:
+        class: AppBundle\Controller\RegistrationController
+        autowire: true # or define your controller constructor and configure its arguments explicitly
+        tags:
+            - name: controller.service_arguments
+
+    data_fixtures.provider.subtract:
+        class: AppBundle\DataFixtures\Provider\EquationProvider
+        tags: [ { name: nelmio_alice.faker.provider } ]
