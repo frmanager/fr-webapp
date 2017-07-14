@@ -12,10 +12,10 @@ AppBundle\Entity\User:
     user{2..20}:
         firstName: <firstName()>
         lastName: <lastName()>
-        email: <freeEmail()>
-        username: <freeEmail()>
+        email (unique): <freeEmail()>
+        username (unique): <freeEmail()>
         password: <{app.alice.parameters.password}>
-        emailConfirmationCode: <password()>
-        apiKey: <password()>
+        emailConfirmationCode (unique): <password()>
+        apiKey (unique): <password()>
         setEmailConfirmationCodeTimestamp: <dateTime()>
         userStatus: '@userStatus*'

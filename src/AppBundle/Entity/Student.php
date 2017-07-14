@@ -282,4 +282,28 @@ class Student
     {
         return $this->campaign;
     }
+
+    /**
+     * Get campaign
+     *
+     * @return \AppBundle\Entity\Campaign
+     */
+    public function getTeacherCampaign()
+    {
+        return $this->teacher->campaign;
+    }
+
+    /**
+     * Set campaign from provided Grade
+     *
+     * @param \AppBundle\Entity\Campaign $campaign
+     *
+     * @return Grade
+     */
+    public function setCampaignFromTeacher(\AppBundle\Entity\Campaign $campaign = null)
+    {
+        $this->campaign = $this->teacher->getCampaign();
+
+        return $this;
+    }
 }

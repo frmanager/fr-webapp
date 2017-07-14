@@ -30,7 +30,6 @@ class Grade
     private $name;
 
 
-
     /**
      * @var Campaign
      *
@@ -139,4 +138,5 @@ class Grade
     {
         return $this->campaign;
     }
+
 }

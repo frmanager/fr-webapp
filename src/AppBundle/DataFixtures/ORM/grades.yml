@@ -1,4 +1,22 @@
 AppBundle\Entity\Grade:
-    grade{1..50}:
-        campaign: '@campaign*'
-        name: <randomElement(<{app.alice.parameters.grades}>)>
+    grade{1..10}:
+        campaign: '@campaign<current()>'
+        name: "Kindergarten"
+    grade{11..20}:
+        campaign: "@campaign<subtract('<current()>',10)>"
+        name: "1st Grade"
+    grade{21..30}:
+        campaign: "@campaign<subtract('<current()>',20)>"
+        name: "2nd Grade"
+    grade{31..40}:
+        campaign: "@campaign<subtract('<current()>',30)>"
+        name: "3rd Grade"
+    grade{41..50}:
+        campaign: "@campaign<subtract('<current()>',40)>"
+        name: "4th Grade"
+    grade{51..60}:
+        campaign: "@campaign<subtract('<current()>',50)>"
+        name: "5th Grade"
+    grade{61..70}:
+        campaign: "@campaign<subtract('<current()>',60)>"
+        name: "Special Education"
