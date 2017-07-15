@@ -1,10 +1,10 @@
 AppBundle\Entity\User:
     user1:
-        firstName: <firstName()>
-        lastName: <lastName()>
+        firstName: 'David'
+        lastName: 'Larrimore'
         email: 'davidlarrimore@gmail.com'
         username: 'davidlarrimore'
-        password: '$2y$13$JYCDsqtyOBKCSXSuncy2MONK9SqhHb2YPFr3rFzzNGLlrgZW2Gvby'
+        password: <{app.alice.parameters.password}>
         emailConfirmationCode: 12345
         apiKey: 12345
         setEmailConfirmationCodeTimestamp: <dateTime()>
