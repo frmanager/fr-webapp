@@ -118,6 +118,12 @@ php bin/console doctrine:schema:update --force
 ```
 
 
+### Bootstrap database using AliceBundle
+
+```
+php bin/console hautelook:fixtures:load
+```
+
 ## TODO: TimeZone
 
 Need to set default timezone as date.timezone = "America/New_York"
