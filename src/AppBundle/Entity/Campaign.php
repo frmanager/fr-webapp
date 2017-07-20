@@ -67,9 +67,10 @@ class Campaign
   /**
    * @var User
    *
-   * @ORM\ManyToOne(targetEntity="User", inversedBy="campaign")
-   * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
-   * @Assert\NotNull()
+   * Many Campaigns have One User.
+   * @ORM\ManyToOne(targetEntity="User")
+   * @ORM\JoinColumn(name="created_by_id", referencedColumnName="id")
+   *
    */
   private $createdBy;
 

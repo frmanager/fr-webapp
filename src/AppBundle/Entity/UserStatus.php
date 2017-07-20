@@ -25,9 +25,9 @@ class UserStatus
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="User", mappedBy="user_status")
+     * @ORM\OneToMany(targetEntity="User", mappedBy="userStatus")
      */
-    private $User;
+    private $users;
 
     /**
      * Constructor

@@ -55,8 +55,7 @@ class User implements UserInterface
      * @var UserStatus
      *
      * @ORM\ManyToOne(targetEntity="UserStatus", inversedBy="users")
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
-     * @Assert\NotNull()
+     * @ORM\JoinColumn(name="user_status_id", referencedColumnName="id")
      */
     private $userStatus;
 
@@ -64,11 +63,6 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="CampaignUser", mappedBy="user", cascade={"remove"})
      */
     private $campaignUsers;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Campaign", mappedBy="user", cascade={"remove"})
-     */
-    private $campaigns;
 
     /**
      * @ORM\Column(type="string", length=100, unique=true)
@@ -374,41 +368,6 @@ class User implements UserInterface
     {
         return $this->campaignUsers;
     }
-
-    /**
-     * Add campaign
-     *
-     * @param \AppBundle\Entity\Campaign $campaign
-     *
-     * @return User
-     */
-    public function addCampaign(\AppBundle\Entity\Campaign $campaign)
-    {
-        $this->campaigns[] = $campaign;
-
-        return $this;
-    }
-
-    /**
-     * Remove campaign
-     *
-     * @param \AppBundle\Entity\Campaign $campaign
-     */
-    public function removeCampaign(\AppBundle\Entity\Campaign $campaign)
-    {
-        $this->campaigns->removeElement($campaign);
-    }
-
-    /**
-     * Get campaigns
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCampaigns()
-    {
-        return $this->campaigns;
-    }
-
 
 
     /**
