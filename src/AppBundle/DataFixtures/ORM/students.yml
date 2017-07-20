@@ -1,7 +1,0 @@
-AppBundle\Entity\Student:
-    student{1..1000}:
-        name: <firstName()> <lastName()>
-        teacher: '@teacher*'
-        __calls:
-            - setCampaignFromTeacher:
-                  0: null

@@ -30,7 +30,3 @@ services:
         autowire: true # or define your controller constructor and configure its arguments explicitly
         tags:
             - name: controller.service_arguments
-
-    data_fixtures.provider.subtract:
-        class: AppBundle\DataFixtures\Provider\EquationProvider
-        tags: [ { name: nelmio_alice.faker.provider } ]

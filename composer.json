@@ -33,10 +33,7 @@
         "laravel/homestead": "^3.0",
         "phpunit/phpunit": "5.5.*",
         "doctrine/data-fixtures": "^1.2",
-        "doctrine/doctrine-fixtures-bundle": "^2.3",
-        "hautelook/alice-bundle": "^2.0",
-        "nelmio/alice": "^3.0@beta",
-        "theofidry/alice-data-fixtures": "^1.0@beta"
+        "doctrine/doctrine-fixtures-bundle": "^2.3"
     },
     "scripts": {
         "symfony-scripts": [

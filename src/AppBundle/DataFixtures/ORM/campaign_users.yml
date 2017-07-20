@@ -1,4 +1,0 @@
-AppBundle\Entity\CampaignUser:
-    campaignUser{1..10}:
-        user: '@user<current()>'
-        campaign: '@campaign<current()>'

@@ -729,4 +729,20 @@ private $causevoxteams;
     {
         return $this->theme;
     }
+
+    /**
+     *
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updatedTimestamps()
+    {
+        $this->setUpdatedAt(new \DateTime(date('Y-m-d H:i:s')));
+
+        if($this->getCreatedAt() == null)
+        {
+            $this->setCreatedAt(new \DateTime(date('Y-m-d H:i:s')));
+        }
+    }
+
 }
