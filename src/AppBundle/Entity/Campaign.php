@@ -730,6 +730,7 @@ private $causevoxteams;
         return $this->theme;
     }
 
+
     /**
      *
      * @ORM\PrePersist
@@ -744,5 +745,4 @@ private $causevoxteams;
             $this->setCreatedAt(new \DateTime(date('Y-m-d H:i:s')));
         }
     }
-
 }

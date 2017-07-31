@@ -199,7 +199,6 @@ class QueryHelper
     public function sortObject(array $objects, array $settings)
     {
 
-        $this->logger->debug('sortObject Settings: '.dump($settings));
         if (isset($settings['order_by'])) {
             $order_by = $settings['order_by'];
 

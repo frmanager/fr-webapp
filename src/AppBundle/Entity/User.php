@@ -74,13 +74,11 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=55)
-     * @Assert\NotNull()
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=55)
-     * @Assert\NotNull()
      */
     private $lastName;
 
