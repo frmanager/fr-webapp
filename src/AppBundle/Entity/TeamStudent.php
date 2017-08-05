@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="team_students",uniqueConstraints={@ORM\UniqueConstraint(columns={"student_id", "team_id"})})
+ * @ORM\Table(name="team_students",uniqueConstraints={@ORM\UniqueConstraint(columns={"name", "team_id"})})
  * @UniqueEntity(
  *     fields={"user_id", "campaign_id"},
  *     errorPath="name",
@@ -34,8 +34,8 @@ class TeamStudent
    * @var student
    *
    * @ORM\ManyToOne(targetEntity="Student", inversedBy="teamStudents")
-   * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
-   * @Assert\NotNull()
+   * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE", nullable=true)
+   *
    */
   private $student;
 
@@ -54,6 +54,11 @@ class TeamStudent
    * @Assert\NotNull()
    */
   private $name;
+
+  /**
+   * @ORM\Column(type="boolean", length=100)
+   */
+  private $confirmedFlag = false;
 
 
   /**
@@ -252,5 +257,29 @@ class TeamStudent
     public function getCreatedBy()
     {
         return $this->createdBy;
+    }
+
+    /**
+     * Set confirmedFlag
+     *
+     * @param boolean $confirmedFlag
+     *
+     * @return TeamStudent
+     */
+    public function setConfirmedFlag($confirmedFlag)
+    {
+        $this->confirmedFlag = $confirmedFlag;
+
+        return $this;
+    }
+
+    /**
+     * Get confirmedFlag
+     *
+     * @return boolean
+     */
+    public function getConfirmedFlag()
+    {
+        return $this->confirmedFlag;
     }
 }
