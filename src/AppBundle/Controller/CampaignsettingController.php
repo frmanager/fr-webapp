@@ -31,16 +31,16 @@ class CampaignsettingController extends Controller
         if (empty($campaignsettings)) {
             $defaultCampaignSettings = [];
 
-            array_push($defaultCampaignSettings, array('displayName' => 'campaign_start_date', 'value' => '9/15/'.date('Y'), 'format' => 'mm/dd/yyyy'));
-            array_push($defaultCampaignSettings, array('displayName' => 'campaign_end_date', 'value' => '10/27/'.date('Y'), 'format' => 'mm/dd/yyyy'));
-            array_push($defaultCampaignSettings, array('displayName' => 'campaign_funding_goal', 'value' => '20000', 'format' => 'an Amount, no commas!'));
-            array_push($defaultCampaignSettings, array('displayName' => 'campaign_url', 'value' => 'http://funrun.lrespto.org', 'format' => 'FQDN'));
+            array_push($defaultCampaignSettings, array('name' => 'campaign_start_date', 'value' => '9/15/'.date('Y'), 'format' => 'mm/dd/yyyy'));
+            array_push($defaultCampaignSettings, array('name' => 'campaign_end_date', 'value' => '10/27/'.date('Y'), 'format' => 'mm/dd/yyyy'));
+            array_push($defaultCampaignSettings, array('name' => 'campaign_funding_goal', 'value' => '20000', 'format' => 'an Amount, no commas!'));
+            array_push($defaultCampaignSettings, array('name' => 'campaign_url', 'value' => 'http://funrun.lrespto.org', 'format' => 'FQDN'));
 
             foreach ($defaultCampaignSettings as $defaultCampaignSetting) {
                 $em = $this->getDoctrine()->getManager();
 
                 $campaignsetting = new Campaignsetting();
-                $campaignsetting->setDisplayName($defaultCampaignSetting['displayName']);
+                $campaignsetting->setDisplayName($defaultCampaignSetting['name']);
                 $campaignsetting->setFormat($defaultCampaignSetting['format']);
                 $campaignsetting->setValue($defaultCampaignSetting['value']);
 

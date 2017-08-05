@@ -61,6 +61,10 @@ class Student
      */
     private $campaign;
 
+    /**
+     * @ORM\OneToMany(targetEntity="TeamStudent", mappedBy="student", cascade={"remove"})
+     */
+    private $teamStudents;
 
 
     /**
@@ -305,5 +309,39 @@ class Student
         $this->campaign = $this->teacher->getCampaign();
 
         return $this;
+    }
+
+    /**
+     * Add teamStudent
+     *
+     * @param \AppBundle\Entity\TeamStudent $teamStudent
+     *
+     * @return Student
+     */
+    public function addTeamStudent(\AppBundle\Entity\TeamStudent $teamStudent)
+    {
+        $this->teamStudents[] = $teamStudent;
+
+        return $this;
+    }
+
+    /**
+     * Remove teamStudent
+     *
+     * @param \AppBundle\Entity\TeamStudent $teamStudent
+     */
+    public function removeTeamStudent(\AppBundle\Entity\TeamStudent $teamStudent)
+    {
+        $this->teamStudents->removeElement($teamStudent);
+    }
+
+    /**
+     * Get teamStudents
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTeamStudents()
+    {
+        return $this->teamStudents;
     }
 }

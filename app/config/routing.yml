@@ -1,3 +1,8 @@
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation
+
+secure:
+    path:     /secure
+    defaults: { _controller: AppBundle:Main:secure }
+    schemes:  [https]

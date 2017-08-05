@@ -10,8 +10,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="campaignawardtype", uniqueConstraints={@ORM\UniqueConstraint(columns={"value"}), @ORM\UniqueConstraint(columns={"display_name"})})
- * @UniqueEntity(fields={"displayName"})
+ * @ORM\Table(name="campaignawardtype", uniqueConstraints={@ORM\UniqueConstraint(columns={"value"}), @ORM\UniqueConstraint(columns={"name"})})
+ * @UniqueEntity(fields={"name"})
  * @UniqueEntity(fields={"value"})
  */
 class Campaignawardtype
@@ -27,7 +27,7 @@ class Campaignawardtype
      * @ORM\Column(type="string", length=100, nullable=false)
      * @Assert\NotNull()
      */
-    private $displayName;
+    private $name;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=false)
@@ -63,27 +63,27 @@ class Campaignawardtype
     }
 
     /**
-     * Set displayName
+     * Set name
      *
-     * @param string $displayName
+     * @param string $name
      *
      * @return Campaignawardtype
      */
-    public function setDisplayName($displayName)
+    public function setDisplayName($name)
     {
-        $this->displayName = $displayName;
+        $this->name = $name;
 
         return $this;
     }
 
     /**
-     * Get displayName
+     * Get name
      *
      * @return string
      */
     public function getDisplayName()
     {
-        return $this->displayName;
+        return $this->name;
     }
 
     /**
@@ -166,5 +166,29 @@ class Campaignawardtype
     public function getCampaignawards()
     {
         return $this->campaignawards;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Campaignawardtype
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

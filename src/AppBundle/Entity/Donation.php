@@ -11,9 +11,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * donation.
  *
  * @ORM\Entity
- * @ORM\Table(name="donation",uniqueConstraints={@ORM\UniqueConstraint(columns={"donated_at", "student_id", "transaction_id", "source"})})
+ * @ORM\Table(name="donation",uniqueConstraints={@ORM\UniqueConstraint(columns={"donated_at", "student_id", "transaction_id"})})
  * @UniqueEntity(
- *     fields={"student", "donatedAt", "transactionId", "source"},
+ *     fields={"student", "donatedAt", "transactionId"},
  *     errorPath="student",
  *     message="Already received a donation from this student on this day...."
  * )
@@ -38,10 +38,19 @@ class Donation
     private $student;
 
     /**
+     * @var Student
+     *
+     * @ORM\ManyToOne(targetEntity="Team", inversedBy="donations")
+     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE", nullable=true)
+     */
+     private $team;
+
+
+    /**
      * @var Teacher
      *
      * @ORM\ManyToOne(targetEntity="Teacher", inversedBy="donations")
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE", nullable=true)
      * @Assert\NotNull()
      */
     private $teacher;
@@ -85,16 +94,9 @@ class Donation
     /**
      * @var float
      *
-     * @ORM\Column(name="causevox_fee", type="float", precision=10, scale=2, nullable=true)
+     * @ORM\Column(name="fee", type="float", precision=10, scale=2, nullable=true)
      */
-    private $causevoxFee;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="donation_page", type="string", length=100, nullable=true)
-     */
-    private $donationPage;
+    private $fee;
 
     /**
      * @var string
@@ -144,6 +146,48 @@ class Donation
 
 
     /**
+     * @var User
+     *
+     * Many Campaigns have One User.
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="created_by_id", referencedColumnName="id")
+     *
+     */
+    private $createdBy;
+
+
+    /**
+    * @ORM\Column(type="datetime")
+    */
+   protected $createdAt;
+
+
+   /**
+    * @ORM\Column(type="datetime")
+    */
+   protected $updatedAt;
+
+
+
+   /**
+    * Constructor
+    */
+   public function __construct()
+   {
+       $this->createdAt= new \DateTime();
+       $this->updatedAt= new \DateTime();
+   }
+
+
+   /**
+    * @ORM\PreUpdate()
+    */
+   public function preUpdate()
+   {
+       $this->updatedAt= new \DateTime();
+   }
+
+    /**
      * Get id.
      *
      * @return int
@@ -160,15 +204,6 @@ class Donation
      *
      */
     private $transactionId;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="source", type="string", nullable=false)
-     *
-     */
-    private $source;
 
     /**
      * Set amount
@@ -290,29 +325,6 @@ class Donation
         return $this->causevoxFee;
     }
 
-    /**
-     * Set donationPage
-     *
-     * @param string $donationPage
-     *
-     * @return Donation
-     */
-    public function setDonationPage($donationPage)
-    {
-        $this->donationPage = $donationPage;
-
-        return $this;
-    }
-
-    /**
-     * Get donationPage
-     *
-     * @return string
-     */
-    public function getDonationPage()
-    {
-        return $this->donationPage;
-    }
 
     /**
      * Set type
@@ -459,30 +471,6 @@ class Donation
     }
 
     /**
-     * Set source
-     *
-     * @param string $source
-     *
-     * @return Donation
-     */
-    public function setSource($source)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-    /**
-     * Get source
-     *
-     * @return string
-     */
-    public function getSource()
-    {
-        return $this->source;
-    }
-
-    /**
      * Set student
      *
      * @param \AppBundle\Entity\Student $student
@@ -602,6 +590,33 @@ class Donation
         return $this;
     }
 
+
+
+        /**
+         * Get campaign from Team
+         *
+         * @return \AppBundle\Entity\Campaign
+         */
+        public function getTeamCampaign()
+        {
+            return $this->team->campaign;
+        }
+
+        /**
+         * Set campaign from provided Team
+         *
+         * @param \AppBundle\Entity\Campaign $campaign
+         *
+         * @return Campaign
+         */
+        public function setCampaignFromTeam(\AppBundle\Entity\Campaign $campaign = null)
+        {
+            $this->campaign = $this->team->getCampaign();
+
+            return $this;
+        }
+
+
     /**
      * Set teacher from provided Student
      *
@@ -614,5 +629,125 @@ class Donation
         $this->teacher = $this->student->getTeacher();
 
         return $this;
+    }
+
+    /**
+     * Set team
+     *
+     * @param \AppBundle\Entity\Team $team
+     *
+     * @return Donation
+     */
+    public function setTeam(\AppBundle\Entity\Team $team = null)
+    {
+        $this->team = $team;
+
+        return $this;
+    }
+
+    /**
+     * Get team
+     *
+     * @return \AppBundle\Entity\Team
+     */
+    public function getTeam()
+    {
+        return $this->team;
+    }
+
+    /**
+     * Set fee
+     *
+     * @param float $fee
+     *
+     * @return Donation
+     */
+    public function setFee($fee)
+    {
+        $this->fee = $fee;
+
+        return $this;
+    }
+
+    /**
+     * Get fee
+     *
+     * @return float
+     */
+    public function getFee()
+    {
+        return $this->fee;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     *
+     * @return Donation
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return Donation
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Set createdBy
+     *
+     * @param \AppBundle\Entity\User $createdBy
+     *
+     * @return Donation
+     */
+    public function setCreatedBy(\AppBundle\Entity\User $createdBy = null)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get createdBy
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
     }
 }

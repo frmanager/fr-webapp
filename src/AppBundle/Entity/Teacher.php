@@ -17,6 +17,11 @@ class Teacher
     private $students;
 
     /**
+     * @ORM\OneToMany(targetEntity="Team", mappedBy="teacher", cascade={"remove"})
+     */
+    private $teams;
+
+    /**
      * @ORM\OneToMany(targetEntity="Causevoxteam", mappedBy="teacher", cascade={"remove"})
      */
     private $causevoxteams;
@@ -40,7 +45,6 @@ class Teacher
      * @Assert\NotNull()
      */
     private $campaign;
-
 
 
     /**
@@ -350,5 +354,39 @@ class Teacher
         $this->campaign = $this->grade->getCampaign();
 
         return $this;
+    }
+
+    /**
+     * Add team
+     *
+     * @param \AppBundle\Entity\Team $team
+     *
+     * @return Teacher
+     */
+    public function addTeam(\AppBundle\Entity\Team $team)
+    {
+        $this->teams[] = $team;
+
+        return $this;
+    }
+
+    /**
+     * Remove team
+     *
+     * @param \AppBundle\Entity\Team $team
+     */
+    public function removeTeam(\AppBundle\Entity\Team $team)
+    {
+        $this->teams->removeElement($team);
+    }
+
+    /**
+     * Get teams
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTeams()
+    {
+        return $this->teams;
     }
 }

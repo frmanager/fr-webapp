@@ -65,6 +65,11 @@ class User implements UserInterface
     private $campaignUsers;
 
     /**
+     * @ORM\OneToMany(targetEntity="Team", mappedBy="user", cascade={"remove"})
+     */
+    private $teams;
+
+    /**
      * @ORM\Column(type="string", length=100, unique=true)
      * @Assert\Email(
      *     message = "The email '{{ value }}' is not a valid email.",
@@ -87,6 +92,18 @@ class User implements UserInterface
      * @ORM\Column(type="integer", nullable = true)
      */
     private $defaultCampaignId = null;
+
+    /**
+     *
+     * @ORM\Column(type="boolean")
+     */
+    private $fundraiserFlag = false;
+
+    /**
+     *
+     * @ORM\Column(type="boolean")
+     */
+    private $campaignManagerFlag = false;
 
 
     /**
@@ -441,4 +458,86 @@ class User implements UserInterface
         return $this->userStatus;
     }
 
+
+    /**
+     * Set fundraiserFlag
+     *
+     * @param boolean $fundraiserFlag
+     *
+     * @return User
+     */
+    public function setFundraiserFlag($fundraiserFlag)
+    {
+        $this->fundraiserFlag = $fundraiserFlag;
+
+        return $this;
+    }
+
+    /**
+     * Get fundraiserFlag
+     *
+     * @return boolean
+     */
+    public function getFundraiserFlag()
+    {
+        return $this->fundraiserFlag;
+    }
+
+    /**
+     * Set campaignManagerFlag
+     *
+     * @param boolean $campaignManagerFlag
+     *
+     * @return User
+     */
+    public function setCampaignManagerFlag($campaignManagerFlag)
+    {
+        $this->campaignManagerFlag = $campaignManagerFlag;
+
+        return $this;
+    }
+
+    /**
+     * Get campaignManagerFlag
+     *
+     * @return boolean
+     */
+    public function getCampaignManagerFlag()
+    {
+        return $this->campaignManagerFlag;
+    }
+
+    /**
+     * Add team
+     *
+     * @param \AppBundle\Entity\Team $team
+     *
+     * @return User
+     */
+    public function addTeam(\AppBundle\Entity\Team $team)
+    {
+        $this->teams[] = $team;
+
+        return $this;
+    }
+
+    /**
+     * Remove team
+     *
+     * @param \AppBundle\Entity\Team $team
+     */
+    public function removeTeam(\AppBundle\Entity\Team $team)
+    {
+        $this->teams->removeElement($team);
+    }
+
+    /**
+     * Get teams
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTeams()
+    {
+        return $this->teams;
+    }
 }

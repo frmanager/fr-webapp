@@ -169,6 +169,7 @@ private $causevoxteams;
         $this->causevoxfundraisers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->causevoxteams = new \Doctrine\Common\Collections\ArrayCollection();
         $this->students = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->teams = new \Doctrine\Common\Collections\ArrayCollection();
         $this->createdAt= new \DateTime();
         $this->updatedAt= new \DateTime();
     }

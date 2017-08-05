@@ -1,11 +1,11 @@
 body {
-  background: url(/assets/img/street-background.jpg) no-repeat center center fixed;
+  background: url(/assets/img/header-bg.jpg) no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/assets/img/street-background.jpg', sizingMethod='scale');
-  -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/assets/img/street-background.jpg', sizingMethod='scale')";
+  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/assets/img/header-bg.jpg', sizingMethod='scale');
+  -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/assets/img/header-bg.jpg', sizingMethod='scale')";
 }
 
 .body-container {
@@ -21,6 +21,10 @@ body {
     color: #555;
 }
 
+.required:after {
+  content:" *";
+  color:red;
+}
 
 .back-to-top {
     cursor: pointer;

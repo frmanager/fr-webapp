@@ -10,8 +10,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="campaignsetting",uniqueConstraints={@ORM\UniqueConstraint(columns={"display_name"}), @ORM\UniqueConstraint(columns={"value"})})
- * @UniqueEntity(fields={"displayName"})
+ * @ORM\Table(name="campaignsetting",uniqueConstraints={@ORM\UniqueConstraint(columns={"name"}), @ORM\UniqueConstraint(columns={"value"})})
+ * @UniqueEntity(fields={"name"})
  * @UniqueEntity(fields={"value"})
  */
 class Campaignsetting
@@ -27,7 +27,7 @@ class Campaignsetting
      * @ORM\Column(type="string", length=100)
      * @Assert\NotNull()
      */
-    private $displayName;
+    private $name;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -56,27 +56,27 @@ class Campaignsetting
     }
 
     /**
-     * Set displayName
+     * Set name
      *
-     * @param string $displayName
+     * @param string $name
      *
      * @return Campaignsetting
      */
-    public function setDisplayName($displayName)
+    public function setDisplayName($name)
     {
-        $this->displayName = $displayName;
+        $this->name = $name;
 
         return $this;
     }
 
     /**
-     * Get displayName
+     * Get name
      *
      * @return string
      */
     public function getDisplayName()
     {
-        return $this->displayName;
+        return $this->name;
     }
 
     /**

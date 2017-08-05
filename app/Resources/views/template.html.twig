@@ -158,8 +158,14 @@
         {% if campaign is defined %}
         <a href="{{ path('campaign_faq', {'campaignUrl': campaign.url }) }}" role="button">FAQs</a></br>
         {% endif %}
-				<strong>For help and support contact <a href="mailto:funrun@lrespto.org">funrun@lrespto.org</a>
-				</strong>
+			</div>
+		</div>
+	</div>
+  <hr>
+  <div class="row">
+		<div class="col-md-12">
+			<div class="license" style="text-align:center;">
+				<i class="fa fa-bolt" aria-hidden="true"></i> Powered by <strong>FR-MANAGER</strong> (<small><i class="fa fa-copyright" aria-hidden="true"></i> 2017 All rights reserved</small>). For help and support <a href="mailto:davidlarrimore@gmail.com">contact support</a>
 			</div>
 		</div>
 	</div>
@@ -169,10 +175,10 @@
 </div>
 
 <script type='application/javascript' src="{{ asset('assets/js/libs/jquery-3.2.1.min.js') }}"></script>
-<script type='application/javascript' src="{{ asset('assets/vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
-<script type='application/javascript' src="{{ asset('assets/vendor/fastclick/lib/fastclick.js') }}"></script>
-<script type='application/javascript' src="{{ asset('assets/vendor/moment/min/moment.min.js') }}"></script>
-<script type='application/javascript' src="{{ asset('assets/vendor/matchheight/dist/jquery.matchHeight-min.js') }}"></script>
+<script type='application/javascript' src="{{ asset('assets/js/libs/bootstrap-v3.3.7.min.js') }}"></script>
+<script type='application/javascript' src="{{ asset('assets/js/libs/fastclick.js') }}"></script>
+<script type='application/javascript' src="{{ asset('assets/js/libs/moment.js') }}"></script>
+<script type='application/javascript' src="{{ asset('assets/js/libs/jquery.matchHeight-min.js') }}"></script>
 
  {% block javascripts %}{% endblock %}
 <!-- IE 10 Viewport Bug Fix -->

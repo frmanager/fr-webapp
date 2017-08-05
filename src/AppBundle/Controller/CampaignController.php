@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Utils\CampaignHelper;
 use AppBundle\Entity\Teacher;
 use AppBundle\Utils\QueryHelper;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use DateTime;
 
@@ -105,4 +106,23 @@ class CampaignController extends Controller
         'campaign' => $campaign,
       ));
     }
+
+
+
+    /**
+     * @Route("/terms_of_service", name="campaign_terms_of_service")
+     */
+    public function termsOfServiceAction($campaignUrl)
+    {
+      $logger = $this->get('logger');
+      $em = $this->getDoctrine()->getManager();
+
+      $campaign =  $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
+
+      return $this->render('default/termsOfService.html.twig', array(
+        'campaign' => $campaign,
+      ));
+    }
+
+
 }
