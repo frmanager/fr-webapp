@@ -6,3 +6,8 @@ secure:
     path:     /secure
     defaults: { _controller: AppBundle:Main:secure }
     schemes:  [https]
+
+api:
+    resource: "@AppBundle/Controller/APIController.php"
+    prefix:   /api
+    type:     annotation
