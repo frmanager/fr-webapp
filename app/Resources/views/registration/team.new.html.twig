@@ -1,0 +1,78 @@
+{% extends 'template.html.twig' %}
+{% use 'bootstrap_3_layout.html.twig' %}
+
+{% block body %}
+  <div class="row">
+    <div class="col-sm-4 col-sm-offset-1">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Why join?</h3>
+        </div>
+        <div class="panel-body">
+          Why Join!
+      </div>
+    </div>
+    </div>
+    <div class="col-sm-6">
+
+      {% set campaignUrl = null %}
+      {% set campaignUrl = app.request.attributes.get('_route_params')['campaignUrl'] %}
+
+      <p style="text-align:left;">
+        The first step to joining the campaign is to create a <u>FR Manager</u> account
+        <hr/>
+        {% if error is defined %}
+          <p class="well-sm bg-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+        {% endif %}
+
+        <form name="user" method="post" class="form-horizontal">
+          <div class="form-group">
+            <label class="col-sm-4 control-label" for="user_firstName">Team Name</label>
+            <div class="col-sm-6"><input type="text" id="team_name" name="team[name]" class="form-control"></div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label" for="user_firstName">Team Name</label>
+            <div class="col-sm-6"><input type="text" id="team_name" name="team[name]" class="form-control"></div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label" for="user_lastName">URL</label>
+            <div class="col-sm-6"><input type="text" id="team_url" name="team[url]"  class="form-control"></div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label required" for="user_Password_first">Password</label>
+            <div class="col-sm-6"><input type="password" id="user_Password_first" name="user[Password][first]" required="required" class="form-control"></div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label required" for="user_Password_second">Repeat Password</label>
+            <div class="col-sm-6"><input type="password" id="user_Password_second" name="user[Password][second]" required="required" class="form-control"></div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-4">&nbsp</div>
+            <div class="col-sm-8"><label for="user_terms_of_service"><input type="checkbox" id="user_terms_of_service" name="user[terms_of_service]" required="required"> Click to accept <a target="_blank" href="{{ path('campaign_terms_of_service', {'campaignUrl': campaignUrl}) }}">terms of service <i class="fa fa-external-link" aria-hidden="true"></i></a></label></div>
+          </div>
+          <hr>
+          <div class="form-group">
+            <div class="col-sm-12">
+              <button type="submit" id="submit" class="btn btn-primary">Go to step 2 <i class="fa fa-arrow-right" aria-hidden="true"></i></button>
+              &nbsp;&nbsp;&nbsp;&nbsp;<small>Already have a FR Manager account? click <a href="{{ path('register_team', {'campaignUrl': campaignUrl}) }}">HERE</a></small>
+            </div>
+          </div>
+
+          <input type="hidden" id="user_defaultCampaignId" name="user[defaultCampaignId]"><input type="hidden" id="user__token" name="user[_token]" value="oPf8W_BVWF3f9zvbETkokwPUnKXWK_I9HYOGSyt5Thk">
+        </form>
+
+      </div>
+    </div>
+  {% endblock body %}
+
+  {% block javascript %}
+  <script type="text/javascript">
+      $('#user_terms_of_service').click(function(){
+        if($(this).attr('checked') == false){
+             $('#submit').attr("disabled","disabled");
+        } else {
+            $('#submit').removeAttr('disabled');
+        }
+    });
+  </script>
+  {% endblock %}

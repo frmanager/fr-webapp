@@ -1,0 +1,55 @@
+{% extends 'template.html.twig' %}
+{% use 'bootstrap_3_layout.html.twig' %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.12/fh-3.1.2/r-2.1.0/sc-1.4.2/datatables.min.css"/>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Teams</h1>
+            <hr/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <br/>
+            <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for team in teams %}
+                        <tr>
+                            <td>
+                                <a href="{{ path('team_show', {'campaignUrl':campaign.url, 'teamUrl': team.url }) }}">{{ team.url }}</a>
+                            </td>
+                            <td>{{ team.name }}</td>
+                            <td style="text-align:center;">
+                                <a href="{{ path('team_show', {'campaignUrl':campaign.url, 'teamUrl': team.url }) }}" class="btn btn-sm btn-info">
+                                    <i class="glyphicon glyphicon-eye-open"></i>
+                                    <span class="hidden-xs hidden-sm">
+                                        View</span>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="application/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.12/fh-3.1.2/r-2.1.0/sc-1.4.2/datatables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.table').DataTable({ "pageLength": 50, "order": [[ 1, "desc" ]]});
+        });
+    </script>
+{% endblock %}

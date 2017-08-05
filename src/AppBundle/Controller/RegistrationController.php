@@ -91,4 +91,41 @@ class RegistrationController extends Controller
         );
     }
 
+    /**
+     * @Route("/register_team", name="register_team")
+     *
+     */
+    public function registerFundraiserTeamAction(Request $request, $campaignUrl)
+    {
+
+      $logger = $this->get('logger');
+      $this->denyAccessUnlessGranted('ROLE_USER');
+
+      $em = $this->getDoctrine()->getManager();
+      $campaign =  $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
+      $teamTypes =  $em->getRepository('AppBundle:TeamType')->findAll();
+
+      //CODE TO CHECK TO SEE IF CAMPAIGN EXISTS
+      $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
+      if(is_null($campaign)){
+        $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
+        return $this->redirectToRoute('homepage');
+      }
+
+      if ($request->isMethod('POST')) {
+
+          $team = new Team();
+          $em = $this->getDoctrine()->getManager();
+          $em->persist($team);
+          $em->flush();
+
+          return $this->redirectToRoute('team_view', array('url' => $team->getUrl()));
+      }
+
+      return $this->render('registration/team.new.html.twig', array(
+        'campaign' => $campaign,
+        'teamTypes' => $teamTypes
+      ));
+    }
+
 }

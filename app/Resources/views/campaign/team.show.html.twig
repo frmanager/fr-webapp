@@ -1,0 +1,21 @@
+{% extends 'template.html.twig' %}
+{% use 'bootstrap_3_horizontal_layout.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>{{ team.name }}</h1>
+            <hr/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <dl class="dl-horizontal">
+                <dt>ID</dt>
+                <dd>{{ team.id }}</dd>
+                <dt>Name</dt>
+                <dd>{{ team.name }}</dd>
+            </dl>
+        </div>
+    </div>
+{% endblock %}
