@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Utils\CampaignHelper;
-use AppBundle\Entity\Teacher;
+use AppBundle\Entity\Classroom;
 use AppBundle\Utils\QueryHelper;
 
 use DateTime;

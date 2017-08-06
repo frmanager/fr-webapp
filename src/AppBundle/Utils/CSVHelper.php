@@ -238,12 +238,12 @@ class CSVHelper
         return floatval($string);
     }
 
-    public function cleanTeacherNames()
+    public function cleanClassroomNames()
     {
         $thisData = $this->getData();
         foreach ($thisData as $rowIndex => $rowData) {
             foreach ($rowData as $key => $value) {
-                if (strcmp($key, 'teachers_name') == 0) {
+                if (strcmp($key, 'classrooms_name') == 0) {
                     $teacherNameString = substr(trim($value), strpos(trim($value), ' - ') + 3, strlen(trim($value)));
                     $thisData[$rowIndex][$key] = $teacherNameString;
                 }
@@ -270,12 +270,12 @@ class CSVHelper
     /**
      * This is really only applicable to "CauseVox" donation files.
      */
-    public function getGradefromTeacherName()
+    public function getGradefromClassroomName()
     {
         $thisData = $this->getData();
         foreach ($thisData as $rowIndex => $rowData) {
             foreach ($rowData as $key => $value) {
-                if (strcmp($key, 'teachers_name') == 0) {
+                if (strcmp($key, 'classrooms_name') == 0) {
                     $gradeString = substr(trim($value), 0, strpos(trim($value), ' - '));
                     $thisData[$rowIndex]['grade'] = $gradeString;
                 }

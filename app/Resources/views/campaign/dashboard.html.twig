@@ -50,39 +50,39 @@
         <div class="col-sm-12">
             <div class="panel panel-info">
                 <div class="panel-heading">Recent Class Awards -
-                    <a href="{{ path('public_teacher_awards', {'campaignUrl':campaign.url}) }}">
+                    <a href="{{ path('public_classroom_awards', {'campaignUrl':campaign.url}) }}">
                         <small>(click here to view all)</small>
                     </a>
                 </div>
-                {% if new_teacher_awards | length > 0 %}
+                {% if new_classroom_awards | length > 0 %}
                     <table class="table table-striped table-condensed">
                         <thead>
                             <tr>
                                 <th>Date Earned</th>
-                                <th>Teacher</th>
+                                <th>Classroom</th>
                                 <th>Total Donations</th>
                                 <th>Award Level</th>
 
                             </tr>
                         </thead>
                         <tbody>
-                            {% for teacher in new_teacher_awards %}
+                            {% for classroom in new_classroom_awards %}
                                 <tr>
-                                    <td>{{ teacher.donated_at|date("D, M d") }}</td>
+                                    <td>{{ classroom.donated_at|date("D, M d") }}</td>
                                     <td>
-                                        <a href="{{ path('teacher_show', { 'campaignUrl': campaign.url, 'id': teacher.id }) }}">
-                                            <span class="hidden-xs">{{ teacher.grade_name }}
+                                        <a href="{{ path('classroom_show', { 'campaignUrl': campaign.url, 'id': classroom.id }) }}">
+                                            <span class="hidden-xs">{{ classroom.grade_name }}
                                                 -</span>
-                                            {{ teacher.teacher_name }}</a>
+                                            {{ classroom.classroom_name }}</a>
                                     </td>
-                                    <td>${{ teacher.cumulative_donation_amount|number_format(2, '.', ',') }}
+                                    <td>${{ classroom.cumulative_donation_amount|number_format(2, '.', ',') }}
                                         <span class="hidden-xs">
-                                            <small>(<span style="color:#5cb85c;">+{{ teacher.donation_amount|number_format(2, '.', ',') }}</span>)</small>
+                                            <small>(<span style="color:#5cb85c;">+{{ classroom.donation_amount|number_format(2, '.', ',') }}</span>)</small>
                                         </span>
                                     </td>
-                                    <td>${{ teacher.campaignaward_amount }}
+                                    <td>${{ classroom.campaignaward_amount }}
                                         -
-                                        {{ teacher.campaignaward_name }}</td>
+                                        {{ classroom.campaignaward_name }}</td>
 
                                 </tr>
                             {% endfor %}
@@ -104,32 +104,32 @@
                 <div class="panel-heading">Top
                     {{ ranking_limit }}
                     Class Rankings -
-                    <a href="{{ path('teacher_index', {'campaignUrl':campaign.url}) }}">
+                    <a href="{{ path('classroom_index', {'campaignUrl':campaign.url}) }}">
                         <small>(click here to view all)</small>
                     </a>
                 </div>
-                {% if teacher_rankings | length > 0 %}
+                {% if classroom_rankings | length > 0 %}
                     <table class="table table-striped table-condensed">
                         <thead>
                             <tr>
                                 <th>Rank</th>
-                                <th>Teacher</th>
+                                <th>Classroom</th>
                                 <th>Amount</th>
 
                             </tr>
                         </thead>
                         <tbody>
-                            {% for teacher_ranking in teacher_rankings %}
+                            {% for classroom_ranking in classroom_rankings %}
                                 <tr>
                                     <td style="text-align:center;vertical-align: middle;">
-                                        <span class="label label-{% if teacher_ranking.rank == 1 %}success{% elseif teacher_ranking.rank == 2 %}warning{% elseif teacher_ranking.rank == 3 %}primary{% else %}default{% endif %}">{{ teacher_ranking.rank }}</span>
+                                        <span class="label label-{% if classroom_ranking.rank == 1 %}success{% elseif classroom_ranking.rank == 2 %}warning{% elseif classroom_ranking.rank == 3 %}primary{% else %}default{% endif %}">{{ classroom_ranking.rank }}</span>
                                     </td>
                                     <td>
-                                        <a href="{{ path('teacher_show', { 'campaignUrl':campaign.url, 'id': teacher_ranking.id }) }}">{{ teacher_ranking.grade_name }}
+                                        <a href="{{ path('classroom_show', { 'campaignUrl':campaign.url, 'id': classroom_ranking.id }) }}">{{ classroom_ranking.grade_name }}
                                             -
-                                            {{ teacher_ranking.teacher_name }}</a>
+                                            {{ classroom_ranking.classroom_name }}</a>
                                     </td>
-                                    <td style="text-align:right;">${{ teacher_ranking.donation_amount|number_format(2, '.', ',') }}</td>
+                                    <td style="text-align:right;">${{ classroom_ranking.donation_amount|number_format(2, '.', ',') }}</td>
 
                                 </tr>
                             {% endfor %}
@@ -138,7 +138,7 @@
                 {% else %}
                     <div class="panel-body" style="font-size:120%;">
                         <div style="text-align:center">
-                            <span class="lead">Not enough data to calculate teacher rankings</span>
+                            <span class="lead">Not enough data to calculate classroom rankings</span>
                         </div>
                     </div>
                 {% endif %}
@@ -154,7 +154,7 @@
                         <thead>
                             <tr>
                                 <th>Rank</th>
-                                <th>Teacher</th>
+                                <th>Classroom</th>
                                 <th>Student</th>
                                 <th>Amount</th>
 
@@ -168,8 +168,8 @@
                                     </td>
                                     <td>
                                         {% if is_granted('ROLE_USER') %}
-                                            <a href="{{ path('teacher_show', { 'campaignUrl':campaign.url, 'id': student_ranking.teacher_id }) }}">{{ student_ranking.teacher_name }}</a>
-                                        {% else %}{{ student_ranking.teacher_name }}{% endif %}
+                                            <a href="{{ path('classroom_show', { 'campaignUrl':campaign.url, 'id': student_ranking.classroom_id }) }}">{{ student_ranking.classroom_name }}</a>
+                                        {% else %}{{ student_ranking.classroom_name }}{% endif %}
                                     </td>
                                     <td>
                                         {{ student_ranking.student_name }}
@@ -183,7 +183,7 @@
                 {% else %}
                     <div class="panel-body" style="font-size:120%;">
                         <div style="text-align:center">
-                            <span class="lead">Not enough data to calculate teacher rankings</span>
+                            <span class="lead">Not enough data to calculate classroom rankings</span>
                         </div>
                     </div>
                 {% endif %}

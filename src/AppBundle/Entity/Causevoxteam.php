@@ -48,12 +48,12 @@ class Causevoxteam
     private $fundsNeeded = null;
 
     /**
-     * @var Teacher
+     * @var Classroom
      *
-     * @ORM\ManyToOne(targetEntity="Teacher", inversedBy="causevoxteams")
+     * @ORM\ManyToOne(targetEntity="Classroom", inversedBy="causevoxteams")
      * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
      */
-    private $teacher;
+    private $classroom;
 
 
     /**
@@ -173,27 +173,27 @@ class Causevoxteam
     }
 
     /**
-     * Set teacher.
+     * Set classroom.
      *
-     * @param string $teacher
+     * @param string $classroom
      *
      * @return CauseVoxTeam
      */
-    public function setTeacher($teacher)
+    public function setClassroom($classroom)
     {
-        $this->teacher = $teacher;
+        $this->classroom = $classroom;
 
         return $this;
     }
 
     /**
-     * Get teacher.
+     * Get classroom.
      *
      * @return string
      */
-    public function getTeacher()
+    public function getClassroom()
     {
-        return $this->teacher;
+        return $this->classroom;
     }
 
     /**

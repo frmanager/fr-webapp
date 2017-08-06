@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Utils\CampaignHelper;
-use AppBundle\Entity\Teacher;
+use AppBundle\Entity\Classroom;
 use AppBundle\Utils\QueryHelper;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -49,8 +49,8 @@ class CampaignController extends Controller
      // replace this example code with whatever you need
      return $this->render('campaign/dashboard.html.twig', array(
        'campaign_settings' => $campaignSettings->getCampaignSettings(),
-       'new_teacher_awards' => $queryHelper->getTeacherAwards(array('campaign' => $campaign, 'before_date' => $reportDate, 'limit' => 5, 'order_by' => array('field' => 'donated_at',  'order' => 'asc'))),
-       'teacher_rankings' => $queryHelper->getTeacherRanks(array('campaign' => $campaign,'limit'=> $limit, 'before_date' => $reportDate)),
+       'new_classroom_awards' => $queryHelper->getClassroomAwards(array('campaign' => $campaign, 'before_date' => $reportDate, 'limit' => 5, 'order_by' => array('field' => 'donated_at',  'order' => 'asc'))),
+       'classroom_rankings' => $queryHelper->getClassroomRanks(array('campaign' => $campaign,'limit'=> $limit, 'before_date' => $reportDate)),
        'report_date' => $reportDate,
        'ranking_limit' => $limit,
        'causevoxteams' => $causevoxteams,

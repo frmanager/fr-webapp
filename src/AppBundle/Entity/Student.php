@@ -10,11 +10,11 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="student",uniqueConstraints={@ORM\UniqueConstraint(columns={"name", "teacher_id", "campaign_id"})})
+ * @ORM\Table(name="student",uniqueConstraints={@ORM\UniqueConstraint(columns={"name", "classroom_id", "campaign_id"})})
  * @UniqueEntity(
- *     fields={"name", "teacher"},
+ *     fields={"name", "classroom"},
  *     errorPath="name",
- *     message="Duplicate Student for Identified Teacher"
+ *     message="Duplicate Student for Identified Classroom"
  * )
  */
 class Student
@@ -33,13 +33,13 @@ class Student
     private $name;
 
     /**
-     * @var Teacher
+     * @var Classroom
      *
-     * @ORM\ManyToOne(targetEntity="Teacher", inversedBy="students")
+     * @ORM\ManyToOne(targetEntity="Classroom", inversedBy="students")
      * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
      * @Assert\NotNull()
      */
-    private $teacher;
+    private $classroom;
 
     /**
      * @ORM\OneToMany(targetEntity="Donation", mappedBy="student", cascade={"remove"})
@@ -51,6 +51,14 @@ class Student
      */
     private $causevoxfundraisers;
 
+    /**
+     * @var Grade
+     *
+     * @ORM\ManyToOne(targetEntity="Grade", inversedBy="classrooms", cascade={"remove"})
+     * @ORM\JoinColumn(name="grade_id", referencedColumnName="id")
+     * @Assert\NotNull()
+     */
+    private $grade;
 
     /**
      * @var Campaign
@@ -112,52 +120,30 @@ class Student
     }
 
     /**
-     * Set teacher.
+     * Set classroom.
      *
-     * @param string $teacher
+     * @param string $classroom
      *
      * @return Student
      */
-    public function setTeacher($teacher)
+    public function setClassroom($classroom)
     {
-        $this->teacher = $teacher;
+        $this->classroom = $classroom;
 
         return $this;
     }
 
     /**
-     * Get teacher.
+     * Get classroom.
      *
      * @return string
      */
-    public function getTeacher()
+    public function getClassroom()
     {
-        return $this->teacher;
+        return $this->classroom;
     }
 
-    /**
-     * Set grade.
-     *
-     * @param string $grade
-     *
-     * @return Student
-     */
-    public function setGrade($grade)
-    {
-        $this->grade = $grade;
 
-        return $this;
-    }
-
-    /**
-     * Get grade.
-     *
-     * @return string
-     */
-    public function getGrade()
-    {
-        return $this->grade;
-    }
     /**
      * Constructor.
      */
@@ -200,9 +186,9 @@ class Student
         return $this->causevoxfundraisers;
     }
 
-    public function getStudentAndTeacher()
+    public function getStudentAndClassroom()
     {
-        return sprintf('%s - %s - %s', $this->teacher->getGrade()->getName(), $this->teacher->getTeacherName(), $this->name);
+        return sprintf('%s - %s - %s', $this->classroom->getGrade()->getName(), $this->classroom->getClassroomName(), $this->name);
     }
 
     /**
@@ -292,9 +278,9 @@ class Student
      *
      * @return \AppBundle\Entity\Campaign
      */
-    public function getTeacherCampaign()
+    public function getClassroomCampaign()
     {
-        return $this->teacher->campaign;
+        return $this->classroom->campaign;
     }
 
     /**
@@ -304,12 +290,27 @@ class Student
      *
      * @return Grade
      */
-    public function setCampaignFromTeacher(\AppBundle\Entity\Campaign $campaign = null)
+    public function setCampaignFromClassroom(\AppBundle\Entity\Campaign $campaign = null)
     {
-        $this->campaign = $this->teacher->getCampaign();
+        $this->campaign = $this->classroom->getCampaign();
 
         return $this;
     }
+
+    /**
+     * Set Grade from provided Classroom
+     *
+     * @param \AppBundle\Entity\Grade $grade
+     *
+     * @return Grade
+     */
+    public function setGradeFromClassroom(\AppBundle\Entity\Grade $grade = null)
+    {
+        $this->grade = $this->classroom->getGrade();
+
+        return $this;
+    }
+
 
     /**
      * Add teamStudent
@@ -343,5 +344,29 @@ class Student
     public function getTeamStudents()
     {
         return $this->teamStudents;
+    }
+
+    /**
+     * Set grade.
+     *
+     * @param string $grade
+     *
+     * @return Grade
+     */
+    public function setGrade($grade)
+    {
+        $this->grade = $grade;
+
+        return $this;
+    }
+
+    /**
+     * Get grade.
+     *
+     * @return string
+     */
+    public function getGrade()
+    {
+        return $this->grade;
     }
 }

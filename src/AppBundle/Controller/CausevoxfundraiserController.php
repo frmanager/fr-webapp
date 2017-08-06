@@ -180,7 +180,7 @@ class CausevoxfundraiserController extends Controller
                 $uploadFile->move('temp/', strtolower($entity).'.csv');
                 $CSVHelper = new CSVHelper();
                 $CSVHelper->processFile('temp/', strtolower($entity).'.csv');
-                $CSVHelper->cleanTeacherNames();
+                $CSVHelper->cleanClassroomNames();
                 $CSVHelper->getFirstNameFromFullName();
 
                 $templateFields = array(
@@ -194,7 +194,7 @@ class CausevoxfundraiserController extends Controller
                   'teams',
                   'joined',
                   'grade',
-                  'teachers_name',
+                  'classrooms_name',
                   'students_name', );
 
                 if ($CSVHelper->validateHeaders($templateFields)) {
@@ -228,7 +228,7 @@ class CausevoxfundraiserController extends Controller
                         unset($errorMessage);
                         unset($student);
                         unset($grade);
-                        unset($teacher);
+                        unset($classroom);
 
                         if (!$failure) {
                             $grade = $this->getDoctrine()->getRepository('AppBundle:Grade')->findOneByName($item['grade']);
@@ -247,18 +247,18 @@ class CausevoxfundraiserController extends Controller
                         }
 
                         if (!$failure) {
-                            $teacher = $this->getDoctrine()->getRepository('AppBundle:Teacher')->findOneByTeacherName($item['teachers_name']);
-                            if (empty($teacher)) {
+                            $classroom = $this->getDoctrine()->getRepository('AppBundle:Classroom')->findOneByClassroomName($item['classrooms_name']);
+                            if (empty($classroom)) {
                                 $failure = true;
                                 $errorMessage = new ValidationHelper(array(
                               'entity' => $entity,
                               'row_index' => ($i + 2),
-                              'error_field' => 'teachers_name',
-                              'error_field_value' => $item['teachers_name'],
-                              'error_message' => 'Could not find teacher',
+                              'error_field' => 'classrooms_name',
+                              'error_field_value' => $item['classrooms_name'],
+                              'error_message' => 'Could not find classroom',
                               'error_level' => ValidationHelper::$level_error, ));
                             }else{
-                              $logger->debug("Found Teacher #".$teacher->getId().": ".$teacher->getTeacherName());
+                              $logger->debug("Found Classroom #".$classroom->getId().": ".$classroom->getClassroomName());
                             }
                         }
 
@@ -266,7 +266,7 @@ class CausevoxfundraiserController extends Controller
                         if (!$failure) {
 
                             if (!isset($studentId)) {
-                                $queryString = sprintf("SELECT u.id FROM AppBundle:Student u WHERE u.teacher = '%s' AND u.name = '%s'", $teacher->getId(), $item['students_name']);
+                                $queryString = sprintf("SELECT u.id FROM AppBundle:Student u WHERE u.classroom = '%s' AND u.name = '%s'", $classroom->getId(), $item['students_name']);
                                 $result = $em->createQuery($queryString)->getResult();
 
                                 if (!empty($result)) {
@@ -276,7 +276,7 @@ class CausevoxfundraiserController extends Controller
                             }
 
                             if (!isset($studentId)) {
-                                $queryString = sprintf("SELECT u.id FROM AppBundle:Student u WHERE u.teacher = '%s' AND u.name = '%s'", $teacher->getId(), $item['students_first_name']);
+                                $queryString = sprintf("SELECT u.id FROM AppBundle:Student u WHERE u.classroom = '%s' AND u.name = '%s'", $classroom->getId(), $item['students_first_name']);
                                 $result = $em->createQuery($queryString)->getResult();
                                 if (!empty($result)) {
                                     $studentId = $result[0]['id'];
@@ -285,7 +285,7 @@ class CausevoxfundraiserController extends Controller
                             }
 
                             if (!isset($studentId)) {
-                                $queryString = sprintf("SELECT u.id FROM AppBundle:Student u WHERE u.teacher = '%s' AND u.name = '%s'", $teacher->getId(), $item['students_name_with_initial']);
+                                $queryString = sprintf("SELECT u.id FROM AppBundle:Student u WHERE u.classroom = '%s' AND u.name = '%s'", $classroom->getId(), $item['students_name_with_initial']);
                                 $result = $em->createQuery($queryString)->getResult();
 
                                 if (!empty($result)) {
@@ -300,8 +300,8 @@ class CausevoxfundraiserController extends Controller
                               $errorMessage = new ValidationHelper(array(
                                   'entity' => $entity,
                                   'row_index' => ($i + 2),
-                                  'error_field' => 'students_name, teacher, grade',
-                                  'error_field_value' => $item['students_name'].', '.$item['teachers_name'].', '.$item['grade'],
+                                  'error_field' => 'students_name, classroom, grade',
+                                  'error_field_value' => $item['students_name'].', '.$item['classrooms_name'].', '.$item['grade'],
                                   'error_message' => 'Could not find student',
                                   'error_level' => ValidationHelper::$level_error, ));
                           }
@@ -312,11 +312,11 @@ class CausevoxfundraiserController extends Controller
                             $student = $em->find('AppBundle:Student', $studentId);
                             $logger->debug("Found Student #".$student->getId().": ".$student->getName());
                             $causevoxfundraiser = $this->getDoctrine()->getRepository('AppBundle:'.$entity)->findOneBy(
-                        array('email' => $item['email'], 'student' => $student, 'teacher' => $teacher)
+                        array('email' => $item['email'], 'student' => $student, 'classroom' => $classroom)
                         );
                         //Going to perform "Insert" vs "Update"
                           if (empty($causevoxfundraiser)) {
-                              $logger->debug($entity.' not found. ['.$item['email'].' - '.$student->getName().' - '.$teacher->getTeacherName().'] .creating new record');
+                              $logger->debug($entity.' not found. ['.$item['email'].' - '.$student->getName().' - '.$classroom->getClassroomName().'] .creating new record');
                               $causevoxfundraiser = new Causevoxfundraiser();
                               $causevoxfundraiser->setEmail($item['email']);
                           } else {
@@ -336,7 +336,7 @@ class CausevoxfundraiserController extends Controller
                             $causevoxfundraiser->setUrl($item['stub']);
                             $causevoxfundraiser->setFundsRaised(intval($item['funds_raised']));
                             $causevoxfundraiser->setStudent($student);
-                            $causevoxfundraiser->setTeacher($teacher);
+                            $causevoxfundraiser->setClassroom($classroom);
                             $causevoxfundraiser->setFirstName($item['first_name']);
                             $causevoxfundraiser->setLastName($item['last_name']);
 

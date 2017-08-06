@@ -180,9 +180,9 @@ class CausevoxteamController extends Controller
                 $uploadFile->move('temp/', strtolower($entity).'.csv');
                 $CSVHelper = new CSVHelper();
                 $CSVHelper->processFile('temp/', strtolower($entity).'.csv');
-                $CSVHelper->cleanTeacherNames();
+                $CSVHelper->cleanClassroomNames();
 
-                $templateFields = array('name', 'grade', 'campaignUrl', 'funds_needed', 'funds_raised', 'teachers_name', 'members', 'admins');
+                $templateFields = array('name', 'grade', 'campaignUrl', 'funds_needed', 'funds_raised', 'classrooms_name', 'members', 'admins');
 
                 if ($CSVHelper->validateHeaders($templateFields)) {
                     $logger->debug('Making changes to database');
@@ -228,22 +228,22 @@ class CausevoxteamController extends Controller
                         }
 
                         if (!$failure) {
-                            $teacher = $this->getDoctrine()->getRepository('AppBundle:Teacher')->findOneByTeacherName($item['teachers_name']);
-                            if (empty($teacher)) {
+                            $classroom = $this->getDoctrine()->getRepository('AppBundle:Classroom')->findOneByClassroomName($item['classrooms_name']);
+                            if (empty($classroom)) {
                                 $failure = true;
                                 $errorMessage = new ValidationHelper(array(
                                 'entity' => $entity,
                                 'row_index' => ($i + 2),
-                                'error_field' => 'teachers_name',
-                                'error_field_value' => $item['teachers_name'],
-                                'error_message' => 'Could not find teacher',
+                                'error_field' => 'classrooms_name',
+                                'error_field_value' => $item['classrooms_name'],
+                                'error_message' => 'Could not find classroom',
                                 'error_level' => ValidationHelper::$level_error, ));
                             }
                         }
 
                         if (!$failure) {
                             $causevoxteam = $this->getDoctrine()->getRepository('AppBundle:'.$entity)->findOneBy(
-                          array('teacher' => $teacher)
+                          array('classroom' => $classroom)
                           );
                           //Going to perform "Insert" vs "Update"
                             if (empty($causevoxteam)) {
@@ -266,7 +266,7 @@ class CausevoxteamController extends Controller
                             $causevoxteam->setFundsNeeded(intval($item['funds_needed']));
                             $causevoxteam->setUrl($item['campaignUrl']);
                             $causevoxteam->setFundsRaised(intval($item['funds_raised']));
-                            $causevoxteam->setTeacher($teacher);
+                            $causevoxteam->setClassroom($classroom);
 
                             $validator = $this->get('validator');
                             $errors = $validator->validate($causevoxteam);

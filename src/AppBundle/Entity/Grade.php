@@ -12,9 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
 class Grade
 {
     /**
-     * @ORM\OneToMany(targetEntity="Teacher", mappedBy="grade", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Classroom", mappedBy="grade", cascade={"remove"})
      */
-    private $teachers;
+    private $classrooms;
 
     /**
      * @ORM\Column(type="integer")
@@ -78,41 +78,41 @@ class Grade
      */
     public function __construct()
     {
-        $this->teachers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->classrooms = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Add teacher.
+     * Add classroom.
      *
-     * @param \AppBundle\Entity\Teacher $teacher
+     * @param \AppBundle\Entity\Classroom $classroom
      *
      * @return Grade
      */
-    public function addTeacher(\AppBundle\Entity\Teacher $teacher)
+    public function addClassroom(\AppBundle\Entity\Classroom $classroom)
     {
-        $this->teachers[] = $teacher;
+        $this->classrooms[] = $classroom;
 
         return $this;
     }
 
     /**
-     * Remove teacher.
+     * Remove classroom.
      *
-     * @param \AppBundle\Entity\Teacher $teacher
+     * @param \AppBundle\Entity\Classroom $classroom
      */
-    public function removeTeacher(\AppBundle\Entity\Teacher $teacher)
+    public function removeClassroom(\AppBundle\Entity\Classroom $classroom)
     {
-        $this->teachers->removeElement($teacher);
+        $this->classrooms->removeElement($classroom);
     }
 
     /**
-     * Get teachers.
+     * Get classrooms.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getTeachers()
+    public function getClassrooms()
     {
-        return $this->teachers;
+        return $this->classrooms;
     }
 
     /**

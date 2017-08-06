@@ -8,7 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\Grade;
 use AppBundle\Entity\Student;
-use AppBundle\Entity\Teacher;
+use AppBundle\Entity\Classroom;
 use AppBundle\Utils\CSVHelper;
 use AppBundle\Entity\Donation;
 use AppBundle\Utils\ValidationHelper;
@@ -206,7 +206,7 @@ class DonationController extends Controller
                 $fileIndexOffset = 0;
 
                 if (strcmp($fileType, 'Offlinedonation') == 0) {
-                    $templateFields = array('date', 'grade', 'teachers_name', 'students_name', 'amount');
+                    $templateFields = array('date', 'grade', 'classrooms_name', 'students_name', 'amount');
                     $fileIndexOffset = 1;
                 } else {
                     $templateFields = array('donation_page',
@@ -235,7 +235,7 @@ class DonationController extends Controller
                   'giftaid',
                   'transaction_id',
                   'donated_at',
-                  'teachers_name',
+                  'classrooms_name',
                   'students_name', );
                 }
 
@@ -244,8 +244,8 @@ class DonationController extends Controller
                 $CSVHelper->processFile('temp/', strtolower($entity).'.csv');
 
                 if (strcmp($fileType, 'Causevoxdonation') == 0) {
-                    $CSVHelper->getGradefromTeacherName();
-                    $CSVHelper->cleanTeacherNames();
+                    $CSVHelper->getGradefromClassroomName();
+                    $CSVHelper->cleanClassroomNames();
                     $CSVHelper->getFirstNameFromFullName();
                 }
 
@@ -296,7 +296,7 @@ class DonationController extends Controller
                         unset($student);
                         unset($studentIdAlt);
                         unset($grade);
-                        unset($teacher);
+                        unset($classroom);
                         $teamPageFlag = false;
 
                         if (strcmp($fileType, 'Causevoxdonation') == 0 && isset($item['donation_page']) && !strcmp($item['donation_page'], 'none') == 0) {
@@ -304,12 +304,12 @@ class DonationController extends Controller
                             if (strcmp($urlString, '/team') == 0) {
                                 $teamPageFlag = true;
                                 $urlString = substr($item['donation_page'], 6, strlen($item['donation_page'])); // Chopping off the '/team'
-                            $queryString = sprintf("SELECT IDENTITY(u.teacher, 'id') as teacher_id FROM AppBundle:Causevoxteam u WHERE u.url = '%s'", $urlString);
+                            $queryString = sprintf("SELECT IDENTITY(u.classroom, 'id') as classroom_id FROM AppBundle:Causevoxteam u WHERE u.url = '%s'", $urlString);
                                 $logger->debug('QueryString: '.$queryString);
                                 $result = $em->createQuery($queryString)->getResult();
                                 if (!empty($result)) {
-                                    $teacherId = $result[0]['teacher_id'];
-                                    $logger->debug('Row ['.($i + 2 + $fileIndexOffset).'] - Found teacher [#'.$teacherId.'] using associated Causevoxteam URL "'.$item['donation_page'].'"');
+                                    $classroomId = $result[0]['classroom_id'];
+                                    $logger->debug('Row ['.($i + 2 + $fileIndexOffset).'] - Found classroom [#'.$classroomId.'] using associated Causevoxteam URL "'.$item['donation_page'].'"');
                                 } else {
                                     $failure = true;
                                     $errorMessage = new ValidationHelper(array(
@@ -393,28 +393,28 @@ class DonationController extends Controller
                         }
 
                         if (!$failure && isset($grade)) {
-                            $teacher = $this->getDoctrine()->getRepository('AppBundle:Teacher')->findOneByTeacherName($item['teachers_name']);
-                            $queryString = sprintf("SELECT u.id FROM AppBundle:Teacher u WHERE u.teacherName = '%s'", $item['teachers_name']);
+                            $classroom = $this->getDoctrine()->getRepository('AppBundle:Classroom')->findOneByClassroomName($item['classrooms_name']);
+                            $queryString = sprintf("SELECT u.id FROM AppBundle:Classroom u WHERE u.teacherName = '%s'", $item['classrooms_name']);
                             $result = $em->createQuery($queryString)->getResult();
                             if (!empty($result)) {
-                                $teacherId = $result[0]['id'];
-                                $logger->debug('Row ['.($i + 2 + $fileIndexOffset).'] - Found teacher "'.$item['teachers_name'].'" [#'.$teacherId.'] using name "'.$item['teachers_name'].'"');
-                            } else if(empty($result) && !isset($studentId) && !isset($teacherId) && !$teamPageFlag) {
+                                $classroomId = $result[0]['id'];
+                                $logger->debug('Row ['.($i + 2 + $fileIndexOffset).'] - Found classroom "'.$item['classrooms_name'].'" [#'.$classroomId.'] using name "'.$item['classrooms_name'].'"');
+                            } else if(empty($result) && !isset($studentId) && !isset($classroomId) && !$teamPageFlag) {
                                 $failure = true;
                                 $errorMessage = new ValidationHelper(array(
                                 'entity' => $entity,
                                 'row_index' => ($i + 2 + $fileIndexOffset),
-                                'error_field' => 'teachers_name',
-                                'error_field_value' => $item['teachers_name'],
-                                'error_message' => 'Could not find teacher',
+                                'error_field' => 'classrooms_name',
+                                'error_field_value' => $item['classrooms_name'],
+                                'error_message' => 'Could not find classroom',
                                 'error_level' => ValidationHelper::$level_error, ));
                             }
                         }
 
                         //Here is our find student logic. We try a lot of different methods to try and find it....
-                        if (!$failure && isset($grade) && isset($teacher)) {
+                        if (!$failure && isset($grade) && isset($classroom)) {
                             if (!isset($studentIdAlt)) {
-                                $queryString = sprintf("SELECT u.id FROM AppBundle:Student u WHERE u.teacher = '%s' AND u.name = '%s'", $teacherId, $item['students_name']);
+                                $queryString = sprintf("SELECT u.id FROM AppBundle:Student u WHERE u.classroom = '%s' AND u.name = '%s'", $classroomId, $item['students_name']);
                                 $result = $em->createQuery($queryString)->getResult();
 
                                 if (!empty($result)) {
@@ -424,7 +424,7 @@ class DonationController extends Controller
                             }
 
                             if (!isset($studentIdAlt)) {
-                                $queryString = sprintf("SELECT u.id FROM AppBundle:Student u WHERE u.teacher = '%s' AND u.name = '%s'", $teacherId, $item['students_first_name']);
+                                $queryString = sprintf("SELECT u.id FROM AppBundle:Student u WHERE u.classroom = '%s' AND u.name = '%s'", $classroomId, $item['students_first_name']);
                                 $result = $em->createQuery($queryString)->getResult();
                                 if (!empty($result)) {
                                     $studentIdAlt = $result[0]['id'];
@@ -433,7 +433,7 @@ class DonationController extends Controller
                             }
 
                             if (!isset($studentIdAlt)) {
-                                $queryString = sprintf("SELECT u.id FROM AppBundle:Student u WHERE u.teacher = '%s' AND u.name = '%s'", $teacherId, $item['students_name_with_initial']);
+                                $queryString = sprintf("SELECT u.id FROM AppBundle:Student u WHERE u.classroom = '%s' AND u.name = '%s'", $classroomId, $item['students_name_with_initial']);
                                 $result = $em->createQuery($queryString)->getResult();
 
                                 if (!empty($result)) {
@@ -452,8 +452,8 @@ class DonationController extends Controller
                               $errorMessage = new ValidationHelper(array(
                                   'entity' => $entity,
                                   'row_index' => ($i + 2 + $fileIndexOffset),
-                                  'error_field' => 'students_name, teacher, grade',
-                                  'error_field_value' => $item['students_name'].', '.$item['teachers_name'].', '.$item['grade'],
+                                  'error_field' => 'students_name, classroom, grade',
+                                  'error_field_value' => $item['students_name'].', '.$item['classrooms_name'].', '.$item['grade'],
                                   'error_message' => 'Could not find student',
                                   'error_level' => ValidationHelper::$level_error, ));
                           }
@@ -461,13 +461,13 @@ class DonationController extends Controller
 
                         if (!$failure) {
                             if ($teamPageFlag) {
-                                $teacher = $em->find('AppBundle:Teacher', $teacherId);
+                                $classroom = $em->find('AppBundle:Classroom', $classroomId);
                                 if(isset($studentId)){
                                    $student = $em->find('AppBundle:Student', $studentId);
                                 }
                             } else {
                                 $student = $em->find('AppBundle:Student', $studentId);
-                                $teacher = $em->find('AppBundle:Teacher', $student->getTeacher());
+                                $classroom = $em->find('AppBundle:Classroom', $student->getClassroom());
                             }
 
                           //Example: 2016-08-25 16:35:54
@@ -536,7 +536,7 @@ class DonationController extends Controller
                             if(isset($student)){
                               $donation->setStudent($student);
                             }
-                            $donation->setTeacher($teacher);
+                            $donation->setClassroom($classroom);
                             $validator = $this->get('validator');
                             $errors = $validator->validate($donation);
 

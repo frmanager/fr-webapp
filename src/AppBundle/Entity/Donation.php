@@ -47,13 +47,13 @@ class Donation
 
 
     /**
-     * @var Teacher
+     * @var Classroom
      *
-     * @ORM\ManyToOne(targetEntity="Teacher", inversedBy="donations")
+     * @ORM\ManyToOne(targetEntity="Classroom", inversedBy="donations")
      * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE", nullable=true)
      * @Assert\NotNull()
      */
-    private $teacher;
+    private $classroom;
 
 
     /**
@@ -495,27 +495,27 @@ class Donation
     }
 
     /**
-     * Set teacher
+     * Set classroom
      *
-     * @param \AppBundle\Entity\Teacher $teacher
+     * @param \AppBundle\Entity\Classroom $classroom
      *
      * @return Donation
      */
-    public function setTeacher(\AppBundle\Entity\Teacher $teacher = null)
+    public function setClassroom(\AppBundle\Entity\Classroom $classroom = null)
     {
-        $this->teacher = $teacher;
+        $this->classroom = $classroom;
 
         return $this;
     }
 
     /**
-     * Get teacher
+     * Get classroom
      *
-     * @return \AppBundle\Entity\Teacher
+     * @return \AppBundle\Entity\Classroom
      */
-    public function getTeacher()
+    public function getClassroom()
     {
-        return $this->teacher;
+        return $this->classroom;
     }
 
     /**
@@ -547,9 +547,9 @@ class Donation
      *
      * @return \AppBundle\Entity\Campaign
      */
-    public function getTeacherCampaign()
+    public function getClassroomCampaign()
     {
-        return $this->teacher->campaign;
+        return $this->classroom->campaign;
     }
 
     /**
@@ -559,9 +559,9 @@ class Donation
      *
      * @return Grade
      */
-    public function setCampaignFromTeacher(\AppBundle\Entity\Campaign $campaign = null)
+    public function setCampaignFromClassroom(\AppBundle\Entity\Campaign $campaign = null)
     {
-        $this->campaign = $this->teacher->getCampaign();
+        $this->campaign = $this->classroom->getCampaign();
 
         return $this;
     }
@@ -618,18 +618,19 @@ class Donation
 
 
     /**
-     * Set teacher from provided Student
+     * Set classroom from provided Student
      *
-     * @param \AppBundle\Entity\Teacher $teacher
+     * @param \AppBundle\Entity\Classroom $classroom
      *
-     * @return Teacher
+     * @return Classroom
      */
-    public function setTeacherFromStudent(\AppBundle\Entity\Teacher $teacher = null)
+    public function setClassroomFromStudent(\AppBundle\Entity\Classroom $classroom = null)
     {
-        $this->teacher = $this->student->getTeacher();
+        $this->classroom = $this->student->getClassroom();
 
         return $this;
     }
+
 
     /**
      * Set team

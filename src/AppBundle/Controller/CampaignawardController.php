@@ -10,7 +10,7 @@ use AppBundle\Entity\Campaignaward;
 use AppBundle\Entity\Campaignawardtype;
 use AppBundle\Entity\Campaignawardstyle;
 use AppBundle\Utils\CampaignHelper;
-use AppBundle\Entity\Teacher;
+use AppBundle\Entity\Classroom;
 use AppBundle\Utils\QueryHelper;
 use DateTime;
 /**
@@ -35,7 +35,7 @@ class CampaignawardController extends Controller
         if (empty($campaignawardtypes)) {
             $defaultCampaignawardtypes = [];
 
-            array_push($defaultCampaignawardtypes, array('name' => 'Teacher/Class', 'value' => 'teacher', 'description' => ''));
+            array_push($defaultCampaignawardtypes, array('name' => 'Classroom/Class', 'value' => 'classroom', 'description' => ''));
             array_push($defaultCampaignawardtypes, array('name' => 'Student/Individual', 'value' => 'student', 'description' => ''));
 
             foreach ($defaultCampaignawardtypes as $defaultCampaignawardtype) {
@@ -56,7 +56,7 @@ class CampaignawardController extends Controller
             $defaultCampaignawardstyles = [];
 
             array_push($defaultCampaignawardstyles, array('name' => 'Place', 'value' => 'place', 'description' => ''));
-            array_push($defaultCampaignawardstyles, array('name' => 'Donation Level', 'value' => 'level', 'description' => 'award received if (Teacher/Student) reach donation amount'));
+            array_push($defaultCampaignawardstyles, array('name' => 'Donation Level', 'value' => 'level', 'description' => 'award received if (Classroom/Student) reach donation amount'));
 
             foreach ($defaultCampaignawardstyles as $defaultCampaignawardstyle) {
                 $em = $this->getDoctrine()->getManager();
@@ -86,12 +86,12 @@ class CampaignawardController extends Controller
 
 
     /**
-     * Lists all Awards for teachers.
+     * Lists all Awards for classrooms.
      *
-     * @Route("/awards", name="public_teacher_awards")
+     * @Route("/awards", name="public_classroom_awards")
      * @Method({"GET", "POST"})
      */
-    public function TeacherAwardsAction($campaignUrl)
+    public function ClassroomAwardsAction($campaignUrl)
     {
       $logger = $this->get('logger');
       $limit = 3;
@@ -103,9 +103,9 @@ class CampaignawardController extends Controller
       $reportDate->modify('-1 day');
 
       // replace this example code with whatever you need
-      return $this->render('default/teacherAwards.html.twig', array(
+      return $this->render('default/classroomAwards.html.twig', array(
         'campaign_settings' => $campaignSettings->getCampaignSettings(),
-        'teachers' => $queryHelper->getTeacherAwards(array('campaign' => $campaign, 'before_date' => $reportDate)),
+        'classrooms' => $queryHelper->getClassroomAwards(array('campaign' => $campaign, 'before_date' => $reportDate)),
         'report_date' => $reportDate,
         'campaign' => $campaign
       ));

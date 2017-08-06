@@ -24,9 +24,9 @@ class QueryHelper
         return $this->getData($this->getStudentsDataQuery($options));
     }
 
-    public function getTeachersData(array $options)
+    public function getClassroomsData(array $options)
     {
-        return $this->getData($this->getTeachersDataQuery($options));
+        return $this->getData($this->getClassroomsDataQuery($options));
     }
 
     public function getData($queryString)
@@ -35,9 +35,9 @@ class QueryHelper
         return $this->em->createQuery($queryString)->getResult();
     }
 
-    public function getTeacherDonationsByDay(array $options)
+    public function getClassroomDonationsByDay(array $options)
     {
-        return $this->getData($this->getTeacherDonationsByDayQuery($options));
+        return $this->getData($this->getClassroomDonationsByDayQuery($options));
     }
 
     public function getTotalDonations(array $options)
@@ -65,16 +65,17 @@ class QueryHelper
 
         $queryString = sprintf('SELECT s.id as id,
                       s.name as student_name,
-                      t.id as teacher_id,
-                      t.email as teacher_email,
+                      t.id as classroom_id,
+                      t.email as classroom_email,
                       t.teacherName as teacher_name,
+                      t.name as classroom_name,
                       g.id as grade_id,
                       g.name as grade_name,
                       sum(d.amount) as donation_amount,
                       count(d.amount) as total_donations
                  FROM AppBundle:Student s
-      LEFT OUTER JOIN AppBundle:Teacher t
-                 WITH t.id = s.teacher
+      LEFT OUTER JOIN AppBundle:Classroom t
+                 WITH t.id = s.classroom
       LEFT OUTER JOIN AppBundle:Donation d
                  WITH s.id = d.student
                    %s
@@ -111,7 +112,7 @@ class QueryHelper
         return $queryString;
     }
 
-    public function getTeachersDataQuery(array $options)
+    public function getClassroomsDataQuery(array $options)
     {
         $campaign = $options['campaign'];
 
@@ -129,14 +130,15 @@ class QueryHelper
 
         $queryString = sprintf('SELECT t.id as id,
                                        t.teacherName as teacher_name,
-                                       t.email as teacher_email,
+                                       t.name as classroom_name,
+                                       t.email as classroom_email,
                                        g.id as grade_id,
                                        g.name as grade_name,
                                        sum(d.amount) as donation_amount,
                                        count(d.amount) as total_donations
-                                  FROM AppBundle:Teacher t
+                                  FROM AppBundle:Classroom t
                        LEFT OUTER JOIN AppBundle:Donation d
-                                  WITH t.id = d.teacher
+                                  WITH t.id = d.classroom
                                    %s
                                   JOIN AppBundle:Grade g
                                   WITH g.id = t.grade
@@ -150,7 +152,7 @@ class QueryHelper
         return $queryString;
     }
 
-    public function getTeacherDonationsByDayQuery(array $options)
+    public function getClassroomDonationsByDayQuery(array $options)
     {
         $campaign = $options['campaign'];
 
@@ -168,15 +170,16 @@ class QueryHelper
 
         $queryString = sprintf('SELECT t.id as id,
                         t.teacherName as teacher_name,
-                        t.email as teacher_email,
+                        t.name as classroom_name,
+                        t.email as classroom_email,
                         g.id as grade_id,
                         g.name as grade_name,
                         d.donatedAt as donated_at,
                         sum(d.amount) as donation_amount,
                         count(d.amount) as total_donations
-                   FROM AppBundle:Teacher t
+                   FROM AppBundle:Classroom t
                    JOIN AppBundle:Donation d
-                   WITH t.id = d.teacher
+                   WITH t.id = d.classroom
                       %s
                    JOIN AppBundle:Grade g
                    WITH g.id = t.grade
@@ -320,7 +323,7 @@ class QueryHelper
     public function getCampaignAwards($campaign, $type, $style)
     {
 
-        $campaignawardtype = $this->em->getRepository('AppBundle:Campaignawardtype')->findOneByValue('teacher');
+        $campaignawardtype = $this->em->getRepository('AppBundle:Campaignawardtype')->findOneByValue('classroom');
         $campaignawardstyle = $this->em->getRepository('AppBundle:Campaignawardstyle')->findOneByValue('level');
         $qb = $this->em->createQueryBuilder()->select('u')
              ->from('AppBundle:Campaignaward', 'u')
@@ -335,14 +338,14 @@ class QueryHelper
         return $qb->getQuery()->getResult();
     }
 
-    public function getTeacherRanks(array $options)
+    public function getClassroomRanks(array $options)
     {
-        return $this->getRanks($this->getTeachersData($options), $options);
+        return $this->getRanks($this->getClassroomsData($options), $options);
     }
 
-    public function getTeacherRank($id, array $options)
+    public function getClassroomRank($id, array $options)
     {
-        return $this->getRank($this->getTeachersData($options), $id, $options);
+        return $this->getRank($this->getClassroomsData($options), $id, $options);
     }
 
     public function getStudentRanks(array $options)
@@ -356,10 +359,10 @@ class QueryHelper
     }
 
     /**
-     * Gets teacher ID and donation amounts by Date
+     * Gets classroom ID and donation amounts by Date
      * returns object.
      */
-    public function getNewTeacherAwards(array $options)
+    public function getNewClassroomAwards(array $options)
     {
         if (isset($options['before_date'])) {
             $todaysDate = $this->convertToDay($options['before_date']);
@@ -367,83 +370,83 @@ class QueryHelper
             $todaysDate = $this->convertToDay(new DateTime());
         }
 
-        $teacherDonationAmountsByDay = $this->getTeacherAwards($options);
+        $classroomDonationAmountsByDay = $this->getClassroomAwards($options);
 
-        $todaysTeachersWithAwards = [];
-        $yesterdaysTeachersWithAwards = [];
-        foreach ($teacherDonationAmountsByDay as $outerLoop) {
+        $todaysClassroomsWithAwards = [];
+        $yesterdaysClassroomsWithAwards = [];
+        foreach ($classroomDonationAmountsByDay as $outerLoop) {
             if (isset($outerLoop['campaignaward_id'])) {
                 //$this->logger->debug("Comparing Today: ".$todaysDate->format('Y-m-d H:i:s')." To outerLoop date: ".$outerLoop['donated_at']->format('Y-m-d H:i:s'));
                 if ($todaysDate == $outerLoop['donated_at']) { //Today
                     //$this->logger->debug("Found award for today: ".print_r($outerLoop, true));
-                    array_push($todaysTeachersWithAwards, $outerLoop);
+                    array_push($todaysClassroomsWithAwards, $outerLoop);
                 } elseif ($todaysDate > $outerLoop['donated_at']) { //Yesterday
                     $existsFlag = false;
                     //$this->logger->debug("Found award for yesterday: ".print_r($outerLoop, true));
-                    foreach ($yesterdaysTeachersWithAwards as $key => $innerLoop) {
+                    foreach ($yesterdaysClassroomsWithAwards as $key => $innerLoop) {
                         if ($innerLoop['id'] == $outerLoop['id']) {
                             $existsFlag = true;
                             if ($outerLoop['donated_at'] >= $innerLoop['donated_at']) {
-                                unset($yesterdaysTeachersWithAwards[$key]);
-                                array_push($yesterdaysTeachersWithAwards, $outerLoop);
+                                unset($yesterdaysClassroomsWithAwards[$key]);
+                                array_push($yesterdaysClassroomsWithAwards, $outerLoop);
                             }
                         }
                     }
                     if (!$existsFlag) {
-                        array_push($yesterdaysTeachersWithAwards, $outerLoop);
+                        array_push($yesterdaysClassroomsWithAwards, $outerLoop);
                     }
                 }
             }
         }
 
           //NOW TAKE THAT NEW LIST
-          foreach ($todaysTeachersWithAwards as $key => $outerLoop) {
-              foreach ($yesterdaysTeachersWithAwards as $innerLoop) {
+          foreach ($todaysClassroomsWithAwards as $key => $outerLoop) {
+              foreach ($yesterdaysClassroomsWithAwards as $innerLoop) {
                   if ($outerLoop['id'] == $innerLoop['id'] && $outerLoop['campaignaward_amount'] <= $innerLoop['campaignaward_amount']) {
-                      unset($todaysTeachersWithAwards[$key]);
+                      unset($todaysClassroomsWithAwards[$key]);
                   }
               }
           }
 
         $this->logger->debug('Classes with Awards before today!');
-        $this->logger->debug(print_r($yesterdaysTeachersWithAwards, true));
+        $this->logger->debug(print_r($yesterdaysClassroomsWithAwards, true));
 
         $this->logger->debug('Todays Classes with New Awards!');
-        $this->logger->debug(print_r($todaysTeachersWithAwards, true));
+        $this->logger->debug(print_r($todaysClassroomsWithAwards, true));
 
-        return $todaysTeachersWithAwards;
+        return $todaysClassroomsWithAwards;
     }
 
     /**
      * Gets the date that various awards were met
      * returns object.
      */
-    public function getTeacherAwards(array $options)
+    public function getClassroomAwards(array $options)
     {
 
-        $teacherDonationAmountsByDay = $this->getTeacherDonationsByDay($options);
-        $teacherCampaignawards = $this->getCampaignAwards($options['campaign'], 'teacher', 'level');
+        $classroomDonationAmountsByDay = $this->getClassroomDonationsByDay($options);
+        $classroomCampaignawards = $this->getCampaignAwards($options['campaign'], 'classroom', 'level');
 
-          //ADDING AWARD DATA TO $teacherDonationAmountsByDay. WE WILL COMPARE THIS AGAINST TODAYS TOTALS
+          //ADDING AWARD DATA TO $classroomDonationAmountsByDay. WE WILL COMPARE THIS AGAINST TODAYS TOTALS
           $loaddedAwardArray = [];
 
-          foreach ($teacherDonationAmountsByDay as $teacher) {
+          foreach ($classroomDonationAmountsByDay as $classroom) {
               $sumAmount = 0;
              //GETTING CUMULATIVE SUM FOR EACH DAY
-              foreach ($teacherDonationAmountsByDay as $thisRecord) {
-                  if ($teacher['id'] == $thisRecord['id'] && $teacher['donated_at'] >= $thisRecord['donated_at']) {
+              foreach ($classroomDonationAmountsByDay as $thisRecord) {
+                  if ($classroom['id'] == $thisRecord['id'] && $classroom['donated_at'] >= $thisRecord['donated_at']) {
                       $sumAmount += $thisRecord['donation_amount'];
                   }
               }
-              $teacher['cumulative_donation_amount'] = $sumAmount;
-              //$this->logger->debug(print_r($teacher, true));
+              $classroom['cumulative_donation_amount'] = $sumAmount;
+              //$this->logger->debug(print_r($classroom, true));
 
-              foreach ($teacherCampaignawards as $teacherCampaignaward) {
-                  if ($teacherCampaignaward->getAmount() <= $sumAmount) {
-                      $teacher['campaignaward_id'] = $teacherCampaignaward->getId();
-                      $teacher['campaignaward_name'] = $teacherCampaignaward->getName();
-                      $teacher['campaignaward_amount'] = $teacherCampaignaward->getAmount();
-                      array_push($loaddedAwardArray, $teacher);
+              foreach ($classroomCampaignawards as $classroomCampaignaward) {
+                  if ($classroomCampaignaward->getAmount() <= $sumAmount) {
+                      $classroom['campaignaward_id'] = $classroomCampaignaward->getId();
+                      $classroom['campaignaward_name'] = $classroomCampaignaward->getName();
+                      $classroom['campaignaward_amount'] = $classroomCampaignaward->getAmount();
+                      array_push($loaddedAwardArray, $classroom);
                   }
               }
 

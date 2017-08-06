@@ -82,13 +82,13 @@ class Causevoxfundraiser
     private $student;
 
     /**
-     * @var Teacher
+     * @var Classroom
      *
-     * @ORM\ManyToOne(targetEntity="Teacher", inversedBy="causevoxfundraisers")
+     * @ORM\ManyToOne(targetEntity="Classroom", inversedBy="causevoxfundraisers")
      * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE", nullable=true)
      * @Assert\NotBlank()
      */
-    private $teacher;
+    private $classroom;
 
 
     /**
@@ -280,27 +280,27 @@ class Causevoxfundraiser
     }
 
     /**
-     * Set teacher
+     * Set classroom
      *
-     * @param \AppBundle\Entity\Teacher $teacher
+     * @param \AppBundle\Entity\Classroom $classroom
      *
      * @return Causevoxfundraiser
      */
-    public function setTeacher(\AppBundle\Entity\Teacher $teacher = null)
+    public function setClassroom(\AppBundle\Entity\Classroom $classroom = null)
     {
-        $this->teacher = $teacher;
+        $this->classroom = $classroom;
 
         return $this;
     }
 
     /**
-     * Get teacher
+     * Get classroom
      *
-     * @return \AppBundle\Entity\Teacher
+     * @return \AppBundle\Entity\Classroom
      */
-    public function getTeacher()
+    public function getClassroom()
     {
-        return $this->teacher;
+        return $this->classroom;
     }
 
     /**

@@ -13,7 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity
  * @ORM\Table(name="campaign",uniqueConstraints={@ORM\UniqueConstraint(columns={"url"})})
  */
-class Campaign
+Class Campaign
 {
 
   /**
@@ -123,9 +123,9 @@ class Campaign
   /**/
 
   /**
-   * @ORM\OneToMany(targetEntity="Teacher", mappedBy="campaign", cascade={"remove"})
+   * @ORM\OneToMany(targetEntity="Classroom", mappedBy="campaign", cascade={"remove"})
    */
-  private $teachers;
+  private $classrooms;
 
   /**
    * @ORM\OneToMany(targetEntity="Donation", mappedBy="campaign", cascade={"remove"})
@@ -163,7 +163,7 @@ private $causevoxteams;
     public function __construct()
     {
         $this->campaignUsers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->teachers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->classrooms = new \Doctrine\Common\Collections\ArrayCollection();
         $this->donations = new \Doctrine\Common\Collections\ArrayCollection();
         $this->campaignawards = new \Doctrine\Common\Collections\ArrayCollection();
         $this->causevoxfundraisers = new \Doctrine\Common\Collections\ArrayCollection();
@@ -398,37 +398,37 @@ private $causevoxteams;
     }
 
     /**
-     * Add teacher
+     * Add classroom
      *
-     * @param \AppBundle\Entity\Teacher $teacher
+     * @param \AppBundle\Entity\Classroom $classroom
      *
      * @return Campaign
      */
-    public function addTeacher(\AppBundle\Entity\Teacher $teacher)
+    public function addClassroom(\AppBundle\Entity\Classroom $classroom)
     {
-        $this->teachers[] = $teacher;
+        $this->classrooms[] = $classroom;
 
         return $this;
     }
 
     /**
-     * Remove teacher
+     * Remove classroom
      *
-     * @param \AppBundle\Entity\Teacher $teacher
+     * @param \AppBundle\Entity\Classroom $classroom
      */
-    public function removeTeacher(\AppBundle\Entity\Teacher $teacher)
+    public function removeClassroom(\AppBundle\Entity\Classroom $classroom)
     {
-        $this->teachers->removeElement($teacher);
+        $this->classrooms->removeElement($classroom);
     }
 
     /**
-     * Get teachers
+     * Get classrooms
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getTeachers()
+    public function getClassrooms()
     {
-        return $this->teachers;
+        return $this->classrooms;
     }
 
     /**
