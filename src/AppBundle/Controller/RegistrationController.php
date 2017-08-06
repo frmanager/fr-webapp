@@ -112,6 +112,13 @@ class RegistrationController extends Controller
         return $this->redirectToRoute('homepage');
       }
 
+      if ($request->isMethod('GET') && null !==  $request->query->get('teamType')) {
+          return $this->render('registration/team.new.html.twig', array(
+            'campaign' => $campaign,
+            'teamTypes' => $teamTypes
+          ));
+      }
+
       if ($request->isMethod('POST')) {
 
           $team = new Team();
@@ -122,7 +129,7 @@ class RegistrationController extends Controller
           return $this->redirectToRoute('team_view', array('url' => $team->getUrl()));
       }
 
-      return $this->render('registration/team.new.html.twig', array(
+      return $this->render('registration/team.type.select.html.twig', array(
         'campaign' => $campaign,
         'teamTypes' => $teamTypes
       ));

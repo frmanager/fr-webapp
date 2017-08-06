@@ -3,15 +3,22 @@
 
 {% block body %}
   <div class="row">
-    <div class="col-sm-4 col-sm-offset-1">
-      <div class="panel panel-primary">
+    <div class="col-sm-6">
+      <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">Why join?</h3>
+          <h3 class="panel-title">About Team Types</h3>
         </div>
         <div class="panel-body">
-          Why Join!
+          <p><i class="fa fa-users fa-border fa-2x" style="text-shadow: 1px 1px #ccc;" aria-hidden="true"></i>&nbsp;<span class="lead">Family</span> <sup style="color:red;">*Most Popular!</sup></p>
+          <p>Family teams are for parents who want a easy way to collect donations for a school campaign without a lot of work. All donations are split evenly amongst all children and their classes.<p>
+          <hr>
+          <p><i class="fa fa-apple fa-border fa-2x" style="text-shadow: 1px 1px #ccc;" aria-hidden="true"></i>&nbsp;<span class="lead">Teacher/Class</span></p>
+          <p>Teacher/Class teams are for collecting donations for an entire class. Great for teachers to do fundraising!<p>
+          <hr>
+          <p><i class="fa fa-graduation-cap fa-border fa-2x" style="text-shadow: 1px 1px #ccc;" aria-hidden="true"></i>&nbsp;<span class="lead">Student</span></p>
+          <p>Student teams are for collecting donations for a single (1) student. Great for individuals or competitive siblings.<p>
+        </div>
       </div>
-    </div>
     </div>
     <div class="col-sm-6">
 
@@ -19,7 +26,7 @@
       {% set campaignUrl = app.request.attributes.get('_route_params')['campaignUrl'] %}
 
       <p style="text-align:left;">
-        The first step to joining the campaign is to create a <u>FR Manager</u> account
+        Now lets create your team page!
         <hr/>
         {% if error is defined %}
           <p class="well-sm bg-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
@@ -27,34 +34,23 @@
 
         <form name="user" method="post" class="form-horizontal">
           <div class="form-group">
-            <label class="col-sm-4 control-label" for="user_firstName">Team Name</label>
-            <div class="col-sm-6"><input type="text" id="team_name" name="team[name]" class="form-control"></div>
+            <label class="col-sm-4 control-label required" for="team_teamType">Team Type</label>
+            <div class="col-sm-6">
+              <select id="team_teamType" name="team[teamType]" required="required" class="form-control">
+                {% for teamType in teamTypes %}
+                  <option value="{{teamType.value}}" {% if teamType.value == "family" %} selected="selected" {% endif %}>{{teamType.name}}</option>
+               {% endfor %}
+              </select>
+            </div>
           </div>
           <div class="form-group">
-            <label class="col-sm-4 control-label" for="user_firstName">Team Name</label>
-            <div class="col-sm-6"><input type="text" id="team_name" name="team[name]" class="form-control"></div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-4 control-label" for="user_lastName">URL</label>
-            <div class="col-sm-6"><input type="text" id="team_url" name="team[url]"  class="form-control"></div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-4 control-label required" for="user_Password_first">Password</label>
-            <div class="col-sm-6"><input type="password" id="user_Password_first" name="user[Password][first]" required="required" class="form-control"></div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-4 control-label required" for="user_Password_second">Repeat Password</label>
-            <div class="col-sm-6"><input type="password" id="user_Password_second" name="user[Password][second]" required="required" class="form-control"></div>
-          </div>
-          <div class="form-group">
-            <div class="col-sm-4">&nbsp</div>
-            <div class="col-sm-8"><label for="user_terms_of_service"><input type="checkbox" id="user_terms_of_service" name="user[terms_of_service]" required="required"> Click to accept <a target="_blank" href="{{ path('campaign_terms_of_service', {'campaignUrl': campaignUrl}) }}">terms of service <i class="fa fa-external-link" aria-hidden="true"></i></a></label></div>
+            <label class="col-sm-4 control-label required" for="user_firstName">Team Name</label>
+            <div class="col-sm-6"><input type="text" id="team_name" required="required" name="team[name]" class="form-control"></div>
           </div>
           <hr>
           <div class="form-group">
             <div class="col-sm-12">
-              <button type="submit" id="submit" class="btn btn-primary">Go to step 2 <i class="fa fa-arrow-right" aria-hidden="true"></i></button>
-              &nbsp;&nbsp;&nbsp;&nbsp;<small>Already have a FR Manager account? click <a href="{{ path('register_team', {'campaignUrl': campaignUrl}) }}">HERE</a></small>
+              <button type="submit" id="submit" class="btn btn-primary">Go to step 3 <i class="fa fa-arrow-right" aria-hidden="true"></i></button>
             </div>
           </div>
 
@@ -66,13 +62,13 @@
   {% endblock body %}
 
   {% block javascript %}
-  <script type="text/javascript">
-      $('#user_terms_of_service').click(function(){
-        if($(this).attr('checked') == false){
-             $('#submit').attr("disabled","disabled");
+    <script type="text/javascript">
+      $('#user_terms_of_service').click(function() {
+        if ($(this).attr('checked') == false) {
+          $('#submit').attr("disabled", "disabled");
         } else {
-            $('#submit').removeAttr('disabled');
+          $('#submit').removeAttr('disabled');
         }
-    });
-  </script>
+      });
+    </script>
   {% endblock %}

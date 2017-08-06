@@ -1,0 +1,59 @@
+{% extends 'template.html.twig' %}
+{% use 'bootstrap_3_layout.html.twig' %}
+
+{% block body %}
+<div class="row">
+  <div class="col-sm-12">
+    <h2>Step 2. Please select a team type</h2>
+  </div>
+</div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <p><i class="fa fa-users fa-border fa-2x" style="text-shadow: 1px 1px #ccc;" aria-hidden="true"></i>&nbsp;<span class="lead">Family</span> <sup style="color:red;">*Most Popular!</sup></p>
+              <hr>
+              <p>Family teams are for parents who want a easy way to collect donations for a school campaign without a lot of work.
+                <ul><li>All donations are split evenly amongst all children and their classes.</li></ul><p>
+              <p style="text-align:center;"><a id="submit" href="{{ path('register_team', {'campaignUrl': campaign.url, 'teamType': 'family' }) }}" class="btn btn-primary">Select Family Team <i class="fa fa-arrow-right" aria-hidden="true"></i></a></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <p><i class="fa fa-apple fa-border fa-2x" style="text-shadow: 1px 1px #ccc;" aria-hidden="true"></i>&nbsp;<span class="lead">Teacher/Class</span></p>
+              <hr>
+              <p>Teacher/Class teams are for collecting donations for an entire class. Great for teachers to do fundraising!<p>
+              <p style="text-align:center;"><a id="submit" href="{{ path('register_team', {'campaignUrl': campaign.url, 'teamType': 'teacher' }) }}" class="btn btn-primary">Select Teacher\Class Team <i class="fa fa-arrow-right" aria-hidden="true"></i></a></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <p><i class="fa fa-graduation-cap fa-border fa-2x" style="text-shadow: 1px 1px #ccc;" aria-hidden="true"></i>&nbsp;<span class="lead">Student</span></p>
+              <hr>
+              <p>Student teams are for collecting donations for a single (1) student. Great for individuals or competitive siblings.<p>
+              <p style="text-align:center;"><a id="submit" href="{{ path('register_team', {'campaignUrl': campaign.url, 'teamType': 'student' }) }}" class="btn btn-primary">Select Student Team <i class="fa fa-arrow-right" aria-hidden="true"></i></a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock body %}
+
+  {% block javascript %}
+    <script type="text/javascript">
+      $('#user_terms_of_service').click(function() {
+        if ($(this).attr('checked') == false) {
+          $('#submit').attr("disabled", "disabled");
+        } else {
+          $('#submit').removeAttr('disabled');
+        }
+      });
+    </script>
+  {% endblock %}
