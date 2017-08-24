@@ -39,6 +39,14 @@ body {
 
 }
 
+
+.drop-shadow {
+  -webkit-box-shadow: 1px 1px 3px 0px rgba(204,204,204,1);
+  -moz-box-shadow: 1px 1px 3px 0px rgba(204,204,204,1);
+  box-shadow: 1px 1px 3px 0px rgba(204,204,204,1);
+}
+
+
 #track span{
 }
 

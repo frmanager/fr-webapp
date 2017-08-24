@@ -40,7 +40,7 @@ class Team
     /**
      * @ORM\Column(type="float", length=5, nullable=true)
      */
-    private $fundsRaised = null;
+    private $fundsRaised = 0.00;
 
 
     /**
@@ -53,7 +53,7 @@ class Team
      * )
      * @Assert\NotNull()
      */
-    private $fundingGoal;
+    private $fundingGoal = 0.00;
 
 
     /**

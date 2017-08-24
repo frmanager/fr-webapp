@@ -13,9 +13,9 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity
  * @ORM\Table(name="team_students",uniqueConstraints={@ORM\UniqueConstraint(columns={"name", "team_id"})})
  * @UniqueEntity(
- *     fields={"user_id", "campaign_id"},
+ *     fields={"team_id", "name"},
  *     errorPath="name",
- *     message="Duplicate Campaign Entry for Identified User"
+ *     message="Duplicate Student Entry for Identified Team"
  * )
  */
 class TeamStudent
@@ -84,6 +84,24 @@ class TeamStudent
  protected $updatedAt;
 
 
+ /**
+  * @var Classroom
+  *
+  * @ORM\ManyToOne(targetEntity="Classroom", inversedBy="teamStudents")
+  * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+  * @Assert\NotNull()
+  */
+ private $classroom;
+
+
+ /**
+  * @var Grade
+  *
+  * @ORM\ManyToOne(targetEntity="Grade", inversedBy="classrooms", cascade={"remove"})
+  * @ORM\JoinColumn(name="grade_id", referencedColumnName="id")
+  * @Assert\NotNull()
+  */
+ private $grade;
 
  /**
   * Constructor
@@ -282,4 +300,96 @@ class TeamStudent
     {
         return $this->confirmedFlag;
     }
+
+    /**
+     * Set classroom
+     *
+     * @param \AppBundle\Entity\Classroom $classroom
+     *
+     * @return TeamStudent
+     */
+    public function setClassroom(\AppBundle\Entity\Classroom $classroom = null)
+    {
+        $this->classroom = $classroom;
+
+        return $this;
+    }
+
+    /**
+     * Get classroom
+     *
+     * @return \AppBundle\Entity\Classroom
+     */
+    public function getClassroom()
+    {
+        return $this->classroom;
+    }
+
+    /**
+     * Set grade
+     *
+     * @param \AppBundle\Entity\Grade $grade
+     *
+     * @return TeamStudent
+     */
+    public function setGrade(\AppBundle\Entity\Grade $grade = null)
+    {
+        $this->grade = $grade;
+
+        return $this;
+    }
+
+    /**
+     * Get grade
+     *
+     * @return \AppBundle\Entity\Grade
+     */
+    public function getGrade()
+    {
+        return $this->grade;
+    }
+
+    /**
+     * Set Grade from provided Classroom
+     *
+     * @param \AppBundle\Entity\Grade $grade
+     *
+     * @return Grade
+     */
+    public function setGradeFromClassroom(\AppBundle\Entity\Grade $grade = null)
+    {
+        $this->grade = $this->classroom->getGrade();
+
+        return $this;
+    }
+
+    /**
+     * Set Grade from provided Classroom
+     *
+     * @param \AppBundle\Entity\Grade $grade
+     *
+     * @return Grade
+     */
+    public function setGradeFromStudent(\AppBundle\Entity\Grade $grade = null)
+    {
+        $this->grade = $this->student->getGrade();
+
+        return $this;
+    }
+
+
+    /**
+     * Set Classroom from provided Student
+     *
+     * @param \AppBundle\Entity\Classroom $classroom
+     *
+     * @return Classroom
+     */
+    public function setClassroomFromStudent(\AppBundle\Entity\Classroom $classroom = null)
+    {
+        $this->classroom = $this->getStudent()->getClassroom();
+
+        return $this;
+    }
+
 }

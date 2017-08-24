@@ -1,0 +1,74 @@
+{% extends 'template.html.twig' %}
+{% use 'bootstrap_3_layout.html.twig' %}
+
+{% block body %}
+<div class="row">
+  <div class="col-sm-12">
+    <h2>Step 2. What type of fundraiser page do you want to create?</h2>
+    <br/>
+  </div>
+</div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="panel panel-default drop-shadow">
+            <div class="panel-body">
+              <img src="/assets/img/team-family.png" class="img-responsive img-rounded" alt="Responsive image">
+              <br>
+              <ul>
+                <li>Great for Families!</li>
+                <li>Register multiple children</li>
+                <li>Donations are split evenly amongst all children in family</li>
+              </ul>
+              <hr>
+              <p style="text-align:center;"><a id="submit" href="{{ path('register_team', {'campaignUrl': campaign.url, 'teamTypeValue': 'family' }) }}" class="btn btn-primary">Select Family <i class="fa fa-arrow-right" aria-hidden="true"></i></a></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="panel panel-default drop-shadow">
+            <div class="panel-body">
+              <img src="/assets/img/team-teacher.png" class="img-responsive img-rounded" alt="Responsive image">
+              <br>
+              <ul>
+                <li>Great for Teachers!</li>
+                <li>Donations go to a single classroom</li>
+              </ul>
+              <br>
+              <hr>
+              <p style="text-align:center;"><a id="submit" href="{{ path('register_team', {'campaignUrl': campaign.url, 'teamTypeValue': 'teacher' }) }}" class="btn btn-primary">Select Teacher <i class="fa fa-arrow-right" aria-hidden="true"></i></a></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="panel panel-default drop-shadow">
+            <div class="panel-body">
+              <img src="/assets/img/team-student.png" class="img-responsive img-rounded" alt="Responsive image">
+              <br>
+              <ul>
+                <li>Great for Students!</li>
+                <li>Donations go to a single student</li>
+              </ul>
+              <br/>
+              <hr>
+              <p style="text-align:center;"><a id="submit" href="{{ path('register_team', {'campaignUrl': campaign.url, 'teamTypeValue': 'student' }) }}" class="btn btn-primary">Select Student <i class="fa fa-arrow-right" aria-hidden="true"></i></a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock body %}
+
+  {% block javascript %}
+    <script type="text/javascript">
+      $('#user_terms_of_service').click(function() {
+        if ($(this).attr('checked') == false) {
+          $('#submit').attr("disabled", "disabled");
+        } else {
+          $('#submit').removeAttr('disabled');
+        }
+      });
+    </script>
+  {% endblock %}

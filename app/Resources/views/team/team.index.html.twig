@@ -18,7 +18,7 @@
             <table class="table table-bordered table-striped table-condensed">
                 <thead>
                     <tr>
-                        <th>Id</th>
+                        <th>Type</th>
                         <th>Name</th>
                         <th>Actions</th>
                     </tr>
@@ -26,10 +26,10 @@
                 <tbody>
                     {% for team in teams %}
                         <tr>
+                            <td>{{ team.teamType.name }}</td>
                             <td>
-                                <a href="{{ path('team_show', {'campaignUrl':campaign.url, 'teamUrl': team.url }) }}">{{ team.url }}</a>
+                                <a href="{{ path('team_show', {'campaignUrl':campaign.url, 'teamUrl': team.url }) }}">{{ team.name }}</a>
                             </td>
-                            <td>{{ team.name }}</td>
                             <td style="text-align:center;">
                                 <a href="{{ path('team_show', {'campaignUrl':campaign.url, 'teamUrl': team.url }) }}" class="btn btn-sm btn-info">
                                     <i class="glyphicon glyphicon-eye-open"></i>

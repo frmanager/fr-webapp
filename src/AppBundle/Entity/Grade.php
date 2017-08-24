@@ -17,6 +17,11 @@ class Grade
     private $classrooms;
 
     /**
+     * @ORM\OneToMany(targetEntity="Student", mappedBy="grade", cascade={"remove"})
+     */
+    private $students;
+
+    /**
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -139,4 +144,38 @@ class Grade
         return $this->campaign;
     }
 
+
+    /**
+     * Add student
+     *
+     * @param \AppBundle\Entity\Student $student
+     *
+     * @return Grade
+     */
+    public function addStudent(\AppBundle\Entity\Student $student)
+    {
+        $this->students[] = $student;
+
+        return $this;
+    }
+
+    /**
+     * Remove student
+     *
+     * @param \AppBundle\Entity\Student $student
+     */
+    public function removeStudent(\AppBundle\Entity\Student $student)
+    {
+        $this->students->removeElement($student);
+    }
+
+    /**
+     * Get students
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getStudents()
+    {
+        return $this->students;
+    }
 }

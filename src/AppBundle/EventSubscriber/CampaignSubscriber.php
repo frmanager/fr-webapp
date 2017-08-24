@@ -28,23 +28,6 @@ class CampaignSubscriber implements EventSubscriberInterface
          * This is not usual in Symfony but it may happen.
          * If it is a class, it comes in array format
          */
-        if (!is_array($controller)) {
-            return;
-        }
-
-        $session = $this->container->get('session');
-
-        if(!$this->container->get('session')->get('campaign')){
-          // Get the doctrine service
-          $doctrine_service = $this->container->get('doctrine');
-          // Get the entity manager
-          $em = $doctrine_service->getEntityManager();
-          $campaign = $em->getRepository('AppBundle:Campaign')->find(1);
-          $this->container->get('session')->set('campaign', $campaign);
-          $session->save();
-        }else{
-          return;
-        }
 
     }
 

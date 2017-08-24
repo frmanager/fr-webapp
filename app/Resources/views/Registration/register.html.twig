@@ -36,7 +36,12 @@
           </div>
           <div class="form-group">
             <label class="col-sm-4 control-label required" for="user_email">Email</label>
-            <div class="col-sm-8"><input type="email" id="user_email" name="user[email]" required="required" class="form-control"></div>
+            <div class="col-sm-8">
+              <div class="input-group">
+                 <span class="input-group-addon" id="basic-addon1"><i class="fa fa-at" aria-hidden="true"></i></span>
+                 <input type="email" id="user_email" name="user[email]" required="required" class="form-control">
+              </div>
+            </div>
           </div>
           <div class="form-group">
             <label class="col-sm-4 control-label required" for="user_Password_first">Password</label>
@@ -54,7 +59,7 @@
           <div class="form-group">
             <div class="col-sm-12">
               <button type="submit" id="submit" class="btn btn-primary">Go to step 2 <i class="fa fa-arrow-right" aria-hidden="true"></i></button>
-              &nbsp;&nbsp;&nbsp;&nbsp;<small>Already have a FR Manager account? click <a href="{{ path('register_team', {'campaignUrl': campaignUrl}) }}">HERE</a></small>
+              &nbsp;&nbsp;&nbsp;&nbsp;<small>Already have a FR Manager account? click <a href="{{ path('register_team_select', {'campaignUrl': campaignUrl}) }}">HERE</a></small>
             </div>
           </div>
 

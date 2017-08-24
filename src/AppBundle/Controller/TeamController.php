@@ -41,7 +41,7 @@ class TeamController extends Controller
       }
 
       // replace this example code with whatever you need
-      return $this->render('campaign/team.index.html.twig', array(
+      return $this->render('team/team.index.html.twig', array(
         'teams' => $em->getRepository('AppBundle:Team')->findByCampaign($campaign),
         'entity' => strtolower($entity),
         'campaign' => $campaign,
@@ -75,12 +75,55 @@ class TeamController extends Controller
           return $this->redirectToRoute('team_index', array('campaignUrl'=>$campaign->getUrl()));
         }
 
-        return $this->render('/campaign/team.show.html.twig', array(
+        return $this->render('team/team.show.html.twig', array(
             'team' => $team,
             'entity' => $entity,
             'campaign' => $campaign,
         ));
     }
 
+
+    /**
+     * Displays a form to edit an existing Team entity.
+     *
+     * @Route("/{teamUrl}/edit", name="team_edit")
+     * @Method({"GET", "POST"})
+     */
+    public function editAction(Request $request, $campaignUrl, $teamUrl)
+    {
+        $entity = 'Team';
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $em = $this->getDoctrine()->getManager();
+
+        //CODE TO CHECK TO SEE IF CAMPAIGN EXISTS
+        $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
+        if(is_null($campaign)){
+          $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
+          return $this->redirectToRoute('homepage');
+        }
+
+        //CODE TO CHECK TO SEE IF CAMPAIGN EXISTS
+        $team = $em->getRepository('AppBundle:Team')->findOneBy(array('url'=>$teamUrl, 'campaign' => $campaign));
+        if(is_null($team)){
+          $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this team.');
+          return $this->redirectToRoute('team_index', array('campaignUrl'=>$campaign->getUrl()));
+        }
+
+        //CODE TO CHECK TO SEE IF THIS CAMPAIGN IS MANAGED BY THIS USER
+        if($team->getUser()->getId() !== $this->get('security.token_storage')->getToken()->getUser()->getId()){
+          $this->get('session')->getFlashBag()->add('warning', 'We are sorry, you cannot edit this team');
+          return $this->redirectToRoute('team_show', array('campaignUrl'=>$campaign->getUrl(), 'teamUrl' => $team->getUrl()));
+        }
+
+        if ($request->isMethod('POST')) {
+            $params = $request->request->all();
+        }
+
+        return $this->render('team/team.edit.html.twig', array(
+            'team' => $team,
+            'campaign' => $campaign,
+        ));
+    }
 
 }

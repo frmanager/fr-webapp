@@ -17,16 +17,22 @@
       <form action="{{ path("login", {'campaignUrl': campaign.url}) }}" method="post" class="form-horizontal" role="form-horizontal">
 
         <div class="form-group">
-          <label for="username" class="col-sm-3 control-label">Username/email</label>
-          <div class="col-sm-9">
-            <input class="form-control" type="text" id="username" name="_username" value="{{ last_username }}" required="required"/>
+          <label for="username" class="col-sm-3 control-label">Email</label>
+          <div class="col-sm-6">
+            <div class="input-group">
+             <span class="input-group-addon" id="basic-addon1"><i class="fa fa-at" aria-hidden="true"></i></span>
+             <input class="form-control" type="text" id="username" placeholder="enter your email" name="_username" value="{{ last_username }}" required="required"/>
+            </div>
           </div>
         </div>
 
         <div class="form-group">
           <label for="password" class="col-sm-3 control-label">Password</label>
-          <div class="col-sm-9">
-            <input class="form-control" type="password" id="password" name="_password" required="required"/>
+          <div class="col-sm-6">
+            <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1"><i class="fa fa-key" aria-hidden="true"></i></span>
+            <input class="form-control" type="password" id="password" placeholder="enter your password" name="_password" required="required"/>
+          </div>
           </div>
         </div>
         <div class="form-group">

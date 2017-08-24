@@ -31,12 +31,12 @@ class CampaignController extends Controller
      $limit = 3;
      $em = $this->getDoctrine()->getManager();
 
-     $campaign =  $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
-
-     if(count($campaign) == 0){
-       return $this->redirectToRoute('homepage', array('action' => 'list_campaigns'));
+     //CODE TO CHECK TO SEE IF CAMPAIGN EXISTS
+     $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
+     if(is_null($campaign)){
+       $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
+       return $this->redirectToRoute('homepage');
      }
-
 
      $queryHelper = new QueryHelper($em, $logger);
      $campaignSettings = new CampaignHelper($this->getDoctrine()->getRepository('AppBundle:Campaignsetting')->findAll());

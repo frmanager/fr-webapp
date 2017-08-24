@@ -63,8 +63,6 @@ class SecurityController extends Controller
       $authUtils = $this->get('security.authentication_utils');
       $session = $request->getSession();
 
-      $campaign = null;
-
       if (!empty($request->attributes->get('_route_params'))) {
           $routeParams = $request->attributes->get('_route_params');
           if (array_key_exists('campaignUrl', $routeParams)) {
@@ -82,7 +80,7 @@ class SecurityController extends Controller
       $team = $em->getRepository('AppBundle:Team')->findOneBy(array('user' => $user, 'campaign' => $campaign));
       if(is_null($team)){
         $this->get('session')->getFlashBag()->add('warning', 'Hi, it looks like you have not completed your team registration yet');
-        return $this->redirectToRoute('register_team', array('campaignUrl'=>$campaign->getUrl()));
+        return $this->redirectToRoute('register_team_select', array('campaignUrl'=>$campaign->getUrl()));
       }
 
       return $this->redirectToRoute('campaign_index', array('campaignUrl' => $campaign->getUrl()));

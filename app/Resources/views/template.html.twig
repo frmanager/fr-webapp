@@ -73,18 +73,29 @@
 			<a href="{{ path('campaign_index', {'campaignUrl': campaignUrl}) }}" class="">
 			HOME </a>
 			</li>
-			<li {% if app.request.attributes.get('_route')=='grade_index'%} class="active" {% endif %}>
-			<a href="{{ path('grade_index', {'campaignUrl': campaignUrl}) }}">
-			<span class="glyphicon glyphicon-apple"></span>
-			GRADE RANKINGS</a>
-			</li>
-			<li {% if app.request.attributes.get('_route')=='classroom_index'%} class="active" {% endif %}>
-			<a href="{{ path('classroom_index', {'campaignUrl': campaignUrl}) }}">
-			<span class="glyphicon glyphicon-apple"></span>
-			TEACHER RANKINGS</a>
-			</li>
-			</li>
-		</ul>
+      <li class="dropdown">
+      <a href="#" class="dropdown-toggle" id="dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+      RANKINGS <span class="caret"></span></span>
+      </a>
+          <ul class="dropdown-menu" aria-labelledby="drop3">
+  			<li {% if app.request.attributes.get('_route')=='grade_index'%} class="active" {% endif %}>
+  			<a href="{{ path('grade_index', {'campaignUrl': campaignUrl}) }}">
+  			<span class="fa fa-graduation-cap"></span>
+  			Grade Rankings</a>
+  			</li>
+  			<li {% if app.request.attributes.get('_route')=='classroom_index'%} class="active" {% endif %}>
+  			<a href="{{ path('classroom_index', {'campaignUrl': campaignUrl}) }}">
+  			<span class="fa fa-apple"></span>
+  			Class Rankings</a>
+  			</li>
+        <li {% if app.request.attributes.get('_route')=='team_index'%} class="active" {% endif %}>
+        <a href="{{ path('team_index', {'campaignUrl': campaignUrl}) }}">
+        <span class="fa fa-users"></span>
+        Team Rankings</a>
+        </li>
+  			</li>
+  		</ul>
+    </ul>
     {% endif %}
 		<ul class="nav navbar-nav navbar-right">
       {% if is_granted('ROLE_USER') and campaign is defined %}

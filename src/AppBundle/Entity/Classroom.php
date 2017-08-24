@@ -17,6 +17,11 @@ class Classroom
     private $students;
 
     /**
+     * @ORM\OneToMany(targetEntity="TeamStudent", mappedBy="classroom", cascade={"remove"})
+     */
+    private $teamStudents;
+
+    /**
      * @ORM\OneToMany(targetEntity="Team", mappedBy="classroom", cascade={"remove"})
      */
     private $teams;
@@ -174,7 +179,7 @@ class Classroom
         $this->createdAt= new \DateTime();
         $this->updatedAt= new \DateTime();
     }
-    
+
     /**
      * @ORM\PreUpdate()
      */
@@ -524,5 +529,39 @@ class Classroom
     public function getCreatedBy()
     {
         return $this->createdBy;
+    }
+
+    /**
+     * Add teamStudent
+     *
+     * @param \AppBundle\Entity\TeamStudent $teamStudent
+     *
+     * @return Classroom
+     */
+    public function addTeamStudent(\AppBundle\Entity\TeamStudent $teamStudent)
+    {
+        $this->teamStudents[] = $teamStudent;
+
+        return $this;
+    }
+
+    /**
+     * Remove teamStudent
+     *
+     * @param \AppBundle\Entity\TeamStudent $teamStudent
+     */
+    public function removeTeamStudent(\AppBundle\Entity\TeamStudent $teamStudent)
+    {
+        $this->teamStudents->removeElement($teamStudent);
+    }
+
+    /**
+     * Get teamStudents
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTeamStudents()
+    {
+        return $this->teamStudents;
     }
 }
