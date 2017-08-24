@@ -129,132 +129,60 @@
                     </div>
                 </div>
             </div>
-            {% if is_granted('ROLE_USER') %}
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Student Summary</div>
-                            <table class="table table-bordered table-striped table-condensed">
-                                <thead>
-                                    <tr>
-                                        <th style="border-top:1px #ccc;">Student</th>
-                                        <th style="border-top:1px #ccc;">Amount Donated</th>
-                                        <th style="border-top:1px #ccc;"># of Donations</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for student in classroom.students %}
-                                        {% set student_number_of_donations = 0 %}
-                                        {% set student_donation_amount = 0 %}
-                                        {% for donation in student.donations %}
-                                            {% set student_number_of_donations = student_number_of_donations + 1 %}
-                                            {% set student_donation_amount = student_donation_amount + donation.amount %}
-                                        {% endfor %}
-                                        <tr>
-                                            <td>
-                                                {{ student.name }}
-                                            </td>
-                                            <td style="text-align:right;">
-                                                {% if not student_donation_amount == 0 %}${{ student_donation_amount|number_format(2, '.', ',')}}{% endif %}
-                                            </td>
-                                            <td style="text-align:center;">
-                                                {% if not student_number_of_donations == 0 %}{{ student_number_of_donations }}{% endif %}
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    <tbody></table>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">Donation Summary</div>
-                                    {% if number_of_donations > 0 %}
-                                        <table class="table table-bordered table-striped table-condensed">
-                                            <thead>
-                                                <tr>
-                                                    <th style="border-top:1px #ccc;">Date</th>
-                                                    <th style="border-top:1px #ccc;">Student</th>
-                                                    <th style="border-top:1px #ccc;">Amount Donated</th>
-                                                    <th style="border-top:1px #ccc;">Type</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {% for donation in classroom.donations %}
-                                                        <tr>
-                                                            <td>{{ donation.donatedAt|date("m/d/Y")  }}</td>
-                                                            <td>
-                                                                {% if donation.student.id is defined %}{{ donation.student.name }}{% else %}N/A{% endif %}
-                                                            </td>
-                                                            <td style="text-align:right;">${{ donation.amount |number_format(2, '.', ',')}}</td>
-                                                            <td style="text-align:center;">{{ donation.type }}</td>
-                                                        </tr>
-                                                {% endfor %}
-                                                <tbody></table>
-                                            {% else %}
-                                                <div class="panel-body" style="font-size:120%;">
-                                                    <div style="text-align:center">
-                                                        <span class="lead">No donations yet!</span>
-                                                    </div>
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endif %}
-                        {% endblock %}
-                        {% block javascripts %}
-                            <script>
-                                $(document).ready(function() {
-                                    var ctx = $("#myChart");
+      {% endblock %}
+  {% block javascripts %}
+      <script>
+          $(document).ready(function() {
+              var ctx = $("#myChart");
 
-                                    var data = {
-                                        labels: [
-                                            "January",
-                                            "February",
-                                            "March",
-                                            "April",
-                                            "May",
-                                            "June",
-                                            "July"
-                                        ],
-                                        datasets: [
-                                            {
-                                                label: "My First dataset",
-                                                fill: false,
-                                                lineTension: 0.1,
-                                                backgroundColor: "rgba(75,192,192,0.4)",
-                                                borderColor: "rgba(75,192,192,1)",
-                                                borderCapStyle: 'butt',
-                                                borderDash: [],
-                                                borderDashOffset: 0.0,
-                                                borderJoinStyle: 'miter',
-                                                pointBorderColor: "rgba(75,192,192,1)",
-                                                pointBackgroundColor: "#fff",
-                                                pointBorderWidth: 1,
-                                                pointHoverRadius: 5,
-                                                pointHoverBackgroundColor: "rgba(75,192,192,1)",
-                                                pointHoverBorderColor: "rgba(220,220,220,1)",
-                                                pointHoverBorderWidth: 2,
-                                                pointRadius: 1,
-                                                pointHitRadius: 10,
-                                                data: [
-                                                    65,
-                                                    59,
-                                                    80,
-                                                    81,
-                                                    56,
-                                                    55,
-                                                    40
-                                                ],
-                                                spanGaps: false
-                                            }
-                                        ]
-                                    };
+              var data = {
+                  labels: [
+                      "January",
+                      "February",
+                      "March",
+                      "April",
+                      "May",
+                      "June",
+                      "July"
+                  ],
+                  datasets: [
+                      {
+                          label: "My First dataset",
+                          fill: false,
+                          lineTension: 0.1,
+                          backgroundColor: "rgba(75,192,192,0.4)",
+                          borderColor: "rgba(75,192,192,1)",
+                          borderCapStyle: 'butt',
+                          borderDash: [],
+                          borderDashOffset: 0.0,
+                          borderJoinStyle: 'miter',
+                          pointBorderColor: "rgba(75,192,192,1)",
+                          pointBackgroundColor: "#fff",
+                          pointBorderWidth: 1,
+                          pointHoverRadius: 5,
+                          pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                          pointHoverBorderColor: "rgba(220,220,220,1)",
+                          pointHoverBorderWidth: 2,
+                          pointRadius: 1,
+                          pointHitRadius: 10,
+                          data: [
+                              65,
+                              59,
+                              80,
+                              81,
+                              56,
+                              55,
+                              40
+                          ],
+                          spanGaps: false
+                      }
+                  ]
+              };
 
-                                    var myLineChart = new Chart(ctx, {
-                                        type: 'line',
-                                        data: data
-                                    });
-                                });
-                            </script>
-                        {% endblock %}
+              var myLineChart = new Chart(ctx, {
+                  type: 'line',
+                  data: data
+              });
+          });
+      </script>
+  {% endblock %}

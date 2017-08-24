@@ -88,13 +88,17 @@ class ClassroomController extends Controller
         //$logger->debug(print_r($student->getDonations()));
         $em = $this->getDoctrine()->getManager();
 
+        $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
+
         $qb = $em->createQueryBuilder()->select('u')
                ->from('AppBundle:Campaignaward', 'u')
+               ->andWhere('u.campaign = :campaignId')
+               ->setParameter('campaignId', $campaign->getId())
                ->orderBy('u.amount', 'DESC');
 
         $campaignAwards = $qb->getQuery()->getResult();
         $campaignSettings = new CampaignHelper($this->getDoctrine()->getRepository('AppBundle:Campaignsetting')->findAll());
-        $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
+
         $queryHelper = new QueryHelper($em, $logger);
 
         return $this->render('/campaign/classroom.show.html.twig', array(

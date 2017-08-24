@@ -220,25 +220,7 @@ class RegistrationController extends Controller
             $team->setName($params['team']['name']);
             $team->setFundingGoal($params['team']['fundingGoal']);
             $team->setCampaign($campaign);
-
-            //this logic looks to see if URL is in use and then iterates on it
-            $newUrl = preg_replace("/[^ \w]+/", "", $params['team']['name']);
-            $newUrl = str_replace(' ', '-', strtolower($newUrl));
-            $teamCheck = $em->getRepository('AppBundle:Team')->findOneBy(array('url' => $newUrl, 'campaign' => $campaign));
-            if(!empty($teamCheck)){
-              $fixed = false;
-              $count = 1;
-              while(!$fixed){
-                $teamCheck = $em->getRepository('AppBundle:Team')->findOneBy(array('url' => $newUrl.$count, 'campaign' => $campaign));
-                if(empty($teamCheck)){
-                  $newUrl = $newUrl.$count;
-                  $fixed = true;
-                }else{
-                  $count ++;
-                }
-              }
-            }
-            $team->setUrl($newUrl);
+            $team->setUrl($this->createTeamUrl($campaign, $params['team']['name']));
 
             //If it is a "Teacher" team, set the classroom
             if($teamType->getValue() == "teacher"){
@@ -339,6 +321,28 @@ class RegistrationController extends Controller
         $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
         $this->get('security.token_storage')->setToken($token);
         $this->get('session')->set('_security_main', serialize($token));
+    }
+
+    private function createTeamUrl(Campaign $campaign, $teamName){
+      $em = $this->getDoctrine()->getManager();
+      //this logic looks to see if URL is in use and then iterates on it
+      $newUrl = preg_replace("/[^ \w]+/", "", $teamName);
+      $newUrl = str_replace(' ', '-', strtolower($newUrl));
+      $teamCheck = $em->getRepository('AppBundle:Team')->findOneBy(array('url' => $newUrl, 'campaign' => $campaign));
+      if(!empty($teamCheck)){
+        $fixed = false;
+        $count = 1;
+        while(!$fixed){
+          $teamCheck = $em->getRepository('AppBundle:Team')->findOneBy(array('url' => $newUrl.$count, 'campaign' => $campaign));
+          if(empty($teamCheck)){
+            $newUrl = $newUrl.$count;
+            $fixed = true;
+          }else{
+            $count ++;
+          }
+        }
+      }
+      return $newUrl;
     }
 
 }
