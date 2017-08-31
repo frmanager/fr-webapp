@@ -35,11 +35,17 @@ class CampaignController extends Controller
      $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
      if(is_null($campaign)){
        $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
-       return $this->redirectToRoute('homepage');
+       return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
+     }elseif(!$campaign->getOnlineFlag()){
+       $campaignHelper = new CampaignHelper($em, $logger);
+       if(!$campaignHelper->campaignPermissionsCheck($this->get('security.token_storage')->getToken()->getUser(), $campaign)){
+         $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
+         return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
+       }
      }
 
      $queryHelper = new QueryHelper($em, $logger);
-     $campaignSettings = new CampaignHelper($this->getDoctrine()->getRepository('AppBundle:Campaignsetting')->findAll());
+
      $causevoxteams = $em->getRepository('AppBundle:Causevoxteam')->findAll();
      $causevoxfundraisers = $em->getRepository('AppBundle:Causevoxfundraiser')->findAll();
 
@@ -48,7 +54,6 @@ class CampaignController extends Controller
 
      // replace this example code with whatever you need
      return $this->render('campaign/dashboard.html.twig', array(
-       'campaign_settings' => $campaignSettings->getCampaignSettings(),
        'new_classroom_awards' => $queryHelper->getClassroomAwards(array('campaign' => $campaign, 'before_date' => $reportDate, 'limit' => 5, 'order_by' => array('field' => 'donated_at',  'order' => 'asc'))),
        'classroom_rankings' => $queryHelper->getClassroomRanks(array('campaign' => $campaign,'limit'=> $limit, 'before_date' => $reportDate)),
        'report_date' => $reportDate,
@@ -95,12 +100,10 @@ class CampaignController extends Controller
       $em = $this->getDoctrine()->getManager();
       $queryHelper = new QueryHelper($em, $logger);
       $campaign =  $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
-      $campaignSettings = new CampaignHelper($this->getDoctrine()->getRepository('AppBundle:Campaignsetting')->findAll());
       $causevoxteams = $em->getRepository('AppBundle:Causevoxteam')->findAll();
       $causevoxfundraisers = $em->getRepository('AppBundle:Causevoxfundraiser')->findAll();
 
       return $this->render('campaign/campaign.faq.html.twig', array(
-        'campaign_settings' => $campaignSettings->getCampaignSettings(),
         'causevoxteams' => $causevoxteams,
         'causevoxfundraisers' => $causevoxfundraisers,
         'campaign' => $campaign,
@@ -123,6 +126,5 @@ class CampaignController extends Controller
         'campaign' => $campaign,
       ));
     }
-
 
 }

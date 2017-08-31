@@ -37,7 +37,13 @@ class TeamController extends Controller
       $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
       if(is_null($campaign)){
         $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
-        return $this->redirectToRoute('homepage');
+        return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
+      }elseif(!$campaign->getOnlineFlag()){
+        $campaignHelper = new CampaignHelper($em, $logger);
+        if(!$campaignHelper->campaignPermissionsCheck($this->get('security.token_storage')->getToken()->getUser(), $campaign)){
+          $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
+          return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
+        }
       }
 
       // replace this example code with whatever you need
@@ -65,10 +71,16 @@ class TeamController extends Controller
         $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
         if(is_null($campaign)){
           $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
-          return $this->redirectToRoute('homepage');
+          return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
+        }elseif(!$campaign->getOnlineFlag()){
+          $campaignHelper = new CampaignHelper($em, $logger);
+          if(!$campaignHelper->campaignPermissionsCheck($this->get('security.token_storage')->getToken()->getUser(), $campaign)){
+            $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
+            return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
+          }
         }
 
-        //CODE TO CHECK TO SEE IF CAMPAIGN EXISTS
+        //CODE TO CHECK TO SEE IF TEAM EXISTS
         $team = $em->getRepository('AppBundle:Team')->findOneBy(array('url'=>$teamUrl, 'campaign' => $campaign));
         if(is_null($team)){
           $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this team.');
@@ -101,10 +113,16 @@ class TeamController extends Controller
         $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
         if(is_null($campaign)){
           $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
-          return $this->redirectToRoute('homepage');
+          return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
+        }elseif(!$campaign->getOnlineFlag()){
+          $campaignHelper = new CampaignHelper($em, $logger);
+          if(!$campaignHelper->campaignPermissionsCheck($this->get('security.token_storage')->getToken()->getUser(), $campaign)){
+            $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
+            return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
+          }
         }
 
-        //CODE TO CHECK TO SEE IF CAMPAIGN EXISTS
+        //CODE TO CHECK TO SEE IF TEAM EXISTS
         $team = $em->getRepository('AppBundle:Team')->findOneBy(array('url'=>$teamUrl, 'campaign' => $campaign));
         if(is_null($team)){
           $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this team.');

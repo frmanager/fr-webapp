@@ -12,6 +12,10 @@ services:
         class: AppBundle\Utils\QueryHelper
         arguments: ['@doctrine.orm.default_entity_manager', '@logger']
 
+    app.CampaignHelper:
+        class: AppBundle\Utils\CampaignHelper
+        arguments: ['@doctrine.orm.default_entity_manager', '@logger']
+
     app.ValidationHelper:
         class: AppBundle\Utils\ValidationHelper
 
@@ -23,7 +27,6 @@ services:
         arguments: ['@service_container']
         tags:
           - { name: kernel.event_subscriber }
-
 
     AppBundle\Controller\RegistrationController:
         class: AppBundle\Controller\RegistrationController

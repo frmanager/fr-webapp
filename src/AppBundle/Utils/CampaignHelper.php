@@ -1,42 +1,49 @@
 <?php
 
-// src/AppBundle/Utils/ValidationHelper.php
+// src/AppBundle/Utils/CampaignHelper.php
 
 namespace AppBundle\Utils;
 
-use AppBundle\Entity\Campaignsetting;
+use Doctrine\ORM\EntityManager;
 use DateTime;
+use Monolog\Logger;
+use AppBundle\Entity\Campaign;
+use AppBundle\Entity\User;
+
 class CampaignHelper
 {
-    private $campaignsettings = [];
 
-    public function __construct(array $objects)
-    {
+  protected $em;
+  protected $logger;
 
-      foreach ($objects as $object) {
-          $this->setCampaignSetting($object->getDisplayName(), $object->getValue());
-      }
+  public function __construct(EntityManager $em, Logger $logger)
+  {
+      $this->em = $em;
+      $this->logger = $logger;
+  }
 
+  /**
+  *
+  * campaignPermissionsCheck takes the campaign that was requested and verifies user has access to it
+  *
+  * Access is verified by looking at the CampaignUser entity and verifying a record exists
+  * for that campaign and user combination
+  *
+  * @param Campaign $campaign
+  *
+  * @return boolean
+  *
+  */
+  public function campaignPermissionsCheck(User $user, Campaign $campaign){
+    //CODE TO PROTECT CONTROLLER FROM USERS WHO ARE NOT IN CAMPAIGNUSER TABLE
+    //TODO: ADD CODE TO ALLOW ADMINS TO ACCESS
+    $query = $this->em->createQuery('SELECT IDENTITY(cu.campaign) FROM AppBundle:CampaignUser cu where cu.user=?1');
+    $query->setParameter(1, $user);
+    $results = array_map('current', $query->getScalarResult());
+    if(!in_array($campaign->getId(), $results)){
+      return false;
     }
+    return true;
+  }
 
-    public function setCampaignSetting($key, $value)
-    {
-        if (strpos($key, 'date')) {
-            $this->campaignsettings[$key] = DateTime::createFromFormat('m/d/Y', $value);
-        } elseif (strpos($key, 'amount')) {
-            $this->campaignsettings[$key] = floatval($value);
-        }else{
-            $this->campaignsettings[$key] = $value;
-        }
-    }
-
-    public function getCampaignSetting($key)
-    {
-        return $this->campaignsettings[$key];
-    }
-
-    public function getCampaignSettings()
-    {
-        return $this->campaignsettings;
-    }
 }

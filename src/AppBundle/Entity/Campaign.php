@@ -95,8 +95,6 @@ Class Campaign
    */
   private $startDate;
 
-
-
   /**
    * @var datetime
    *
@@ -104,6 +102,14 @@ Class Campaign
    * @Assert\Date()
    */
   private $endDate;
+
+
+  /**
+   *  @var boolean
+   *
+   * @ORM\Column(type="boolean", length=100)
+   */
+  private $onlineFlag = false;
 
 
   /**
@@ -118,8 +124,6 @@ Class Campaign
    */
   private $fundingGoal;
 
-
-
   /**/
 
   /**
@@ -132,25 +136,20 @@ Class Campaign
    */
   private $donations;
 
-
   /**
    * @ORM\OneToMany(targetEntity="Campaignaward", mappedBy="campaign", cascade={"remove"})
    */
   private $campaignawards;
 
+  /**
+   * @ORM\OneToMany(targetEntity="Causevoxfundraiser", mappedBy="campaign", cascade={"remove"})
+   */
+  private $causevoxfundraisers;
 
-
-/**
- * @ORM\OneToMany(targetEntity="Causevoxfundraiser", mappedBy="campaign", cascade={"remove"})
- */
-private $causevoxfundraisers;
-
-
-/**
- * @ORM\OneToMany(targetEntity="Causevoxteam", mappedBy="campaign", cascade={"remove"})
- */
-private $causevoxteams;
-
+  /**
+   * @ORM\OneToMany(targetEntity="Causevoxteam", mappedBy="campaign", cascade={"remove"})
+   */
+  private $causevoxteams;
 
   /**
    * @ORM\OneToMany(targetEntity="Student", mappedBy="campaign", cascade={"remove"})
@@ -745,5 +744,29 @@ private $causevoxteams;
         {
             $this->setCreatedAt(new \DateTime(date('Y-m-d H:i:s')));
         }
+    }
+
+    /**
+     * Set onlineFlag
+     *
+     * @param boolean $onlineFlag
+     *
+     * @return Campaign
+     */
+    public function setOnlineFlag($onlineFlag)
+    {
+        $this->onlineFlag = $onlineFlag;
+
+        return $this;
+    }
+
+    /**
+     * Get onlineFlag
+     *
+     * @return boolean
+     */
+    public function getOnlineFlag()
+    {
+        return $this->onlineFlag;
     }
 }

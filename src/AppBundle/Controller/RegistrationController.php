@@ -9,6 +9,7 @@ use AppBundle\Entity\TeamStudent;
 use AppBundle\Entity\Campaign;
 use AppBundle\Entity\CampaignUser;
 use AppBundle\Entity\UserStatus;
+use AppBundle\Utils\CampaignHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -134,7 +135,13 @@ class RegistrationController extends Controller
       $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
       if(is_null($campaign)){
         $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
-        return $this->redirectToRoute('homepage');
+        return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
+      }elseif(!$campaign->getOnlineFlag()){
+        $campaignHelper = new CampaignHelper($em, $logger);
+        if(!$campaignHelper->campaignPermissionsCheck($this->get('security.token_storage')->getToken()->getUser(), $campaign)){
+          $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
+          return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
+        }
       }
 
       return $this->render('team/team.type.select.html.twig', array(
