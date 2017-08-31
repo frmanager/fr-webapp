@@ -10,7 +10,7 @@
     </div>
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            {% if app.user.id == team.user.id %}<a href="{{ path('team_edit', {'campaignUrl':campaign.url, 'teamUrl': team.url }) }}">EDIT</a>{% endif %}
+            {% if is_granted('ROLE_USER') and app.user.id == team.user.id %}<a href="{{ path('team_edit', {'campaignUrl':campaign.url, 'teamUrl': team.url }) }}">EDIT</a>{% endif %}
             <dl class="dl-horizontal">
                 <dt>ID</dt>
                 <dd>{{ team.id }}</dd>
@@ -19,4 +19,58 @@
             </dl>
         </div>
     </div>
+    {% set nonConfirmed = false %}
+    {% if team.teamType.value == 'student' or team.teamType.value == 'family' %}
+    <hr>
+    <div class="row">
+      <div class="col-md-12">
+        <table class="table table-bordered table-striped table-condensed">
+            <thead>
+                <tr>
+                    <th>Grade</th>
+                    <th>Classroom</th>
+                    <th>Name</th>
+                    {% if is_granted('ROLE_USER') and app.user.id == team.user.id %}
+                      <th>Confirmed?</th>
+                      <th>Actions</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for teamStudent in teamStudents %}
+                {% if not teamStudent.confirmedFlag %}{% set nonConfirmed = true %}{% endif %}
+                    <tr>
+                        <td>{{ teamStudent.grade.name }}</td>
+                        <td>{{ teamStudent.classroom.name }}</td>
+                        <td>{{ teamStudent.name }}</td>
+                        {% if is_granted('ROLE_USER') and app.user.id == team.user.id %}
+                          <td>{% if teamStudent.confirmedFlag %}Yes{% else %}No{% endif %}</td>
+                          <td style="text-align:center;"><a class="btn btn-primary btn-sm" href="#">Edit</a>&nbsp;<a class="btn btn-warning btn-sm" href="#">Delete</a></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+      </div>
+    </div>
+    {% if is_granted('ROLE_USER') and app.user.id == team.user.id and nonConfirmed %}
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel panel-warning">
+          <div class="panel-heading">Have a student that is not confirmed?</div>
+          <div class="panel-body">
+            <p>If FR Manager could not auto-magically link your student to a campaign student, the Campaign manager must manually go in and link the student.</p>
+            <p>Reasons why your student could not auto-magically be linked:</p>
+            <ul>
+              <li>Using informal name like 'Alex', when campaign is marked as 'Alexander'.</li>
+              <li>There are multiple children in the class with the same name.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% elseif team.teamType.value == 'teacher' %}
+
+    {% endif %}
 {% endblock %}

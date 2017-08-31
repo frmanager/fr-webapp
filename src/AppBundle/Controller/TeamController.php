@@ -79,6 +79,7 @@ class TeamController extends Controller
             'team' => $team,
             'entity' => $entity,
             'campaign' => $campaign,
+            'teamStudents' => $team->getTeamStudents(),
         ));
     }
 
