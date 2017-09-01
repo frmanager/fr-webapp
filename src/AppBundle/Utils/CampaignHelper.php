@@ -46,4 +46,22 @@ class CampaignHelper
     return true;
   }
 
+  /**
+  *
+  * campaignCheck takes a campaignUrl and verifies that a campaign exists
+  *
+  * @param String $campaignUrl
+  *
+  * @return boolean
+  *
+  */
+  public function campaignCheck($campaignUrl){
+    //CODE TO CHECK TO SEE IF CAMPAIGN EXISTS
+    $campaign = $this->em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
+    if(is_null($campaign)){
+      return false;
+    }
+    return true;
+  }
+
 }

@@ -124,24 +124,38 @@ class RegistrationController extends Controller
       $campaign =  $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
       $teamTypes =  $em->getRepository('AppBundle:TeamType')->findAll();
 
+      //CODE TO CHECK TO SEE IF CAMPAIGN EXISTS
+      $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
+      $accessFail = false;
+      //Does Campaign Exist? if not, fail
+      if(is_null($campaign)){
+        $accessFail = true;
+      //If it does exist, is it "offline"? if not, fail
+      }elseif(!$campaign->getOnlineFlag()){
+        $securityContext = $this->container->get('security.authorization_checker');
+        //If it is offline, is a user logged in? If not, fail
+        if ($securityContext->isGranted('ROLE_USER')) {
+          $campaignHelper = new CampaignHelper($em, $logger);
+          //Does that user have access to the campaign? If not, fail
+          if(!$campaignHelper->campaignPermissionsCheck($this->get('security.token_storage')->getToken()->getUser(), $campaign)){
+            $accessFail = true;
+          }
+        }else{
+          $accessFail = true;
+        }
+      }
+
+      //IF CAMPAIGN CHECK FAILED
+      if($accessFail){
+        $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
+        return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
+      }
+
       //Make sure user doesn't already have a team setup for this campaign.
       $teamCheck = $em->getRepository('AppBundle:Team')->findOneBy(array('campaign' => $campaign, 'user' => $this->get('security.token_storage')->getToken()->getUser()));
       if(!is_null($teamCheck)){
         $this->get('session')->getFlashBag()->add('warning', 'Unfortunatley, you can only have one team per campaign.');
         return $this->redirectToRoute('team_show', array('campaignUrl' => $campaign->getUrl(), 'teamUrl' => $teamCheck->getUrl()));
-      }
-
-      //CODE TO CHECK TO SEE IF CAMPAIGN EXISTS
-      $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
-      if(is_null($campaign)){
-        $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
-        return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
-      }elseif(!$campaign->getOnlineFlag()){
-        $campaignHelper = new CampaignHelper($em, $logger);
-        if(!$campaignHelper->campaignPermissionsCheck($this->get('security.token_storage')->getToken()->getUser(), $campaign)){
-          $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
-          return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
-        }
       }
 
       return $this->render('team/team.type.select.html.twig', array(

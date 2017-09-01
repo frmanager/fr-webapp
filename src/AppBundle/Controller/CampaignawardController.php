@@ -98,13 +98,11 @@ class CampaignawardController extends Controller
       $em = $this->getDoctrine()->getManager();
       $campaign =  $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
       $queryHelper = new QueryHelper($em, $logger);
-      $campaignSettings = new CampaignHelper($this->getDoctrine()->getRepository('AppBundle:Campaignsetting')->findAll());
       $reportDate = $queryHelper->convertToDay(new DateTime());
       $reportDate->modify('-1 day');
 
       // replace this example code with whatever you need
       return $this->render('default/classroomAwards.html.twig', array(
-        'campaign_settings' => $campaignSettings->getCampaignSettings(),
         'classrooms' => $queryHelper->getClassroomAwards(array('campaign' => $campaign, 'before_date' => $reportDate)),
         'report_date' => $reportDate,
         'campaign' => $campaign

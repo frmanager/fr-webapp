@@ -33,15 +33,29 @@ class CampaignController extends Controller
 
      //CODE TO CHECK TO SEE IF CAMPAIGN EXISTS
      $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
+     $accessFail = false;
+     //Does Campaign Exist? if not, fail
      if(is_null($campaign)){
+       $accessFail = true;
+     //If it does exist, is it "offline"? if not, fail
+     }elseif(!$campaign->getOnlineFlag()){
+       $securityContext = $this->container->get('security.authorization_checker');
+       //If it is offline, is a user logged in? If not, fail
+       if ($securityContext->isGranted('ROLE_USER')) {
+         $campaignHelper = new CampaignHelper($em, $logger);
+         //Does that user have access to the campaign? If not, fail
+         if(!$campaignHelper->campaignPermissionsCheck($this->get('security.token_storage')->getToken()->getUser(), $campaign)){
+           $accessFail = true;
+         }
+       }else{
+         $accessFail = true;
+       }
+     }
+
+     //IF CAMPAIGN CHECK FAILED
+     if($accessFail){
        $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
        return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
-     }elseif(!$campaign->getOnlineFlag()){
-       $campaignHelper = new CampaignHelper($em, $logger);
-       if(!$campaignHelper->campaignPermissionsCheck($this->get('security.token_storage')->getToken()->getUser(), $campaign)){
-         $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
-         return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
-       }
      }
 
      $queryHelper = new QueryHelper($em, $logger);
