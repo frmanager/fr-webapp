@@ -1,0 +1,14 @@
+parameters:
+    database_driver: pdo_mysql
+    database_host: localhost
+    database_port: 33060
+    database_name: frmanager_test
+    database_user: root
+    database_password: ~
+    secret: DontForgetThatThisIsOnlyForTravisCISucka!
+    main_app_url: http://fr-webapp
+    admin_app_url: http://fr-webapp-admin
+    mailer_transport: gmail
+    mailer_host: null
+    mailer_user: test@test.com
+    mailer_password: ThisisATest
