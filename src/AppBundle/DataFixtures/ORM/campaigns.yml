@@ -1,0 +1,12 @@
+AppBundle\Entity\Campaign:
+    campaign{1..10}:
+        name: 'campaign<current()>'
+        description: <paragraph(3,true)>
+        theme: 'cerulean'
+        url: 'campaign<current()>'
+        email: 'davidlarrimore@gamil.com'
+        createdBy: '@user<current()>'
+        startDate: <dateTimeBetween('-30 days', '+5 days')>
+        endDate: <dateTimeBetween('+15 days','+90 days')>
+        fundingGoal: <numberBetween(1000, 30000)>
+        onlineFlag: true

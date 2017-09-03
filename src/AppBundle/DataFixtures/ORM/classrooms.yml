@@ -1,0 +1,9 @@
+AppBundle\Entity\Classroom:
+    classroom{1..100}:
+        teacherName: Teachers Name
+        name: <title()> <lastName()>s Class
+        email: <email()>
+        grade: '@grade*'
+        __calls:
+            - setCampaignFromGrade:
+                  0: null

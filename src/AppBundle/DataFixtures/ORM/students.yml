@@ -1,0 +1,9 @@
+AppBundle\Entity\Student:
+    student{1..1000}:
+        name: <firstName()> <randomLetter()>.
+        classroom: '@classroom*'
+        __calls:
+            - setCampaignFromClassroom:
+                  0: null
+            - setGradeFromClassroom:
+                  0: null

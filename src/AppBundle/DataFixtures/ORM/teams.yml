@@ -1,0 +1,11 @@
+AppBundle\Entity\Team:
+    team{1..50}:
+        name: 'Team <current()>'
+        url: 'team<current()>'
+        classroom: '@classroom*'
+        user: '@user<current()>'
+        teamType: '@rf_team_type*'
+        fundingGoal: <randomFloat(2, 50, 200)>
+        __calls:
+            - setCampaignFromClassroom:
+                  0: null

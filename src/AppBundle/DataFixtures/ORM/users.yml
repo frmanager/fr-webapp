@@ -1,0 +1,34 @@
+AppBundle\Entity\User:
+    user1:
+        firstName: 'David'
+        lastName: 'Larrimore'
+        email: 'davidlarrimore@gmail.com'
+        username: 'davidlarrimore@gmail.com'
+        password: <{app.alice.parameters.password}>
+        emailConfirmationCode: 12345
+        apiKey: 12345
+        campaignManagerFlag: true
+        setEmailConfirmationCodeTimestamp: <dateTime()>
+        userStatus: '@userStatus1'
+    user{2..20}:
+        firstName: <firstName()>
+        lastName: <lastName()>
+        email (unique): <freeEmail()>
+        username (unique): <freeEmail()>
+        password: <password()>
+        emailConfirmationCode (unique): <password()>
+        apiKey (unique): <password()>
+        campaignManagerFlag: true
+        setEmailConfirmationCodeTimestamp: <dateTime()>
+        userStatus: '@userStatus*'
+    user{21..50}:
+        firstName: <firstName()>
+        lastName: <lastName()>
+        email (unique): <freeEmail()>
+        username (unique): <freeEmail()>
+        password: <password()>
+        emailConfirmationCode (unique): <password()>
+        apiKey (unique): <password()>
+        fundraiserFlag: true
+        setEmailConfirmationCodeTimestamp: <dateTime()>
+        userStatus: '@userStatus*'

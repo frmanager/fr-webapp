@@ -1,0 +1,21 @@
+AppBundle\Entity\TeamStudent:
+    br_team_student{1..200}:
+        student: '@student*'
+        team: '@team*'
+        confirmedFlag: true
+        name: <firstName()> <randomLetter()>.
+        __calls:
+            - setClassroomFromStudent:
+                  0: null
+            - setGradeFromClassroom:
+                  0: null
+    br_team_student{201..250}:
+        student: '@student*'
+        team: '@team*'
+        confirmedFlag: false
+        name: <firstName()> <randomLetter()>.
+        __calls:
+            - setClassroomFromStudent:
+                  0: null
+            - setGradeFromStudent:
+                  0: null
