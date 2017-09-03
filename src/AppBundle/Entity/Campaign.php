@@ -63,7 +63,6 @@ Class Campaign
    */
   private $grades;
 
-
   /**
    * @var User
    *
@@ -74,18 +73,15 @@ Class Campaign
    */
   private $createdBy;
 
-
   /**
     * @ORM\Column(type="datetime")
     */
    protected $createdAt;
 
-
    /**
     * @ORM\Column(type="datetime")
     */
    protected $updatedAt;
-
 
   /**
    * @var datetime
@@ -103,7 +99,6 @@ Class Campaign
    */
   private $endDate;
 
-
   /**
    *  @var boolean
    *
@@ -111,6 +106,34 @@ Class Campaign
    */
   private $onlineFlag = false;
 
+  /**
+   * @var string
+   *
+   * @ORM\Column(type="string", length=100, nullable=true)
+   */
+  private $paypalEmail;
+
+  /**
+   *  @var boolean
+   *
+   * @ORM\Column(type="boolean", length=100)
+   */
+  private $donationFlag = false;
+
+  /**
+   * @var boolean
+   *
+   * @ORM\Column(type="boolean", length=100)
+   */
+  private $tippingFlag = false;
+
+  /**
+   *  @var blob
+   *
+   * @ORM\Column(type="blob", nullable=false)
+   * @Assert\NotNull()
+   */
+  private $donationReceiptText;
 
   /**
    * @var float
@@ -768,5 +791,101 @@ Class Campaign
     public function getOnlineFlag()
     {
         return $this->onlineFlag;
+    }
+
+    /**
+     * Set paypalEmail
+     *
+     * @param string $paypalEmail
+     *
+     * @return Campaign
+     */
+    public function setPaypalEmail($paypalEmail)
+    {
+        $this->paypalEmail = $paypalEmail;
+
+        return $this;
+    }
+
+    /**
+     * Get paypalEmail
+     *
+     * @return string
+     */
+    public function getPaypalEmail()
+    {
+        return $this->paypalEmail;
+    }
+
+    /**
+     * Set donationFlag
+     *
+     * @param boolean $donationFlag
+     *
+     * @return Campaign
+     */
+    public function setDonationFlag($donationFlag)
+    {
+        $this->donationFlag = $donationFlag;
+
+        return $this;
+    }
+
+    /**
+     * Get donationFlag
+     *
+     * @return boolean
+     */
+    public function getDonationFlag()
+    {
+        return $this->donationFlag;
+    }
+
+    /**
+     * Set tippingFlag
+     *
+     * @param boolean $tippingFlag
+     *
+     * @return Campaign
+     */
+    public function setTippingFlag($tippingFlag)
+    {
+        $this->tippingFlag = $tippingFlag;
+
+        return $this;
+    }
+
+    /**
+     * Get tippingFlag
+     *
+     * @return boolean
+     */
+    public function getTippingFlag()
+    {
+        return $this->tippingFlag;
+    }
+
+    /**
+     * Set donationReceiptText
+     *
+     * @param string $donationReceiptText
+     *
+     * @return Campaign
+     */
+    public function setDonationReceiptText($donationReceiptText)
+    {
+        $this->donationReceiptText = $donationReceiptText;
+
+        return $this;
+    }
+
+    /**
+     * Get donationReceiptText
+     *
+     * @return string
+     */
+    public function getDonationReceiptText()
+    {
+        return $this->donationReceiptText;
     }
 }

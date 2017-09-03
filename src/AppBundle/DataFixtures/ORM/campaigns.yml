@@ -10,3 +10,7 @@ AppBundle\Entity\Campaign:
         endDate: <dateTimeBetween('+15 days','+90 days')>
         fundingGoal: <numberBetween(1000, 30000)>
         onlineFlag: true
+        donationFlag: true
+        paypalEmail: davidlarrimore@gmail.com
+        tippingFlag: true
+        donationReceiptText: "BLAHBLAHBLAH"
