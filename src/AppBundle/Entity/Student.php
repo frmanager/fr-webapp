@@ -10,7 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="student",uniqueConstraints={@ORM\UniqueConstraint(columns={"name", "classroom_id", "campaign_id"})})
+ * @ORM\Table(name="student",uniqueConstraints={@ORM\UniqueConstraint(columns={"name", "classroom_id"})})
  * @UniqueEntity(
  *     fields={"name", "classroom"},
  *     errorPath="name",
