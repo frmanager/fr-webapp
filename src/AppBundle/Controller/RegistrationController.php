@@ -240,6 +240,7 @@ class RegistrationController extends Controller
             $team->setTeamType($teamType);
             $team->setName($params['team']['name']);
             $team->setFundingGoal($params['team']['fundingGoal']);
+            $team->setDescription($params['team']['description']);
             $team->setCampaign($campaign);
             $team->setUrl($this->createTeamUrl($campaign, $params['team']['name']));
 

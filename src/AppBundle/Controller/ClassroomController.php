@@ -97,7 +97,6 @@ class ClassroomController extends Controller
                ->orderBy('u.amount', 'DESC');
 
         $campaignAwards = $qb->getQuery()->getResult();
-        $campaignSettings = new CampaignHelper($this->getDoctrine()->getRepository('AppBundle:Campaignsetting')->findAll());
 
         $queryHelper = new QueryHelper($em, $logger);
 
@@ -105,7 +104,6 @@ class ClassroomController extends Controller
             'classroom' => $classroom,
             'classroom_rank' => $queryHelper->getClassroomRank($classroom->getId(),array('campaign' => $campaign, 'limit' => 0)),
             'campaign_awards' => $campaignAwards,
-            'campaignsettings' => $campaignSettings->getCampaignSettings(),
             'entity' => $entity,
             'campaign' => $campaign,
         ));

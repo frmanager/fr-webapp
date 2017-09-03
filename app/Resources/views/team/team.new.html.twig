@@ -32,6 +32,10 @@
             <div class="col-sm-6"><input type="text" placeholder="The Smith Family" value="{% if team is not null and team['name'] is not null %}{{ team['name'] }}{% endif %}" id="team_name" required="required" name="team[name]" class="form-control"></div>
           </div>
           <div class="form-group">
+            <label class="col-sm-3 control-label required" for="team_description">Call for Action</label>
+            <div class="col-sm-9"><textarea placeholder="Help the Smith family get to the top of the charts!..." value="{% if team is not null and team['description'] is not null %}{{ team['description'] }}{% endif %}" id="team_description" name="team[description]" rows="3" class="form-control"></textarea></div>
+          </div>
+          <div class="form-group">
             <label class="col-sm-3 control-label required" for="team_name">Campaign Goal</label>
             <div class="col-sm-3">
               <div class="input-group">
@@ -92,6 +96,10 @@
             <div class="col-sm-6"><input type="text" id="team_name" required="required" value="{% if team is not empty and team['name'] is not empty %}{{ team['name'] }}{% endif %}" name="team[name]" class="form-control"></div>
           </div>
           <div class="form-group">
+            <label class="col-sm-3 control-label required" for="team_description">Call for Action</label>
+            <div class="col-sm-9"><textarea placeholder="Help the Mrs. Smith get to the top of the charts!..." value="{% if team is not null and team['description'] is not null %}{{ team['description'] }}{% endif %}" id="team_description" name="team[description]" rows="3" class="form-control"></textarea></div>
+          </div>
+          <div class="form-group">
             <label class="col-sm-3 control-label required" for="team_fundingGoal">Campaign Goal</label>
             <div class="col-sm-3">
               <div class="input-group">
@@ -117,6 +125,10 @@
           <div class="form-group">
             <label class="col-sm-3 control-label required" for="team_name">Team Name</label>
             <div class="col-sm-6"><input type="text" id="team_name" required="required" value="{% if team is not empty and team['name'] is not empty %}{{ team['name'] }}{% endif %}" name="team[name]" class="form-control"></div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label required" for="team_description">Call for Action</label>
+            <div class="col-sm-9"><textarea placeholder="Help the Stephen get to the top of the charts!..." value="{% if team is not null and team['description'] is not null %}{{ team['description'] }}{% endif %}" id="team_description" name="team[description]" rows="3" class="form-control"></textarea></div>
           </div>
           <div class="form-group">
             <label class="col-sm-3 control-label required" for="team_fundingGoal">Campaign Goal</label>

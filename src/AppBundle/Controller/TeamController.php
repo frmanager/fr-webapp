@@ -116,7 +116,7 @@ class TeamController extends Controller
           return $this->redirectToRoute('team_index', array('campaignUrl'=>$campaign->getUrl()));
         }
 
-        return $this->render('team/team.show.html.twig', array(
+        return $this->render('team/team.show.'.$team->getTeamType()->getValue().'.html.twig', array(
             'team' => $team,
             'entity' => $entity,
             'campaign' => $campaign,

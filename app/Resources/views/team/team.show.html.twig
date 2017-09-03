@@ -3,12 +3,15 @@
 
 {% block body %}
     <div class="row">
-        <div class="col-md-6">
-            <h1>{{ team.name }}</h1>
+        <div class="col-md-12">
+            <h1 style="text-align:center;">{{ team.name }}</h1>
         </div>
+    </row>
+    <!--
         <div class="col-md-6">
             {% if is_granted('ROLE_USER') and app.user.id == team.user.id %}<a href="{{ path('team_edit', {'campaignUrl':campaign.url, 'teamUrl': team.url }) }}" class="btn btn-primary pull-right"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Team</a>{% endif %}
         </div>
+    -->
     </div>
     <hr/>
     <div class="row">
@@ -47,7 +50,7 @@
                         <td>{{ teamStudent.name }}</td>
                         {% if is_granted('ROLE_USER') and app.user.id == team.user.id %}
                           <td>{% if teamStudent.confirmedFlag %}Yes{% else %}No{% endif %}</td>
-                          <td style="text-align:center;"><a class="btn btn-primary btn-sm" href="#">Edit</a>&nbsp;<a class="btn btn-warning btn-sm" href="#">Delete</a></td>
+                          <td style="text-align:center;"><a class="btn btn-primary btn-sm" href="{{ path('teamStudent_edit', {'campaignUrl':campaign.url, 'teamUrl': team.url, 'teamStudentId': teamStudent.id }) }}">Edit</a>&nbsp;<a class="btn btn-warning btn-sm" href="#">Delete</a></td>
                         {% endif %}
                     </tr>
                 {% endfor %}

@@ -1,0 +1,40 @@
+{% extends 'template.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Edit {{ teamStudent.name }}</h1>
+            <hr/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+        {% if error is defined %}
+          <p class="well-sm bg-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+        {% endif %}
+        <form name="teamStudent" method="post" class="form-horizontal">
+          <div class="form-group">
+            <div class="col-sm-6">
+                <select id="teamStudent_classroomId" name="teamStudent[classroomId]" class="form-control">
+                  <option value="" selected="selected">Select Classroom</option>
+                  {% for classroom in classrooms %}
+                    <option value="{{classroom.id}}" {% if teamStudent.classroom.id == classroom.id %}selected{% endif %}>{{classroom.grade.name}} - {{classroom.name}}</option>
+                  {% endfor %}
+                </select>
+            </div>
+            <div class="col-sm-3">
+              <input type="text" id="teamStudent_name" value="{{ teamStudent.name }}" name="teamStudent[name]" class="form-control">
+            </div>
+          </div>
+        <hr>
+        <div class="form-group">
+          <div class="col-sm-12">
+            <button type="submit" id="submit" class="btn btn-primary pull-right">Update</button>
+          </div>
+        </div>
+        <input type="hidden" id="teamStudent_campaignId" name="teamStudent[campaignId]" value="{{ teamStudent.team.campaign.id }}">
+        <input type="hidden" id="teamStudent_teamId" name="teamStudent[teamId]" value="{{ teamStudent.team.id }}">
+        </form>
+        </div>
+    </div>
+{% endblock %}

@@ -31,6 +31,12 @@ class Team
      */
     private $name;
 
+
+    /**
+     * @ORM\Column(type="string", length=2000)
+     */
+    private $description;
+
     /**
      * @ORM\Column(type="string", length=100)
      * @Assert\NotNull()
@@ -511,5 +517,29 @@ class Team
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Team
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 }
