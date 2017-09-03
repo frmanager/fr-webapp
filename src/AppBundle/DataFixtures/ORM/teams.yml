@@ -2,6 +2,7 @@ AppBundle\Entity\Team:
     team{1..50}:
         name: 'Team <current()>'
         url: 'team<current()>'
+        description: <paragraph(3,true)>
         classroom: '@classroom*'
         user: '@user<current()>'
         teamType: '@rf_team_type*'

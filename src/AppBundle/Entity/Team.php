@@ -33,7 +33,7 @@ class Team
 
 
     /**
-     * @ORM\Column(type="string", length=2000)
+     * @ORM\Column(type="string", length=2000, nullable=true)
      */
     private $description;
 
