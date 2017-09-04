@@ -23,7 +23,6 @@
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "^2.0",
         "google/apiclient": "^2.0",
-        "beelab/bowerphp": "^0.4.0",
         "guzzlehttp/guzzle": "^6.2",
         "ocramius/proxy-manager": "^2.0"
     },
