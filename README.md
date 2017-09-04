@@ -96,7 +96,7 @@ githubApiKey=<GITHUB_API_KEY>
 ```
 umask 002
 PS1='[\h]$ '
-export PATH=/usr/local/php56/bin:$PATH
+export PATH=/usr/local/php71/bin:$PATH
 export PATH=/home/<USERNAME>/.php/composer:$PATH
 export SYMFONY_ENV=prod
 export BOWERPHP_TOKEN=<GITHUB_API_KEY>
