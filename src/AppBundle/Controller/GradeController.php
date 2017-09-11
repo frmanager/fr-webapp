@@ -27,27 +27,6 @@ class GradeController extends Controller
         $em = $this->getDoctrine()->getManager();
         $grades = $em->getRepository('AppBundle:Grade')->findAll();
 
-        if (empty($grades)) {
-            $defaultGrades = ['Kindergarten', '1st Grade', '2nd Grade', '3rd Grade', '4th Grade', '5th Grade', 'ID', 'ED'];
-            foreach ($defaultGrades as $defaultGrade) {
-                $em = $this->getDoctrine()->getManager();
-
-                $grade = new Grade();
-                $grade->setName($defaultGrade);
-
-                $em->persist($grade);
-                $em->flush();
-            }
-            $em->clear();
-
-            $grades = $em->getRepository('AppBundle:Grade')->findAll();
-
-            $this->addFlash(
-              'info',
-              'Default Grades Added'
-            );
-        }
-
         return $this->render('campaign/grade.index.html.twig', array(
             'grades' => $grades,
             'entity' => $entity,

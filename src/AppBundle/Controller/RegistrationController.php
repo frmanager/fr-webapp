@@ -193,7 +193,7 @@ class RegistrationController extends Controller
       if ($request->isMethod('POST')) {
           $fail = false;
           $params = $request->request->all();
-          dump($request->request->get('data'));
+          //dump($request->request->get('data'));
           //$logger->debug('Team Name: '.print_r($params, true));
 
           //form Validation

@@ -1,0 +1,251 @@
+{% extends 'template.html.twig' %}
+
+{% block body %}
+  {% set campaignUrl = null %}
+  {% set campaignUrl = app.request.attributes.get('_route_params')['campaignUrl'] %}
+  <div class="row">
+    <div class="col-md-8">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="lead">Make a donation to the</div>
+          <h2>
+            <strong>{{ campaign.name }}</strong>
+          </h2>
+        </div>
+        <!-- ./column -->
+      </div>
+      <!-- ./row -->
+      <br>
+      <form name="donation" method="post" class="form">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label class="control-label required" for="donation_amount">Donation Amount:
+                <small>U.S. Dollar (USD)</small>
+              </label>
+              <div class="input-group col-sm-6">
+                <span class="input-group-addon" id="basic-addon1"><i class="fa fa-usd" aria-hidden="true"></i></span>
+                <input type="number" class="form-control input-lg" style="text-align:right;" min="0" id="donation_amount" value="{% if donation is null or donation.email is not defined %}5{% else %}{{ donation.amount }}{% endif %}" name="donation[amount]">
+                <span class="input-group-addon" id="basic-addon1">.00</span>
+              </div>
+            </div>
+          </div>
+          <!-- ./column -->
+        </div>
+        <!-- ./row -->
+        <hr>
+        <div class="row">
+          <div class="col-md-12">
+            {% if donationType == "student" %}
+              <div class="row">
+              <div class="col-md-8">
+                <div class="form-group">
+                  <label class="control-label required" for="donation_classroomId">Select Classroom</label>
+                  <div class="input-group col-md-12">
+                    <select id="donation_classroomId" name="donationclassroomId]" class="form-control input-lg">
+                      <option value="" selected="selected">Select Classroom</option>
+                      {% for classroom in classrooms %}
+                       <option value="{{classroom.id}}" {% if donation is not null and donation.classroom.id is defined and donation.classroom.id == classroom.id %} selected{% endif %}>{{classroom.grade.name}}
+                          -
+                          {{classroom.name}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <!-- ./column -->
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="control-label required" for="donation_studentName">Student Name</label>
+                  <input type="text" id="donation_studentName" class="form-control input-lg" value="{% if donation is not empty and donation.studentName is defined %}{{ donation.studentName }}{% endif %}" placeholder="Charles S." name="donation[studentName]">
+                </div>
+              </div>
+              <!-- ./column -->
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <span id="helpBlock" class="help-block">Please include the students last initial to help us map to the correct student.</span>
+              </div>
+            </div>
+            <hr>
+            <!-- ./row -->
+            {% elseif donationType == "classroom" %}
+              <div class="form-group">
+                <label class="control-label required" for="donation_classroomId">Select a Classroom</label>
+                <select id="donation_classroomId" name="donationclassroomId]" class="form-control input-lg">
+                  <option value="" selected="selected">Select Classroom</option>
+                  {% for classroom in classrooms %}
+                    <option value="{{classroom.id}}" {% if donation is not null and donation.classroom.id is defined and donation.classroom.id == classroom.id %} selected{% endif %}>{{classroom.grade.name}}
+                      -
+                      {{classroom.name}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <hr>
+              {% elseif donationType == "team" %}
+                <div class="form-group">
+                  <label class="control-label required" for="donation_classroomId">Select a Team</label>
+                  <input type="text" id="donation_teamId" class="form-control input-lg" disabled="disabled" value="{% if donation is not empty and donation.team is defined %}{{ donation.team.name }}{% endif %}" name="donation[teamId]">
+                </div>
+                <hr>
+            {% endif %}
+          </div>
+          <!-- ./column -->
+        </div>
+        <!-- ./row -->
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="control-label required" for="donation_firstName">Donor First Name</label>
+              <input type="text" class="form-control input-lg" placeholder="last name" id="donation_firstName" name="donation[lastName]">
+            </div>
+          </div>
+          <!-- ./column -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="control-label required" for="donation_lastName">Donor Last Name</label>
+              <input type="text" class="form-control input-lg" placeholder="last name" id="donation_lastName" name="donation[lastName]">
+            </div>
+          </div>
+          <!-- ./column -->
+        </div>
+        <!-- ./row -->
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label class="control-label required" for="donation_amount">Donor Email Address</label>
+              <div class="input-group col-md-12">
+                <span class="input-group-addon" id="basic-addon1"><i class="fa fa-at" aria-hidden="true"></i></span>
+                <input type="text" class="form-control input-lg" id="donation_email" value="{% if donation is not null and donation.email is defined %}{{ donation.email }}{% endif %}" name="donation[email]">
+              </div>
+            </div>
+          </div>
+          <!-- ./column -->
+        </div>
+        <!-- ./row -->
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label class="control-label" for="donation_message">Include a Message with your donation <sup>(optional)</sup> </label>
+              <textarea type="text" class="form-control input-lg" maxlength="500" id="donation_message" rows="3" name="donation[message]">{% if donation is not null and donation.message is defined %}{{ donation.message }}{% endif %}</textarea>
+            </div>
+          </div>
+          <!-- ./column -->
+        </div>
+        <!-- ./row -->
+        <hr>
+        <div class="row">
+          <div class="col-md-12">
+            <input type="hidden" id="donation_campaignId" name="donation[campaignId]" value="{{campaign.id}}">
+            <input type="hidden" id="donation_donationType" name="donation[donationType]" value="{{donationType}}">
+            <button type="submit" id="submit" class="btn btn-primary btn-lg btn-block">DONATE</button>
+            <i class="fa fa-cc-paypal fa-3x" aria-hidden="true"></i>
+            <i class="fa fa-cc-visa fa-3x" aria-hidden="true"></i>
+            <i class="fa fa-cc-mastercard fa-3x" aria-hidden="true"></i>
+            <i class="fa fa-cc-discover fa-3x" aria-hidden="true"></i>
+            <i class="fa fa-cc-amex fa-3x" aria-hidden="true"></i>
+          </div>
+          <!-- ./column -->
+        </div>
+        <!-- ./row -->
+      </div>
+      <!-- /column -->
+      <div class="col-md-4">
+        {% if donationType == "team" %}
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <img src="/assets/img/{{ donation.team.teamType.value }}-image-default.png"  alt="..." class="img-responsive">
+            <p class="lead" style="margin-bottom:5px;">{{donation.team.name}}</p>
+            <p>{{donation.team.description[:100]}}...</p>
+            <p class="lead" style="margin-bottom:5px;">$0</p>
+            <p><small>of ${{donation.team.fundingGoal|number_format(0, '.', ',')}} goal</small></p>
+            <br>
+            <div class="progress">
+                  <div
+                      class="progress-bar progress-bar-warning"
+                      role="progressbar"
+                      aria-valuenow="{{ 0 / donation.team.fundingGoal * 100}}"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      style="width:{{ 0 / donation.team.fundingGoal * 100}}%">
+                  </div>
+              </div>
+          </div><!-- ./Panel body -->
+        </div><!-- ./Panel -->
+        {% endif %}
+
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="lead">About your
+              {{donationType|capitalize}}
+              Donation</div>
+            {% if donationType == "campaign" %}
+              <p>This donation will be made to the general
+                {{ campaign.name }}
+                campaign.</p>
+            {% elseif donationType == "student" %}
+              <p>Donation will be credited to an individual student.</p>
+            {% elseif donationType == "classroom" %}
+              <p>Donation credit will be given to the classroom of your choosing, meaning that donation credit towards awards will be split evenly amongst all students in classroom.</p>
+            {% elseif donationType == "team" %}
+              <p>Donation credit will be given to the
+                {{donation.team.name}}
+                team.</p>
+            {% endif %}
+            <hr>
+            <div>Other Donation Options:</div>
+            {% if donationType != 'campaign' %}<a href="{{ path('donation_index', {'campaignUrl': campaign.url , 'type': 'campaign'}) }}" class="btn btn-info btn-sm btn-block">Donate to general campaign</a>{% endif %}
+            {% if app.request.query.get("classroomID") is defined %}
+            {% if donationType != 'student' %}<a href="{{ path('donation_index', {'campaignUrl': campaign.url, 'type': 'student', 'classroomID': app.request.query.get("classroomID") }) }}" class="btn btn-info btn-sm btn-block">Donate to a Student</a>{% endif %}
+            {% if donationType != 'classroom' %}<a href="{{ path('donation_index', {'campaignUrl': campaign.url, 'type': 'classroom', 'classroomID': app.request.query.get("classroomID") }) }}" class="btn btn-info btn-sm btn-block">Donate to a Classroom</a>{% endif %}
+            {% else %}
+            {% if donationType != 'student' %}<a href="{{ path('donation_index', {'campaignUrl': campaign.url, 'type': 'student' }) }}" class="btn btn-info btn-sm btn-block">Donate to a Student</a>{% endif %}
+            {% if donationType != 'classroom' %}<a href="{{ path('donation_index', {'campaignUrl': campaign.url, 'type': 'classroom' }) }}" class="btn btn-info btn-sm btn-block">Donate to a Classroom</a>{% endif %}
+            {% endif %}
+            {% if donationType != 'team' %}<a href="{{ path('team_index', {'campaignUrl': campaign.url }) }}" class="btn btn-info btn-sm btn-block">Donate to a Team</a>{% endif %}
+          </div>
+          <!-- ./Panel body -->
+        </div>
+        <!-- ./Panel -->
+      </div>
+      <!-- /Column -->
+    </div>
+    <!-- /Row -->
+  </form>
+  {% if app.environment == "dev" %}
+  <hr>
+    <div class="panel panel-danger" id="debug">
+      <div class="panel-heading">
+        <h3 class="panel-title">DEBUG PANEL</h3>
+      </div>
+      <div class="panel-body">
+        <p>DonationType Object:
+          {{dump(donationType)}}</p>
+        <p>Donation Object:
+          {{dump(donation)}}</p>
+        <p>Classroom Object:
+          {{dump(teams)}}</p>
+        <p>Classrooms Object:
+          {{dump(classrooms)}}</p>
+        <p>Teams Object:
+          {{dump(teams)}}</p>
+        <p>Campaign Object:
+          {{dump(campaign)}}</p>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+  <script>
+    $(document).ready(function() {
+      //called when key is pressed in textbox
+      $("#donation_amount").keypress(function(e) {
+        //if the letter is not digit then display error and don't type anything
+        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+          return false;
+        }
+      });
+    });
+  </script>
+{% endblock %}

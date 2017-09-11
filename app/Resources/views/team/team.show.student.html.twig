@@ -39,7 +39,7 @@
               </div>
               <p>Raised by x donors<p>
               <hr>
-              <p><a href="#" class="btn btn-primary btn-lg btn-block">DONATE NOW!</a></p>
+              <p><a href="{{ path('donation_index', {'campaignUrl': campaign.url, 'teamUrl': team.url, 'type': 'team' }) }}" class="btn btn-primary btn-lg btn-block">DONATE NOW!</a></p>
               <p><a href="http://www.facebook.com/share.php?u={{ app.request.uri }}" target="_blank" class="btn btn-info btn-block"><i class="fa fa-facebook-official" aria-hidden="true"></i> Share on Facebook</a></p>
         </div>
       </div>
