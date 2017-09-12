@@ -6,6 +6,8 @@
 {% if campaign is defined %}
   {% if date('now' | date('Y/m/d')) < date(campaign.startDate | date('Y/m/d')) %}
     {% set notStarted = true %}
+  {% else %}
+    {% set notStarted = false %}
   {% endif %}
 {% endif %}
 
