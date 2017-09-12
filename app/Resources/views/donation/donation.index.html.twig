@@ -25,7 +25,7 @@
               </label>
               <div class="input-group col-sm-6">
                 <span class="input-group-addon" id="basic-addon1"><i class="fa fa-usd" aria-hidden="true"></i></span>
-                <input type="number" class="form-control input-lg" style="text-align:right;" min="0" id="donation_amount" value="{% if donation is null or donation.email is not defined %}5{% else %}{{ donation.amount }}{% endif %}" name="donation[amount]">
+                <input type="number" class="form-control input-lg" style="text-align:right;" min="0" id="donation_amount" value="{% if donation is null or donation.amount is not defined %}5{% else %}{{ donation.amount }}{% endif %}" name="donation[amount]">
                 <span class="input-group-addon" id="basic-addon1">.00</span>
               </div>
             </div>
@@ -93,17 +93,18 @@
           <!-- ./column -->
         </div>
         <!-- ./row -->
+        <div class="lead">Donor Information</div>
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
-              <label class="control-label required" for="donation_firstName">Donor First Name</label>
+              <label class="control-label required" for="donation_firstName">First Name</label>
               <input type="text" class="form-control input-lg" placeholder="last name" id="donation_firstName" name="donation[lastName]">
             </div>
           </div>
           <!-- ./column -->
           <div class="col-md-6">
             <div class="form-group">
-              <label class="control-label required" for="donation_lastName">Donor Last Name</label>
+              <label class="control-label required" for="donation_lastName">Last Name</label>
               <input type="text" class="form-control input-lg" placeholder="last name" id="donation_lastName" name="donation[lastName]">
             </div>
           </div>
@@ -113,7 +114,7 @@
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
-              <label class="control-label required" for="donation_amount">Donor Email Address</label>
+              <label class="control-label required" for="donation_amount">Email Address</label>
               <div class="input-group col-md-12">
                 <span class="input-group-addon" id="basic-addon1"><i class="fa fa-at" aria-hidden="true"></i></span>
                 <input type="text" class="form-control input-lg" id="donation_email" value="{% if donation is not null and donation.email is defined %}{{ donation.email }}{% endif %}" name="donation[email]">
@@ -136,14 +137,114 @@
         <hr>
         <div class="row">
           <div class="col-md-12">
+            <div class="lead">Select a Payment Method</div>
+            <div class="form-group-lg">
+              <label class="radio-inline">
+                <input type="radio" name="donation[paymentMethod]" id="donation_paymentMethod_1" value="paypal" checked> Paypal (<i class="fa fa-paypal" aria-hidden="true"></i>)
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="donation[paymentMethod]" id="donation_paymentMethod_2" value="cc"> Credit Card (<i class="fa fa-cc-paypal" aria-hidden="true"></i>
+                <i class="fa fa-cc-visa" aria-hidden="true"></i>
+                <i class="fa fa-cc-mastercard" aria-hidden="true"></i>
+                <i class="fa fa-cc-discover" aria-hidden="true"></i>
+                <i class="fa fa-cc-amex" aria-hidden="true"></i>)
+              </label>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="collapse" id="cc_form">
+          <div class="row">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-8">
+                <div class="form-group">
+                  <label class="control-label required" for="donation_cc_cardholderName">Name on Card</label>
+                  <input type="text" class="form-control input-lg" id="donation_cc_cardholderName" name="donation[cc][cardholderName]">
+                </div>
+              </div>
+              <!-- ./column -->
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="control-label required" for="donation_cc_country">Country</label>
+                    <select id="donation_cc_country" name="donation[cc][country]" class="form-control input-lg">
+                      <option value="US" selected="selected">United States</option><option value="AF">Afghanistan</option><option value="AX">Aland Islands</option><option value="AL">Albania</option><option value="DZ">Algeria</option><option value="AS">American Samoa</option><option value="AD">Andorra</option><option value="AO">Angola</option><option value="AI">Anguilla</option><option value="AQ">Antarctica</option><option value="AG">Antigua and Barbuda</option><option value="AR">Argentina</option><option value="AM">Armenia</option><option value="AW">Aruba</option><option value="AU">Australia</option><option value="AT">Austria</option><option value="AZ">Azerbaijan</option><option value="BS">Bahamas</option><option value="BH">Bahrain</option><option value="BD">Bangladesh</option><option value="BB">Barbados</option><option value="BY">Belarus</option><option value="BE">Belgium</option><option value="BZ">Belize</option><option value="BJ">Benin</option><option value="BM">Bermuda</option><option value="BT">Bhutan</option><option value="BO">Bolivia</option><option value="BA">Bosnia and Herzegovina</option><option value="BW">Botswana</option><option value="BV">Bouvet Island</option><option value="BR">Brazil</option><option value="IO">British Indian Ocean Territory</option><option value="BN">Brunei Darussalam</option><option value="BG">Bulgaria</option><option value="BF">Burkina Faso</option><option value="BI">Burundi</option><option value="KH">Cambodia</option><option value="CM">Cameroon</option><option value="CA">Canada</option><option value="CV">Cape Verde</option><option value="KY">Cayman Islands</option><option value="CF">Central African Republic</option><option value="TD">Chad</option><option value="CL">Chile</option><option value="CN">China</option><option value="CX">Christmas Island</option><option value="CC">Cocos (Keeling) Islands</option><option value="CO">Colombia</option><option value="KM">Comoros</option><option value="CG">Congo</option><option value="CK">Cook Islands</option><option value="CR">Costa Rica</option><option value="CI">Cote D'Ivoire (Ivory Coast)</option><option value="HR">Croatia (Hrvatska)</option><option value="CW">Curacao</option><option value="CY">Cyprus</option><option value="CZ">Czech Republic</option><option value="CD">Democratic Republic of the Congo</option><option value="DK">Denmark</option><option value="DJ">Djibouti</option><option value="DM">Dominica</option><option value="DO">Dominican Republic</option><option value="TP">East Timor</option><option value="EC">Ecuador</option><option value="EG">Egypt</option><option value="SV">El Salvador</option><option value="GQ">Equatorial Guinea</option><option value="ER">Eritrea</option><option value="EE">Estonia</option><option value="ET">Ethiopia</option><option value="FK">Falkland Islands (Malvinas)</option><option value="FO">Faroe Islands</option><option value="FM">Federated States of Micronesia</option><option value="FJ">Fiji</option><option value="FI">Finland</option><option value="FR">France</option><option value="FX">France, Metropolitan</option><option value="GF">French Guiana</option><option value="PF">French Polynesia</option><option value="TF">French Southern Territories</option><option value="GA">Gabon</option><option value="GM">Gambia</option><option value="GE">Georgia</option><option value="DE">Germany</option><option value="GH">Ghana</option><option value="GI">Gibraltar</option><option value="GB">Great Britain (UK)</option><option value="GR">Greece</option><option value="GL">Greenland</option><option value="GD">Grenada</option><option value="GP">Guadeloupe</option><option value="GU">Guam</option><option value="GT">Guatemala</option><option value="GN">Guinea</option><option value="GW">Guinea-Bissau</option><option value="GY">Guyana</option><option value="HT">Haiti</option><option value="HM">Heard Island and McDonald Islands</option><option value="HN">Honduras</option><option value="HK">Hong Kong</option><option value="HU">Hungary</option><option value="IS">Iceland</option><option value="IN">India</option><option value="ID">Indonesia</option><option value="IQ">Iraq</option><option value="IE">Ireland</option><option value="IL">Israel</option><option value="IT">Italy</option><option value="JM">Jamaica</option><option value="JP">Japan</option><option value="JO">Jordan</option><option value="KZ">Kazakhstan</option><option value="KE">Kenya</option><option value="KI">Kiribati</option><option value="KR">Korea (South)</option><option value="XK">Kosovo</option><option value="KW">Kuwait</option><option value="KG">Kyrgyzstan</option><option value="LA">Laos</option><option value="LV">Latvia</option><option value="LB">Lebanon</option><option value="LS">Lesotho</option><option value="LR">Liberia</option><option value="LY">Libya</option><option value="LI">Liechtenstein</option><option value="LT">Lithuania</option><option value="LU">Luxembourg</option><option value="MO">Macao</option><option value="MK">Macedonia</option><option value="MG">Madagascar</option><option value="MW">Malawi</option><option value="MY">Malaysia</option><option value="MV">Maldives</option><option value="ML">Mali</option><option value="MT">Malta</option><option value="MH">Marshall Islands</option><option value="MQ">Martinique</option><option value="MR">Mauritania</option><option value="MU">Mauritius</option><option value="YT">Mayotte</option><option value="MX">Mexico</option><option value="MD">Moldova</option><option value="MC">Monaco</option><option value="MN">Mongolia</option><option value="ME">Montenegro</option><option value="MS">Montserrat</option><option value="MA">Morocco</option><option value="MZ">Mozambique</option><option value="MM">Myanmar</option><option value="NA">Namibia</option><option value="NR">Nauru</option><option value="NP">Nepal</option><option value="NL">Netherlands</option><option value="AN">Netherlands Antilles</option><option value="NC">New Caledonia</option><option value="NZ">New Zealand (Aotearoa)</option><option value="NI">Nicaragua</option><option value="NE">Niger</option><option value="NG">Nigeria</option><option value="NU">Niue</option><option value="NF">Norfolk Island</option><option value="MP">Northern Mariana Islands</option><option value="NO">Norway</option><option value="OM">Oman</option><option value="PK">Pakistan</option><option value="PW">Palau</option><option value="PS">Palestinian Territory</option><option value="PA">Panama</option><option value="PG">Papua New Guinea</option><option value="PY">Paraguay</option><option value="PE">Peru</option><option value="PH">Philippines</option><option value="PN">Pitcairn</option><option value="PL">Poland</option><option value="PT">Portugal</option><option value="PR">Puerto Rico</option><option value="QA">Qatar</option><option value="RE">Reunion</option><option value="RO">Romania</option><option value="RU">Russian Federation</option><option value="RW">Rwanda</option><option value="GS">S. Georgia and S. Sandwich Islands</option><option value="SH">Saint Helena</option><option value="KN">Saint Kitts and Nevis</option><option value="LC">Saint Lucia</option><option value="MF">Saint Martin</option><option value="SX">Sint Maarten</option><option value="PM">Saint Pierre and Miquelon</option><option value="VC">Saint Vincent and the Grenadines</option><option value="WS">Samoa</option><option value="SM">San Marino</option><option value="ST">Sao Tome and Principe</option><option value="SA">Saudi Arabia</option><option value="SN">Senegal</option><option value="RS">Serbia</option><option value="SC">Seychelles</option><option value="SL">Sierra Leone</option><option value="SG">Singapore</option><option value="SK">Slovakia</option><option value="SI">Slovenia</option><option value="SB">Solomon Islands</option><option value="SO">Somalia</option><option value="ZA">South Africa</option><option value="ES">Spain</option><option value="LK">Sri Lanka</option><option value="SS">South Sudan</option><option value="SR">Suriname</option><option value="SJ">Svalbard and Jan Mayen</option><option value="SZ">Swaziland</option><option value="SE">Sweden</option><option value="CH">Switzerland</option><option value="TW">Taiwan</option><option value="TJ">Tajikistan</option><option value="TZ">Tanzania</option><option value="TH">Thailand</option><option value="TL">Timor-Leste</option><option value="TG">Togo</option><option value="TK">Tokelau</option><option value="TO">Tonga</option><option value="TT">Trinidad and Tobago</option><option value="TN">Tunisia</option><option value="TR">Turkey</option><option value="TM">Turkmenistan</option><option value="TC">Turks and Caicos Islands</option><option value="TV">Tuvalu</option><option value="SU">USSR (former)</option><option value="UG">Uganda</option><option value="UA">Ukraine</option><option value="AE">United Arab Emirates</option><option value="UK">United Kingdom</option><option value="UM">United States Minor Outlying Islands</option><option value="UY">Uruguay</option><option value="UZ">Uzbekistan</option><option value="VU">Vanuatu</option><option value="VA">Vatican City State (Holy See)</option><option value="VE">Venezuela</option><option value="VN">Viet Nam</option><option value="VG">Virgin Islands (British)</option><option value="VI">Virgin Islands (U.S.)</option><option value="WF">Wallis and Futuna</option><option value="EH">Western Sahara</option><option value="YE">Yemen</option><option value="YU">Yugoslavia (former)</option><option value="ZR">Zaire (former)</option><option value="ZM">Zambia</option><option value="ZW">Zimbabwe</option>
+                  </select>
+                </div>
+              </div>
+              <!-- ./column -->
+            </div>
+            <!-- ./row -->
+          </div>
+          <!-- ./column -->
+        </div>
+        <!-- ./row -->
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-8">
+                <div class="form-group">
+                  <label class="control-label required" for="donation_cc_number">Card Number</label>
+                  <input type="number" class="form-control input-lg" id="donation_cc_number" name="donation[cc][number]">
+                </div>
+              </div>
+              <!-- ./column -->
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="control-label required" for="donation_cc_zipCode">Zip code</label>
+                  <input type="text" maxlength="20" class="form-control input-lg" id="donation_cc_zipCode" name="donation[cc][zipCode]">
+                </div>
+              </div>
+              <!-- ./column -->
+            </div>
+            <!-- ./row -->
+          </div>
+          <!-- ./column -->
+        </div>
+        <!-- ./row -->
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-5">
+                <div class="form-group">
+                    <label class="control-label required" for="donation_cc_expirationMonth">Expiration Date</label>
+                    <div class="form-group">
+                      <div class="input-group col-sm-4" style="display: inline-block;">
+                        <input type="text" class="form-control input-lg" maxlength="2" placeholder="MM" id="donation_cc_expirationMonth" name="donation[cc][expirationMonth]">
+                      </div>
+                      <div class="input-group col-xs-2" style="display: inline-block;">
+                        <p class="form-control input-lg" style="border:none;-webkit-box-shadow:none;box-shadow: none;-webkit-transition: none;">/</p>
+                      </div>
+                      <div class="input-group col-sm-4" style="display: inline-block;">
+                        <input type="text" class="form-control input-lg" maxlength="2" placeholder="YY" id="donation_cc_expirationYear" name="donation[cc][expirationYear]">
+                      </div>
+                  </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label class="control-label required" for="donation_amount">cvv code</label>
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon1" data-toggle="tooltip" data-placement="top" title="CVV is a 3 or 4 digit code embossed or imprinted on the reverse side of Visa, MasterCard and Discover cards and on the front of American Express cards."><i class="fa fa-credit-card" aria-hidden="true"></i></i></span>
+                  <input type="text" maxlength="4" class="form-control input-lg" id="donation_cc_cvv" name="donation[cc][cvv]">
+                </div>
+              </div>
+            </div>
+            <!-- ./column -->
+            </div>
+            <!-- ./row -->
+          </div>
+          <!-- ./column -->
+        </div>
+        <!-- ./row -->
+      </div>
+      <!-- ./collapse -->
+        <hr>
+        <div class="row">
+          <div class="col-md-12">
             <input type="hidden" id="donation_campaignId" name="donation[campaignId]" value="{{campaign.id}}">
             <input type="hidden" id="donation_donationType" name="donation[donationType]" value="{{donationType}}">
             <button type="submit" id="submit" class="btn btn-primary btn-lg btn-block">DONATE</button>
-            <i class="fa fa-cc-paypal fa-3x" aria-hidden="true"></i>
-            <i class="fa fa-cc-visa fa-3x" aria-hidden="true"></i>
-            <i class="fa fa-cc-mastercard fa-3x" aria-hidden="true"></i>
-            <i class="fa fa-cc-discover fa-3x" aria-hidden="true"></i>
-            <i class="fa fa-cc-amex fa-3x" aria-hidden="true"></i>
           </div>
           <!-- ./column -->
         </div>
@@ -173,7 +274,6 @@
           </div><!-- ./Panel body -->
         </div><!-- ./Panel -->
         {% endif %}
-
         <div class="panel panel-default">
           <div class="panel-body">
             <div class="lead">About your
@@ -240,12 +340,26 @@
   <script>
     $(document).ready(function() {
       //called when key is pressed in textbox
-      $("#donation_amount").keypress(function(e) {
+      $("#donation_amount, #donation_cc_expirationMonth, #donation_cc_expirationYear, #donation_cc_cvv").keypress(function(e) {
         //if the letter is not digit then display error and don't type anything
         if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
           return false;
         }
       });
+
+
+      $('input:radio[name="donation[paymentMethod]"]').change(function(){
+          if ($(this).val() == "cc") {
+            $('#cc_form').collapse("show");
+          }else{
+            $('#cc_form').collapse("hide");
+          }
+      });
+
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
     });
+
   </script>
 {% endblock %}
