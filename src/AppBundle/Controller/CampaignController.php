@@ -159,12 +159,8 @@ class CampaignController extends Controller
       $em = $this->getDoctrine()->getManager();
       $queryHelper = new QueryHelper($em, $logger);
       $campaign =  $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
-      $causevoxteams = $em->getRepository('AppBundle:Causevoxteam')->findAll();
-      $causevoxfundraisers = $em->getRepository('AppBundle:Causevoxfundraiser')->findAll();
 
       return $this->render('campaign/campaign.faq.html.twig', array(
-        'causevoxteams' => $causevoxteams,
-        'causevoxfundraisers' => $causevoxfundraisers,
         'campaign' => $campaign,
       ));
     }

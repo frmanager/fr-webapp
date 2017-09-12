@@ -2,6 +2,14 @@
 {% set campaignUrl = null %}
 {% set campaignUrl = app.request.attributes.get('_route_params')['campaignUrl'] %}
 {% endif %}
+
+{% if campaign is defined %}
+  {% if date('now' | date('Y/m/d')) < date(campaign.startDate | date('Y/m/d')) %}
+    {% set notStarted = true %}
+  {% endif %}
+{% endif %}
+
+
 <html>
 <head>
 <base target="_parent"/>
@@ -65,9 +73,8 @@
 
 </head>
 <body>
-
 <nav class="navbar navbar-default navbar-fixed-top">
-<div class="container-fluid">
+  <div class="container-fluid">
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-x-collapse" aria-expanded="false">
 		<span class="sr-only">Toggle navigation</span>
@@ -85,6 +92,7 @@
 			<a href="{{ path('campaign_index', {'campaignUrl': campaignUrl}) }}" class="">
 			HOME </a>
 			</li>
+      {% if not notStarted %}
       <li class="dropdown">
       <a href="#" class="dropdown-toggle" id="dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
       RANKINGS <span class="caret"></span></span>
@@ -106,9 +114,11 @@
         Team Rankings</a>
         </li>
   			</li>
+        {% endif %}
   		</ul>
     </ul>
     {% endif %}
+    {% if not notStarted %}
 		<ul class="nav navbar-nav navbar-right">
       {% if is_granted('ROLE_USER') and campaign is defined %}
 			<li class="dropdown">
@@ -129,6 +139,7 @@
 			</li>
 			 {% endif %}
 		</ul>
+    {% endif %}
 	</div>
 </div>
 </nav>
