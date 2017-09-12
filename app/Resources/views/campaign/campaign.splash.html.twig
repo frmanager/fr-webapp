@@ -1,0 +1,68 @@
+{% extends 'template.html.twig' %}
+
+{% block css %}
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.12/fh-3.1.2/r-2.1.0/sc-1.4.2/datatables.min.css"/>
+{% endblock %}
+
+{% block title %}{{campaign.name}}
+  Dashboard{% endblock %}
+
+{% block body %}
+  {% set difference = date(campaign.endDate | date('Y/m/d')).diff(date('now' | date('Y/m/d'))) %}
+  {% set daysLeft = difference.days %}
+
+  {% set difference = date(campaign.startDate | date('Y/m/d')).diff(date(campaign.endDate | date('Y/m/d'))) %}
+  {% set daysTotal = difference.days %}
+
+  {% if date('now' | date('Y/m/d')) > date(campaign.endDate | date('Y/m/d')) %}
+    {% set daysLeft = daysLeft * -1 %}
+  {% endif %}
+  {% if date('now' | date('Y/m/d')) < date(campaign.startDate | date('Y/m/d')) %}
+    {% set notStarted = true %}
+    {% set difference = date(campaign.startDate | date('Y/m/d')).diff(date('now' | date('Y/m/d'))) %}
+    {% set startDays = difference.days %}
+  {% endif %}
+  {% if notStarted %}
+    {% set percentLeft = 0 %}
+  {% elseif daysLeft > 0 %}
+    {% set percentLeft = (((daysTotal - daysLeft) / daysTotal) * 100) | number_format(2, '.', ',') %}
+  {% else %}
+    {% set percentLeft = 100 %}
+  {% endif %}
+
+  <div class="row">
+    <div class="col-md-12">
+      <img class="img img-responsive center-block" src="/assets/img/FunRun2017-banner.png"/>
+    </div>
+  </div>
+  <br><br>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-primary">
+        <div class="panel-body" style="text-align:center;">
+          <h2 style="text-align:center;padding-bottom:20px;">THIS CAMPAIGN STARTS IN:</h2>
+          <p>
+            <div style="font-size:16px;" id="trackSplash" data-countdown="{{ campaign.startDate|date('Y/m/d') }}"></div>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block javascripts %}
+  <script type='application/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.min.js"></script>
+  <script type="application/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.12/fh-3.1.2/r-2.1.0/sc-1.4.2/datatables.min.js"></script>
+  <script type='application/javascript' src="{{ asset('assets/js/libs/jquery.countdown.min.js') }}"></script>
+
+  <script>
+    $('[data-countdown]').each(function() {
+      var $this = $(this),
+        finalDate = $(this).data('countdown');
+      $this.countdown(finalDate, function(event) {
+        $this.html(event.strftime('<span class="label label-info">%D</span> day%!D &nbsp;&nbsp;<span class="label label-info">%H</span> hours &nbsp;&nbsp;<span class="label label-info">%M</span> minutes &nbsp;&nbsp;<span class="label label-info">%S</span> seconds'));
+      });
+    });
+  </script>
+{% endblock %}

@@ -107,6 +107,13 @@ Class Campaign
   private $onlineFlag = false;
 
   /**
+   *  @var boolean
+   *
+   * @ORM\Column(type="boolean", length=100)
+   */
+  private $teamsFlag = false;
+
+  /**
    * @var string
    *
    * @ORM\Column(type="string", length=100, nullable=true)
@@ -887,5 +894,29 @@ Class Campaign
     public function getDonationReceiptText()
     {
         return $this->donationReceiptText;
+    }
+
+    /**
+     * Set teamsFlag
+     *
+     * @param boolean $teamsFlag
+     *
+     * @return Campaign
+     */
+    public function setTeamsFlag($teamsFlag)
+    {
+        $this->teamsFlag = $teamsFlag;
+
+        return $this;
+    }
+
+    /**
+     * Get teamsFlag
+     *
+     * @return boolean
+     */
+    public function getTeamsFlag()
+    {
+        return $this->teamsFlag;
     }
 }

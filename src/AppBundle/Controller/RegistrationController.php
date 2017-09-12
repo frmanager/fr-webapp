@@ -129,7 +129,8 @@ class RegistrationController extends Controller
       $accessFail = false;
       //Does Campaign Exist? if not, fail
       if(is_null($campaign)){
-        $accessFail = true;
+        $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
+        return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
       //If it does exist, is it "offline"? if not, fail
       }elseif(!$campaign->getOnlineFlag()){
         $securityContext = $this->container->get('security.authorization_checker');
@@ -138,11 +139,15 @@ class RegistrationController extends Controller
           $campaignHelper = new CampaignHelper($em, $logger);
           //Does that user have access to the campaign? If not, fail
           if(!$campaignHelper->campaignPermissionsCheck($this->get('security.token_storage')->getToken()->getUser(), $campaign)){
-            $accessFail = true;
+            $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
+            return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
           }
         }else{
-          $accessFail = true;
+          $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
+          return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
         }
+      }elseif($campaign->getStartDate() > new DateTime("now")){
+        return $this->redirectToRoute('campaign_splash', array('campaignUrl'=>$campaign->getUrl(), 'campaign'=>$campaign));
       }
 
       //IF CAMPAIGN CHECK FAILED
