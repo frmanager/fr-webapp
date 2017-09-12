@@ -10,7 +10,8 @@ use AppBundle\Utils\CampaignHelper;
 use AppBundle\Entity\Classroom;
 use AppBundle\Utils\QueryHelper;
 
-use DateTime;
+use \DateTime;
+use \DateTimeZone;
 
 class DefaultController extends Controller
 {
