@@ -11,7 +11,8 @@ use AppBundle\Entity\Classroom;
 use AppBundle\Utils\QueryHelper;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-use DateTime;
+use \DateTime;
+use \DateTimeZone;
 
 /**
  * Manage Campaign controller.

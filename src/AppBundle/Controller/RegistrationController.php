@@ -17,7 +17,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use DateTime;
+use \DateTime;
+use \DateTimeZone;
 
 /**
  * Security controller.
