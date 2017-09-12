@@ -11,3 +11,5 @@ api:
     resource: "@AppBundle/Controller/APIController.php"
     prefix:   /api
     type:     annotation
+
+# app/config/routing.yml

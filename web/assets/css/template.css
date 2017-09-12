@@ -57,3 +57,9 @@ body {
   padding-top:1px;
   padding-bottom:1px;
 }
+
+
+#trackSplash .label {
+ font-size:32px;
+ line-height:40px;
+}

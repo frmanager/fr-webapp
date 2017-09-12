@@ -1,0 +1,43 @@
+{% extends 'template.html.twig' %}
+
+{% block body %}
+{% set campaignUrl = null %}
+{% set campaignUrl = app.request.attributes.get('_route_params')['campaignUrl'] %}
+{% if app.request.get('donation') is not empty %}
+{% set donation = app.request.get('donation') %}
+{% else %}
+{% set donation = null %}
+{% endif %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Make a donation to <strong>{{ campaign.name }}</strong></h3>
+        </div>
+    </div>
+    <div class="row">
+       <div class="col-md-6">
+       </div>
+        <div class="col-md-6">
+          <form name="donation" method="post" class="form">
+            <div class="form-group">
+              <label class="control-label required" for="donation_amount">Donation Amount: <small>U.S. Dollar (USD)</small></label>
+                <div class="input-group col-sm-4">
+                    <span class="input-group-addon" id="basic-addon1">$</span>
+                    <input type="number" min=0 id="donation_amount" value="{% if donation is null or donation['amount'] is empty %}500{% else %}{{ donation['amount'] }}{% endif %}" name="donation[amount]" class="form-control" style="text-align:right;">
+                  </div>
+            </div>
+            <hr>
+            <div class="form-group">
+              <label class="control-label" for="donation_classroomId">Student Info</label>
+                  <select id="donation_classroomId" name="donationclassroomId]" class="form-control">
+                    <option value="" selected="selected">Select Classroom</option>
+                    {% for classroom in classrooms %}
+                      <option value="{{classroom.id}}" {% if donation is not null and donation['classroomId'] is not empty and donation['classroomId'] == classroom.id %}selected{% endif %}>{{classroom.grade.name}} - {{classroom.name}}</option>
+                    {% endfor %}
+                  </select>
+            </div>
+          <hr>
+          <input type="hidden" id="donation_campaignId" name="donation[campaignId]">
+        </div>
+    </div>
+{% endblock %}
