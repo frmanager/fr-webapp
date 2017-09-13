@@ -152,15 +152,6 @@
 	&nbsp;
 </div>
 <div class="container body-container">
-	<div class="clearfix">
-		&nbsp;
-	</div>
-	<div class="clearfix">
-		&nbsp;
-	</div>
-	<div class="clearfix">
-		&nbsp;
-	</div>
 	 {% for type, messages in app.session.flashBag.all() %} {% for message in messages %}
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
@@ -176,10 +167,12 @@
 	<div id="content">
 		 {% block body %}{% endblock %}
 	</div>
-<div class="container">
+  <br>
+  <div class="footer">
+  <br>
 	<div class="row">
-		<div class="col-md-12">
-			<div class="footer">
+		<div class="col-md-10 offset-md-1">
+			<div class="">
         {% if campaign is defined %}
         <a href="{{ path('campaign_faq', {'campaignUrl': campaign.url }) }}" role="button">FAQs</a></br>
         {% endif %}
@@ -188,17 +181,18 @@
 	</div>
   <hr>
   <div class="row">
-		<div class="col-md-12">
+		<div class="col-md-10 offset-md-1">
 			<div class="license" style="text-align:center;">
 				<i class="fa fa-bolt" aria-hidden="true"></i> Powered by <strong>FR-MANAGER</strong> (<small><i class="fa fa-copyright" aria-hidden="true"></i> 2017 All rights reserved</small>). For help and support <a href="mailto:davidlarrimore@gmail.com">contact support</a>
 			</div>
 		</div>
 	</div>
+  <br>
+ </div>
+ </div><!-- ./body-container -->
 	<a id="back-to-top" href="#" class="btn btn-primary btn-lg back-to-top" role="button" data-toggle="tooltip" data-placement="left">
 	<i class="fa fa-chevron-up"></i>
 	</a>
-</div>
-
 <script type='application/javascript' src="{{ asset('assets/js/libs/jquery-3.2.1.min.js') }}"></script>
 <script type='application/javascript' src="{{ asset('assets/js/libs/tether.min.js') }}"></script>
 <script type='application/javascript' src="{{ asset('assets/js/libs/bootstrap-v4.0.0-alpha.6.min.js') }}"></script>
