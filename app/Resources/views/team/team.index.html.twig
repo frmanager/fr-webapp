@@ -2,7 +2,8 @@
 {% use 'bootstrap_3_layout.html.twig' %}
 
 {% block css %}
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.12/fh-3.1.2/r-2.1.0/sc-1.4.2/datatables.min.css"/>
+<!-- Datatables styles -->
+<link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
@@ -13,9 +14,9 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-8 offset-md-2">
             <br/>
-            <table class="table table-bordered table-striped table-condensed">
+            <table class="table table-hover table-outline mb-0">
                 <thead>
                     <tr>
                         <th>Type</th>
@@ -46,7 +47,8 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script type="application/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.12/fh-3.1.2/r-2.1.0/sc-1.4.2/datatables.min.js"></script>
+  <script type="application/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+  <script type="application/javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js"></script>
     <script>
         $(document).ready(function() {
             $('.table').DataTable({ "pageLength": 50, "order": [[ 1, "desc" ]]});

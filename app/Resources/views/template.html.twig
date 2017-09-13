@@ -10,7 +10,16 @@
     {% set notStarted = false %}
   {% endif %}
 {% endif %}
-
+{% set userTeam = null %}
+{% set hasTeamFlag = false %}
+{% if app.user.teams is defined %}
+  {% for team in app.user.teams %}
+  {% if team.campaign.id == campaign.id %}
+    {% set hasTeamFlag = true %}
+    {% set userTeam = team %}
+  {% endif %}
+  {% endfor %}
+{% endif %}
 
 <html>
 <head>
@@ -26,7 +35,7 @@
 {% else %}
   {% set theme = 'superhero' %}
 {% endif %}
-<link rel="stylesheet" href="{{ asset('assets/css/bootswatch/' ~ theme ~ '.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/bootswatch_v4/' ~ theme ~ '.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/template.css') }}">
 <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
 
@@ -75,69 +84,60 @@
 
 </head>
 <body>
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar fixed-top navbar-toggleable-md navbar-inverse bg-primary">
   <div class="container-fluid">
-	<div class="navbar-header">
-		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-x-collapse" aria-expanded="false">
-		<span class="sr-only">Toggle navigation</span>
-		<span class="icon-bar"></span>
-		<span class="icon-bar"></span>
-		<span class="icon-bar"></span>
-		</button>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="#">{{campaign.name}}</a>
 		<!--<a href="{{ path('homepage') }}" class="navbar-brand">{FR}</a>-->
 	</div>
-	<div class="collapse navbar-collapse navbar-x-collapse">
+	<div class="collapse navbar-collapse">
     {% if campaign is defined %}
-		<ul class="nav navbar-nav">
-      <li><span class="navbar-text">{{campaign.name}}</a></li>
-			<li {% if app.request.attributes.get('_route')=='campaign_index'%} class="active" {% endif %}>
-			<a href="{{ path('campaign_index', {'campaignUrl': campaignUrl}) }}" class="">
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item{% if app.request.attributes.get('_route')=='campaign_index'%} active{% endif %}">
+			<a href="{{ path('campaign_index', {'campaignUrl': campaignUrl}) }}" class="nav-link">
 			HOME </a>
 			</li>
       {% if not notStarted %}
-      <li class="dropdown">
-      <a href="#" class="dropdown-toggle" id="dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+      <li class="dropdown nav-item">
+      <a class="nav-link dropdown-toggle" href="#" class="dropdown-toggle" id="dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
       RANKINGS <span class="caret"></span></span>
       </a>
-          <ul class="dropdown-menu" aria-labelledby="drop3">
-  			<li {% if app.request.attributes.get('_route')=='grade_index'%} class="active" {% endif %}>
-  			<a href="{{ path('grade_index', {'campaignUrl': campaignUrl}) }}">
-  			<span class="fa fa-graduation-cap"></span>
-  			Grade Rankings</a>
-  			</li>
-  			<li {% if app.request.attributes.get('_route')=='classroom_index'%} class="active" {% endif %}>
-  			<a href="{{ path('classroom_index', {'campaignUrl': campaignUrl}) }}">
-  			<span class="fa fa-apple"></span>
-  			Class Rankings</a>
-  			</li>
-        <li {% if app.request.attributes.get('_route')=='team_index'%} class="active" {% endif %}>
-        <a href="{{ path('team_index', {'campaignUrl': campaignUrl}) }}">
-        <span class="fa fa-users"></span>
-        Team Rankings</a>
-        </li>
+        <div class="dropdown-menu" aria-labelledby="drop3">
+  			<a class="dropdown-item {% if app.request.attributes.get('_route')=='grade_index'%} active {% endif %}" href="{{ path('grade_index', {'campaignUrl': campaignUrl}) }}">
+  			<span class="fa fa-graduation-cap"></span> Grade Rankings</a>
+  			<a class="dropdown-item {% if app.request.attributes.get('_route')=='classroom_index'%} active {% endif %}" href="{{ path('classroom_index', {'campaignUrl': campaignUrl}) }}">
+  			<span class="fa fa-apple"></span> Class Rankings</a>
+        <a class="dropdown-item {% if app.request.attributes.get('_route')=='team_index'%} active {% endif %}" href="{{ path('team_index', {'campaignUrl': campaignUrl}) }}">
+        <span class="fa fa-users"></span> Team Rankings</a>
   			</li>
         {% endif %}
-  		</ul>
+  		</div>
     </ul>
     {% endif %}
     {% if not notStarted %}
-		<ul class="nav navbar-nav navbar-right">
+		<ul class="navbar-nav mr-auto navbar-toggler-right">
       {% if is_granted('ROLE_USER') and campaign is defined %}
-			<li class="dropdown">
-			<a href="#" class="dropdown-toggle" id="dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+			<li class="dropdown nav-item">
+			<a href="#" class="nav-link dropdown-toggle" id="dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 			<i class="fa fa-user"></i>&nbsp; {{ app.user.username }}&nbsp; <span class="caret"></span>
 			</a>
-			<ul class="dropdown-menu" aria-labelledby="drop3">
-				<li>
-				<a href="{{ path('logout', {'campaignUrl': campaignUrl}) }}">LOGOUT</a>
-				</li>
-			</ul>
+			<div class="dropdown-menu" aria-labelledby="drop3">
+        {% if hasTeamFlag and userTeam is defined %}
+        <a class="dropdown-item" href="{{ path('team_show', {'campaignUrl': campaignUrl, 'teamUrl': userTeam.url}) }}">View Teaam</a>
+        {% else %}
+        <a class="dropdown-item" href="{{ path('register_team_select', {'campaignUrl': campaignUrl}) }}">Register Team</a>
+        {% endif %}
+				<a class="dropdown-item" href="{{ path('logout', {'campaignUrl': campaignUrl}) }}">Logout</a>
+			</div>
 			</li>
 			 {% elseif(app.request.attributes.get('_route') not in ['homepage']) %}
-       <li>
- 			<a href="{{ path('user_registration', {'campaignUrl': campaignUrl}) }}" role="button">SIGN UP!</a>
- 			</li>			<li>
-			<a href="{{ path('login', {'campaignUrl': campaignUrl}) }}" role="button">LOGIN</a>
+       <li class="nav-item">
+   			<a class="nav-link" href="{{ path('user_registration', {'campaignUrl': campaignUrl}) }}" role="button">SIGN UP!</a>
+   			</li>
+      <li class="nav-item">
+			<a class="nav-link" href="{{ path('login', {'campaignUrl': campaignUrl}) }}" role="button">LOGIN</a>
 			</li>
 			 {% endif %}
 		</ul>
@@ -176,16 +176,6 @@
 	<div id="content">
 		 {% block body %}{% endblock %}
 	</div>
-	<div class="clearfix">
-		&nbsp;
-	</div>
-	<div class="clearfix">
-		&nbsp;
-	</div>
-</div>
-<div class="clearfix">
-	&nbsp;
-</div>
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
@@ -210,7 +200,8 @@
 </div>
 
 <script type='application/javascript' src="{{ asset('assets/js/libs/jquery-3.2.1.min.js') }}"></script>
-<script type='application/javascript' src="{{ asset('assets/js/libs/bootstrap-v3.3.7.min.js') }}"></script>
+<script type='application/javascript' src="{{ asset('assets/js/libs/tether.min.js') }}"></script>
+<script type='application/javascript' src="{{ asset('assets/js/libs/bootstrap-v4.0.0-alpha.6.min.js') }}"></script>
 <script type='application/javascript' src="{{ asset('assets/js/libs/fastclick.js') }}"></script>
 <script type='application/javascript' src="{{ asset('assets/js/libs/moment.js') }}"></script>
 <script type='application/javascript' src="{{ asset('assets/js/libs/jquery.matchHeight-min.js') }}"></script>
