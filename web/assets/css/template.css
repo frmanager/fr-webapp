@@ -59,7 +59,8 @@ body {
 }
 
 
-#trackSplash .label {
+#trackSplash span {
  font-size:32px;
  line-height:40px;
+ color:red;
 }

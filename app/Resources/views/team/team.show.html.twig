@@ -1,81 +1,89 @@
 {% extends 'template.html.twig' %}
-{% use 'bootstrap_3_horizontal_layout.html.twig' %}
 
 {% block body %}
-    <div class="row">
-        <div class="col-md-12">
-            <h1 style="text-align:center;">{{ team.name }}</h1>
-        </div>
-    </row>
-    <!--
-        <div class="col-md-6">
-            {% if is_granted('ROLE_USER') and app.user.id == team.user.id %}<a href="{{ path('team_edit', {'campaignUrl':campaign.url, 'teamUrl': team.url }) }}" class="btn btn-primary pull-right"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Team</a>{% endif %}
-        </div>
-    -->
+{% set nonConfirmed = false %}
+<div class="row">
+    <div class="col-md-12">
+        <h1 style="text-align:center;">{{ team.name }}</h1>
     </div>
-    <hr/>
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <dl class="dl-horizontal">
-                <dt>ID</dt>
-                <dd>{{ team.id }}</dd>
-                <dt>Name</dt>
-                <dd>{{ team.name }}</dd>
-            </dl>
-        </div>
+</row>
+<!--
+    <div class="col-md-6">
+        {% if is_granted('ROLE_USER') and app.user.id == team.user.id %}<a href="{{ path('team_edit', {'campaignUrl':campaign.url, 'teamUrl': team.url }) }}" class="btn btn-primary pull-right"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Team</a>{% endif %}
     </div>
-    {% set nonConfirmed = false %}
-    {% if team.teamType.value == 'student' or team.teamType.value == 'family' %}
-    <hr>
-    <div class="row">
-      <div class="col-md-12">
-        <table class="table table-bordered table-striped table-condensed">
-            <thead>
-                <tr>
-                    <th>Grade</th>
-                    <th>Classroom</th>
-                    <th>Name</th>
-                    {% if is_granted('ROLE_USER') and app.user.id == team.user.id %}
-                      <th>Confirmed?</th>
-                      <th>Actions</th>
-                    {% endif %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for teamStudent in teamStudents %}
-                {% if not teamStudent.confirmedFlag %}{% set nonConfirmed = true %}{% endif %}
-                    <tr>
-                        <td>{{ teamStudent.grade.name }}</td>
-                        <td>{{ teamStudent.classroom.name }}</td>
-                        <td>{{ teamStudent.name }}</td>
-                        {% if is_granted('ROLE_USER') and app.user.id == team.user.id %}
-                          <td>{% if teamStudent.confirmedFlag %}Yes{% else %}No{% endif %}</td>
-                          <td style="text-align:center;"><a class="btn btn-primary btn-sm" href="{{ path('teamStudent_edit', {'campaignUrl':campaign.url, 'teamUrl': team.url, 'teamStudentId': teamStudent.id }) }}">Edit</a>&nbsp;<a class="btn btn-warning btn-sm" href="#">Delete</a></td>
-                        {% endif %}
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-      </div>
-    </div>
-    {% if is_granted('ROLE_USER') and app.user.id == team.user.id and nonConfirmed %}
-    <div class="row">
-      <div class="col-md-12">
-        <div class="panel panel-warning">
-          <div class="panel-heading">Have a student that is not confirmed?</div>
-          <div class="panel-body">
-            <p>If FR Manager could not auto-magically link your student to a campaign student, the Campaign manager must manually go in and link the student.</p>
-            <p>Reasons why your student could not auto-magically be linked:</p>
-            <ul>
-              <li>Using informal name like 'Alex', when campaign is marked as 'Alexander'.</li>
-              <li>There are multiple children in the class with the same name.</li>
-            </ul>
+-->
+</div>
+<hr/>
+<div class="row">
+    <div class="col-sm-8">
+        <div clas="row">
+          <div class="col-sm-8 offset-sm-2">
+            <img src="/assets/img/{{ team.teamType.value }}-image-default.png"  alt="..." class="img-fuild">
           </div>
         </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="row">
+        <div class="col-sm-12">
+              <p class="lead"><strong>0$</strong> of ${{team.fundingGoal|number_format(2, '.', ',')}} goal</p>
+              <div class="progress">
+                  <div
+                      class="progress-bar progress-bar-warning"
+                      role="progressbar"
+                      aria-valuenow="{{ 0 / team.fundingGoal * 100}}"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      style="width:{{ 0 / team.fundingGoal * 100}}%;">
+                      {{ (0 / team.fundingGoal * 100)|number_format(2, '.', ',')}}% Complete
+                  </div>
+              </div>
+              <p>Raised by x donors<p>
+              <hr>
+              <p><a href="{{ path('donation_index', {'campaignUrl': campaign.url, 'teamUrl': team.url, 'type': 'team' }) }}" class="btn btn-primary btn-lg btn-block">DONATE NOW!</a></p>
+              <p><a href="http://www.facebook.com/share.php?u={{ app.request.uri }}" target="_blank" class="btn btn-info btn-block"><i class="fa fa-facebook-official" aria-hidden="true"></i> Share on Facebook</a></p>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-sm-12">
+          <p>Created By <strong>{{team.user.firstName}} {{team.user.lastName}}</strong></p>
+        </div>
       </div>
     </div>
-    {% endif %}
-    {% elseif team.teamType.value == 'teacher' %}
-
-    {% endif %}
+</div>
+<hr/>
+<div class="row">
+    <div class="col-sm-12">
+      <h3>About this Team:</h3>
+      <p class="lead">{{ team.description }}</p>
+    </div>
+</div>
+<hr>
+{% if team.teamType.value == "family" %}
+<div class="row">
+    <div class="col-sm-12">
+      <h3>Children:</h3>
+    </div>
+</div>
+<div class="row">
+    {% for teamStudent in teamStudents %}
+    <div class="col-md-4">
+      <div class="card card-inverse" style="background-color: #333; border-color: #333;">
+        <div class="card-block">
+          <div class="row">
+            <div class="col-md-4">
+              <img class="img-thumbnail" src="/assets/img/child-avatar-default128.png" alt="Child Avatar Image">
+            </div>
+            <div class="col-md-8">
+              <h4 class="card-title">{{ teamStudent.name }}</h4>
+              <p class="card-text">{{ teamStudent.classroom.grade.name }}<br>
+              {{ teamStudent.classroom.name }}</p>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    {% endfor %}
+</div>
+{% endif %}
 {% endblock %}

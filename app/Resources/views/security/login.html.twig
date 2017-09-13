@@ -2,7 +2,7 @@
 
 {% block body %}
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-8 offset-md-2">
     <p style="text-align:left;">
       <strong>NOTE:</strong>
       Please contact
@@ -13,12 +13,11 @@
       {% if error %}
         <p class="well-sm bg-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
       {% endif %}
-
-      <form action="{{ path("login", {'campaignUrl': campaign.url}) }}" method="post" class="form-horizontal" role="form-horizontal">
+      <form action="{{ path("login", {'campaignUrl': campaign.url}) }}" method="post" class="form" role="form">
 
         <div class="form-group">
-          <label for="username" class="col-sm-3 control-label">Email</label>
           <div class="col-sm-6">
+            <label for="username" class="col-sm-3 control-label">Email</label>
             <div class="input-group">
              <span class="input-group-addon" id="basic-addon1"><i class="fa fa-at" aria-hidden="true"></i></span>
              <input class="form-control" type="text" id="username" placeholder="enter your email" name="_username" value="{{ last_username }}" required="required"/>
@@ -27,8 +26,8 @@
         </div>
 
         <div class="form-group">
-          <label for="password" class="col-sm-3 control-label">Password</label>
           <div class="col-sm-6">
+            <label for="password" class="col-sm-3 control-label">Password</label>
             <div class="input-group">
             <span class="input-group-addon" id="basic-addon1"><i class="fa fa-key" aria-hidden="true"></i></span>
             <input class="form-control" type="password" id="password" placeholder="enter your password" name="_password" required="required"/>
@@ -36,9 +35,9 @@
           </div>
         </div>
         <div class="form-group">
-          <div class="col-sm-offset-3 col-sm-9">
-            <div class="checkbox">
-              <label>
+          <div class="col-sm-9">
+            <div class="form-check">
+              <label class="form-check-label">
                 <input type="checkbox" id="remember_me" name="_remember_me" value="on"/>
                 Remember Me
               </label>

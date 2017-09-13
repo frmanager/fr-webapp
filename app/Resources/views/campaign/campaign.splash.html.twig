@@ -8,46 +8,27 @@
   Dashboard{% endblock %}
 
 {% block body %}
-  {% set difference = date(campaign.endDate | date('Y/m/d')).diff(date('now' | date('Y/m/d'))) %}
-  {% set daysLeft = difference.days %}
-
-  {% set difference = date(campaign.startDate | date('Y/m/d')).diff(date(campaign.endDate | date('Y/m/d'))) %}
-  {% set daysTotal = difference.days %}
-
-  {% if date('now' | date('Y/m/d')) > date(campaign.endDate | date('Y/m/d')) %}
-    {% set daysLeft = daysLeft * -1 %}
-  {% endif %}
-  {% if date('now' | date('Y/m/d')) < date(campaign.startDate | date('Y/m/d')) %}
-    {% set notStarted = true %}
-    {% set difference = date(campaign.startDate | date('Y/m/d')).diff(date('now' | date('Y/m/d'))) %}
-    {% set startDays = difference.days %}
-  {% endif %}
-  {% if notStarted %}
-    {% set percentLeft = 0 %}
-  {% elseif daysLeft > 0 %}
-    {% set percentLeft = (((daysTotal - daysLeft) / daysTotal) * 100) | number_format(2, '.', ',') %}
-  {% else %}
-    {% set percentLeft = 100 %}
-  {% endif %}
-
   <div class="row">
-    <div class="col-md-12">
-      <img class="img img-responsive center-block" src="/assets/img/FunRun2017-banner.png"/>
+    <div class="col-md-12 text-center">
+      <img class="img-fluid " src="/assets/img/FunRun2017-banner.png"/>
     </div>
   </div>
   <br><br>
   <div class="row">
     <div class="col-md-12">
-      <div class="panel panel-primary">
-        <div class="panel-body" style="text-align:center;">
-          <h2 style="text-align:center;padding-bottom:20px;">THIS CAMPAIGN STARTS IN:</h2>
+      <div class="card card-inverse" style="background-color: #333; border-color: #333;">
+        <div class="card-block text-center">
+          <h2 class="display-4" style="text-align:center;padding-bottom:20px;">This campaign starts in:</h2>
           <p>
             <div style="font-size:16px;" id="trackSplash" data-countdown="{{ campaign.startDate|date('Y/m/d') }}"></div>
           </p>
         </div>
       </div>
+      <!-- ./card -->
     </div>
+    <!-- ./column -->
   </div>
+  <!-- ./row -->
 
 {% endblock %}
 
@@ -61,7 +42,7 @@
       var $this = $(this),
         finalDate = $(this).data('countdown');
       $this.countdown(finalDate, function(event) {
-        $this.html(event.strftime('<span class="label label-info">%D</span> day%!D &nbsp;&nbsp;<span class="label label-info">%H</span> hours &nbsp;&nbsp;<span class="label label-info">%M</span> minutes &nbsp;&nbsp;<span class="label label-info">%S</span> seconds'));
+        $this.html(event.strftime('<span class="lead">%D</span> day%!D &nbsp;&nbsp;<span class="lead">%H</span> hours &nbsp;&nbsp;<span class="lead">%M</span> minutes &nbsp;&nbsp;<span class="lead">%S</span> seconds'));
       });
     });
   </script>
