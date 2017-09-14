@@ -14,6 +14,7 @@ use PayPal\Api\FundingInstrument;
 use PayPal\Api\Item;
 use PayPal\Api\ItemList;
 use PayPal\Api\Payer;
+use PayPal\Api\Payee;
 use PayPal\Api\Payment;
 use PayPal\Api\PaymentCard;
 use PayPal\Api\Transaction;
