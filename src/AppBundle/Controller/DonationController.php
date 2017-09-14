@@ -20,6 +20,7 @@ use PayPal\Api\Transaction;
 use PayPal\Api\RedirectUrls;
 use PayPal\Api\PaymentExecution;
 use AppBundle\Utils\CampaignHelper;
+use AppBundle\Entity\Donation;
 
 use \DateTime;
 use \DateTimeZone;
@@ -111,134 +112,268 @@ class DonationController extends Controller
 
     $logger->debug("Donation Object:", $donation);
 
-    // replace this example code with whatever you need
-    return $this->render('donation/donation.index.html.twig', array(
+    if ($request->isMethod('POST')) {
+        $fail = false;
+        $params = $request->request->all();
+
+        if(!$fail && empty($params['donation']['amount'])){
+          $this->addFlash('warning','Donation amount is required');
+          $fail = true;
+        }
+
+        if(!$fail && empty($params['donation']['firstName'])){
+          $this->addFlash('warning','Donor First name is required');
+          $fail = true;
+        }
+
+        if(!$fail && empty($params['donation']['lastName'])){
+          $this->addFlash('warning','DonorLast name is required');
+          $fail = true;
+        }
+
+        if(!$fail && empty($params['donation']['email'])){
+          $this->addFlash('warning','Donor Email address is required');
+          $fail = true;
+        }
+
+        if (!$fail && $donationType == 'team'){
+          if(empty($params['donation']['teamId'])){
+            $this->addFlash('warning','No Team was selected');
+            $fail = true;
+          }
+          if(!$fail){
+            $teamCheck = $em->getRepository('AppBundle:Team')->findOneBy(array('id'=>$params['donation']['teamId'], 'campaign' => $campaign));
+            if(is_null($teamCheck)){
+              $this->addFlash('warning','No Valid Team was selected');
+              $fail = true;
+            }
+          }
+        }else if (!$fail && $donationType == 'classroom'){
+          if(empty($params['donation']['classroomId']) || $params['donation']['classroomId'] == ""){
+            $this->addFlash('warning','No Classroom was selected');
+            $fail = true;
+          }
+          if(!$fail){
+            $classroomCheck = $em->getRepository('AppBundle:Classroom')->findOneBy(array('id'=>$params['donation']['classroomId'], 'campaign' => $campaign));
+            if(is_null($classroomCheck)){
+              $this->addFlash('warning','No Valid Classroom was selected');
+              $fail = true;
+            }
+          }
+        }else if (!$fail && $donationType == 'student'){
+          if(empty($params['donation']['classroomId']) || $params['donation']['classroomId'] == ""){
+            $this->addFlash('warning','No Classroom was selected');
+            $fail = true;
+          }
+
+          if(!$fail){
+            $classroomCheck = $em->getRepository('AppBundle:Classroom')->findOneBy(array('id'=>$params['donation']['classroomId'], 'campaign' => $campaign));
+            if(is_null($classroomCheck)){
+              $this->addFlash('warning','No Valid Classroom was selected');
+              $fail = true;
+            }
+          }
+
+          if(empty($params['donation']['studentName'])){
+            $this->addFlash('warning','Student Name is required');
+            $fail = true;
+          }
+
+        }
+
+        if(!$fail && empty($params['donation']['paymentMethod'])){
+          $this->addFlash('warning','Payment method must be requested');
+          $fail = true;
+        }
+
+        $paymentMethod = $params['donation']['paymentMethod'];
+        if(!$fail && $paymentMethod == "cc"){
+
+          if(!$fail && empty($params['donation']['cc']['cardholderName'])){
+            $this->addFlash('warning','Cardholder Name is required');
+            $fail = true;
+          }
+
+          if(!$fail && empty($params['donation']['cc']['country'])){
+            $this->addFlash('warning','Country is required');
+            $fail = true;
+          }
+
+          if(!$fail && empty($params['donation']['cc']['number'])){
+            $this->addFlash('warning','Card Number is required');
+            $fail = true;
+          }else{
+              /* The following code is based upon:
+              * https://stackoverflow.com/questions/72768/how-do-you-detect-credit-card-type-based-on-number
+              * http://www.regular-expressions.info/creditcard.html
+              */
+              if(preg_match('/^4[0-9]{6,}$/', $params['donation']['cc']['number'])){
+                $logger->debug('Processing a VISA Card');
+                $cardType = 'visa';
+              }else if(preg_match('/^5[1-5][0-9]{5,}|222[1-9][0-9]{3,}|22[3-9][0-9]{4,}|2[3-6][0-9]{5,}|27[01][0-9]{4,}|2720[0-9]{3,}$/', $params['donation']['cc']['number'])){
+                $this->addFlash('warning','Card was a MasterCard');
+                $cardType = 'mastercard';
+              }else if(preg_match('/^3[47][0-9]{5,}$/', $params['donation']['cc']['number'])){
+                $logger->debug('Processing a AMEX Card');
+                $cardType = 'amex';
+              }else if(preg_match('/^3(?:0[0-5]|[68][0-9])[0-9]{4,}$/', $params['donation']['cc']['number'])){
+                $logger->debug('Processing a Diners Club Card');
+                $cardType = 'dinersclub';
+              }else if(preg_match('/^6(?:011|5[0-9]{2})[0-9]{3,}$/', $params['donation']['cc']['number'])){
+                $logger->debug('Processing a Discover Card');
+                $cardType = 'discover';
+              }else if(preg_match('/^(?:2131|1800|35[0-9]{3})[0-9]{3,}$/', $params['donation']['cc']['number'])){
+                $logger->debug('Processing a JCB Card');
+                $cardType = 'jcb';
+              }else{
+                $logger->debug('Could not find card match, defaulting to MasterCard');
+                $cardType = 'mastercard';
+              }
+          }
+
+          if(!$fail && empty($params['donation']['cc']['zipCode'])){
+            $this->addFlash('warning','Zip Code is required');
+            $fail = true;
+          }
+
+          if(!$fail && empty($params['donation']['cc']['expirationMonth'])){
+            $this->addFlash('warning','Card Expiration Month is required');
+            $fail = true;
+          }
+
+          if(!$fail && empty($params['donation']['cc']['expirationYear'])){
+            $this->addFlash('warning','Card Expiration Year is required');
+            $fail = true;
+          }
+
+          if(!$fail && empty($params['donation']['cc']['cvv'])){
+            $this->addFlash('warning','Card CVV is required');
+            $fail = true;
+          }
+        }
+
+        if(!$fail){
+          $donation = new Donation();
+          $donation->setCampaign($campaign);
+          $donation->setAmount($params['donation']['amount']);
+          $donation->setDonorFirstName($params['donation']['firstName']);
+          $donation->setDonorLastName($params['donation']['lastName']);
+          $donation->setDonorEmail($params['donation']['email']);
+          $donation->setDonatedAt(new DateTime('now'));
+          $donation->setTransactionId(uniqid('', true));
+          if(!empty($donation->setDonorEmail($params['donation']['message']))){
+            $donation->setDonorComment($params['donation']['message']);
+          }
+          if($donationType == "team"){
+              $donation->setTeam($teamCheck);
+          }elseif($donationType == "classroom"){
+              $donation->setClassroom($classroomCheck);
+          }elseif($donationType == "student"){
+              $donation->setStudentName($params['donation']['studentName']);
+              $donation->setClassroom($classroomCheck);
+              //TODO: Add code to try and auto-validate studentName
+          }
+          $donation->setType($donationType);
+          $donation->setPaymentMethod($params['donation']['paymentMethod']);
+          $em->persist($donation);
+          $em->flush();
+
+
+          /*NOW WE START THE PAYPAL STUFF */
+
+          $apiContext = new \PayPal\Rest\ApiContext(
+                  new \PayPal\Auth\OAuthTokenCredential(
+                      $this->getParameter('paypal.paypal_rest.client_id'),     // ClientID
+                      $this->getParameter('paypal.paypal_rest.client_secret')      // ClientSecret
+                  )
+          );
+
+          $payer = new Payer();
+
+          $item1 = new Item();
+          $item1->setName('Donation to '.$campaign->getName())
+              ->setCurrency('USD')
+              ->setQuantity(1)
+              ->setPrice($donation->getAmount());
+
+          $itemList = new ItemList();
+          $itemList->setItems(array($item1));
+
+          $details = new Details();
+          $details->setTax(0)
+              ->setSubtotal($donation->getAmount());
+
+          $amount = new Amount();
+          $amount->setCurrency("USD")
+              ->setTotal($donation->getAmount())
+              ->setDetails($details);
+
+          $transaction = new Transaction();
+          $transaction->setAmount($amount)
+              ->setItemList($itemList)
+              ->setDescription('Donation to '.$campaign->getName())
+              ->setInvoiceNumber($donation->getTransactionId());
+
+          //IF A PAYPAL PAYMENT
+          if($params['donation']['paymentMethod'] == "paypal"){
+            $payer->setPaymentMethod("paypal");
+
+            $redirectUrls = new RedirectUrls();
+
+            $successRoute = $this->get('router')->generate('donation_done', array('campaignUrl' => $campaignUrl, "success"=>true, "transactionId"=>$donation->getTransactionId()));
+            $failRoute = $this->get('router')->generate('donation_done', array('campaignUrl' => $campaignUrl, "success"=>false, "transactionId"=>$donation->getTransactionId()));
+
+            $redirectUrls->setReturnUrl($this->container->getParameter('main_app_url').$successRoute)
+                ->setCancelUrl($this->container->getParameter('main_app_url').$failRoute);
+
+
+            $payment = new Payment();
+            $payment->setIntent("sale")
+                ->setPayer($payer)
+                ->setRedirectUrls($redirectUrls)
+                ->setTransactions(array($transaction));
+
+            $request = clone $payment;
+
+            try {
+                $payment->create($apiContext);
+            } catch (Exception $ex) {
+                exit(1);
+            }
+
+            $approvalUrl = $payment->getApprovalLink();
+
+            return $this->redirect($approvalUrl);
+          }
+
+
+
+        }
+    }
+
+
+    $data = array(
       'donation' => $donation,
       'donationType' => $donationType,
       'teams' => $em->getRepository('AppBundle:Team')->findByCampaign($campaign),
       'classrooms' => $em->getRepository('AppBundle:Classroom')->findByCampaign($campaign),
       'campaign' => $campaign,
-    ));
+    );
+
+    if(null !== $request->query->get('teamUrl') && $donationType == "team"){
+      $data['team'] = $team;
+    }
+
+    if(null !== $request->query->get('classroomID') && $donationType == "classroom"){
+      $data['classroom'] = $classroom;
+    }
+
+    // replace this example code with whatever you need
+    return $this->render('donation/donation.index.html.twig', $data);
 
 
 
   }
-
-
-
-
-    /**
-     * @Route("/prepare", name="donation_prepare")
-     *
-     */
-    public function prepareAction(Request $request, $campaignUrl)
-    {
-      $logger = $this->get('logger');
-
-
-
-      $em = $this->getDoctrine()->getManager();
-
-      //CODE TO CHECK TO SEE IF CAMPAIGN EXISTS
-      $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
-      $accessFail = false;
-      //Does Campaign Exist? if not, fail
-      if(is_null($campaign)){
-        $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
-        return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
-      //If it does exist, is it "offline"? if not, fail
-      }elseif(!$campaign->getOnlineFlag()){
-        $securityContext = $this->container->get('security.authorization_checker');
-        //If it is offline, is a user logged in? If not, fail
-        if ($securityContext->isGranted('ROLE_USER')) {
-          $campaignHelper = new CampaignHelper($em, $logger);
-          //Does that user have access to the campaign? If not, fail
-          if(!$campaignHelper->campaignPermissionsCheck($this->get('security.token_storage')->getToken()->getUser(), $campaign)){
-            $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
-            return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
-          }
-        }else{
-          $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
-          return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
-        }
-      }elseif($campaign->getStartDate() > new DateTime("now")){
-        return $this->redirectToRoute('campaign_splash', array('campaignUrl'=>$campaign->getUrl(), 'campaign'=>$campaign));
-      }
-
-
-
-
-
-      $apiContext = new \PayPal\Rest\ApiContext(
-              new \PayPal\Auth\OAuthTokenCredential(
-                  $this->getParameter('paypal.paypal_rest.client_id'),     // ClientID
-                  $this->getParameter('paypal.paypal_rest.client_secret')      // ClientSecret
-              )
-      );
-
-      $payer = new Payer();
-      $payer->setPaymentMethod("paypal");
-
-      $item1 = new Item();
-      $item1->setName('Ground Coffee 40 oz')
-          ->setCurrency('USD')
-          ->setQuantity(1)
-          ->setSku("123123") // Similar to `item_number` in Classic API
-          ->setPrice(7.5);
-      $item2 = new Item();
-      $item2->setName('Granola bars')
-          ->setCurrency('USD')
-          ->setQuantity(5)
-          ->setSku("321321") // Similar to `item_number` in Classic API
-          ->setPrice(2);
-
-      $itemList = new ItemList();
-      $itemList->setItems(array($item1, $item2));
-
-      $details = new Details();
-      $details->setShipping(1.2)
-          ->setTax(1.3)
-          ->setSubtotal(17.50);
-
-      $amount = new Amount();
-      $amount->setCurrency("USD")
-          ->setTotal(20)
-          ->setDetails($details);
-
-      $transaction = new Transaction();
-      $transaction->setAmount($amount)
-          ->setItemList($itemList)
-          ->setDescription("Payment description")
-          ->setInvoiceNumber(uniqid());
-
-      $redirectUrls = new RedirectUrls();
-
-      $successRoute = $this->get('router')->generate('donation_done', array('campaignUrl' => $campaignUrl, "success"=>true));
-      $failRoute = $this->get('router')->generate('donation_done', array('campaignUrl' => $campaignUrl, "success"=>false));
-
-      $redirectUrls->setReturnUrl("http://fr-webapp".$successRoute)
-          ->setCancelUrl("http://fr-webapp".$failRoute);
-
-
-      $payment = new Payment();
-      $payment->setIntent("sale")
-          ->setPayer($payer)
-          ->setRedirectUrls($redirectUrls)
-          ->setTransactions(array($transaction));
-
-      $request = clone $payment;
-
-      try {
-          $payment->create($apiContext);
-      } catch (Exception $ex) {
-          exit(1);
-      }
-
-      $approvalUrl = $payment->getApprovalLink();
-
-      return $this->redirect($approvalUrl);
-
-    }
 
 
     /**
@@ -249,7 +384,6 @@ class DonationController extends Controller
     {
 
         $logger = $this->get('logger');
-
 
         $em = $this->getDoctrine()->getManager();
 
@@ -293,43 +427,49 @@ class DonationController extends Controller
                 )
         );
 
-        $logger->debug("Looking for success parameter");
-        if(null !== $request->query->get('success')){
-          $logger->debug("Found success parameter");
-          $successFlag = $request->query->get('success');
+        $logger->debug("Looking for donation record with Transaction ID ".$request->query->get('transactionId'));
+        $donation = $em->getRepository('AppBundle:Donation')->findOneBy(array('transactionId'=>$request->query->get('transactionId'), 'campaign' => $campaign));
 
-          if ($successFlag == true) {
+        //Updating Donation Record
+        $donation->setPaypaltoken($request->query->get('transactionId'));
+        $donation->setPaypalPayerId($request->query->get('PayerID'));
+        $donation->setPaypalToken($request->query->get('token'));
+        $donation->setPaypalPaymentId($request->query->get('paymentId'));
+        $donation->setPaypalSuccessFlag($request->query->get('success'));
+
+         $logger->debug("Looking for success parameter");
+          if ($donation->getPaypalSuccessFlag() == true) {
               $logger->debug("Payment was a success");
-              $paymentId = $request->query->get('paymentId');
-              $payment = Payment::get($paymentId, $apiContext);
+
+              $payment = Payment::get($donation->getPaypalPaymentId(), $apiContext);
 
               $execution = new PaymentExecution();
-              $execution->setPayerId($request->query->get('PayerID'));
+              $execution->setPayerId($donation->getPaypalPayerId());
 
               try {
                   $result = $payment->execute($execution, $apiContext);
-
                   try {
-                      $payment = Payment::get($paymentId, $apiContext);
+                      $PaypalPaymentDetails = Payment::get($donation->getPaypalPaymentId(), $apiContext);
+                      $donation->setPaypalPaymentDetails(json_decode($PaypalPaymentDetails, true));
                   } catch (Exception $ex) {
                       exit(1);
                   }
               } catch (Exception $ex) {
                   exit(1);
               }
-              $logger->debug($payment);
-
-              return $this->render('donation/donation.success.html.twig', array(
-                  'campaign' => $campaign,
-                  'paymentDetails' => $payment
-              ));
-
-
           } else {
               exit;
           }
 
-        }
+        $em->persist($donation);
+        $em->flush();
+
+
+        return $this->render('donation/donation.success.html.twig', array(
+            'donation' => $donation,
+            'campaign' => $campaign,
+            'paymentDetails' => $payment
+        ));
 
     }
 }

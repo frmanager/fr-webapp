@@ -1,20 +1,33 @@
 AppBundle\Entity\Donation:
     donation{1..500}:
         classroom: '@classroom*'
+        donorEmail: <freeEmail()>
+        donorFirstName: <firstName()>
+        donorLastName: <lastName()>
+        donorComment: <paragraph(1,true)>
+        transactionId: <uuid()>
         student: null
         team: null
+        type: 'classroom'
         amount: <randomFloat(2, 1, 50)>
         donatedAt: <dateTimeBetween('-30 days', '0 days')>
-        type: "manual"
+        paymentMethod: "paypal"
         __calls:
             - setCampaignFromClassroom:
                   0: null
     donation{501..2000}:
         student: '@student*'
+        donorEmail: <freeEmail()>
+        donorFirstName: <firstName()>
+        donorLastName: <lastName()>
+        donorComment: <paragraph(1,true)>
+        transactionId: <uuid()>
         team: null
+        type: 'student'
+        studentName: <firstName()> <randomLetter()>.
         amount: <randomFloat(2, 1, 50)>
         donatedAt: <dateTimeBetween('-30 days', '0 days')>
-        type: "manual"
+        paymentMethod: "paypal"
         __calls:
             - setClassroomFromStudent:
                   0: null
@@ -22,11 +35,17 @@ AppBundle\Entity\Donation:
                   0: null
     donation{2001..2500}:
         student: null
+        donorEmail: <freeEmail()>
+        donorFirstName: <firstName()>
+        donorLastName: <lastName()>
+        donorComment: <paragraph(1,true)>
+        transactionId: <uuid()>
         classroom: null
         team: '@team*'
+        type: 'team'
         amount: <randomFloat(2, 1, 50)>
         donatedAt: <dateTimeBetween('-30 days', '0 days')>
-        type: "manual"
+        paymentMethod: "paypal"
         __calls:
             - setCampaignFromTeam:
                   0: null
