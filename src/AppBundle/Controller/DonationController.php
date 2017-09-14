@@ -255,12 +255,13 @@ class DonationController extends Controller
         if(!$fail){
           $donation = new Donation();
           $donation->setCampaign($campaign);
+          $donation->setTransactionId(strtoupper(md5(uniqid(rand(), true))));
           $donation->setAmount($params['donation']['amount']);
+          $donation->setDonationStatus("PENDING");
           $donation->setDonorFirstName($params['donation']['firstName']);
           $donation->setDonorLastName($params['donation']['lastName']);
           $donation->setDonorEmail($params['donation']['email']);
           $donation->setDonatedAt(new DateTime('now'));
-          $donation->setTransactionId(uniqid('', true));
           if(!empty($donation->setDonorEmail($params['donation']['message']))){
             $donation->setDonorComment($params['donation']['message']);
           }
@@ -308,11 +309,19 @@ class DonationController extends Controller
               ->setTotal($donation->getAmount())
               ->setDetails($details);
 
+          //Here we are making sure the campaign gets the donation, not us!
+          $payee = new Payee();
+          $payee->setEmail($campaign->getPaypalEmail());
+
           $transaction = new Transaction();
           $transaction->setAmount($amount)
               ->setItemList($itemList)
               ->setDescription('Donation to '.$campaign->getName())
+              ->setPayee($payee)
               ->setInvoiceNumber($donation->getTransactionId());
+
+
+          //TODO: Create "Batch" Payout to receive funds https://paypal.github.io/PayPal-PHP-SDK/sample/doc/payouts/CreateBatchPayout.html
 
           //IF A PAYPAL PAYMENT
           if($params['donation']['paymentMethod'] == "paypal"){
@@ -427,43 +436,96 @@ class DonationController extends Controller
                 )
         );
 
-        $logger->debug("Looking for donation record with Transaction ID ".$request->query->get('transactionId'));
-        $donation = $em->getRepository('AppBundle:Donation')->findOneBy(array('transactionId'=>$request->query->get('transactionId'), 'campaign' => $campaign));
+        //We assume a TransactionID is required for us to do anything
+        if(null !== $request->query->get('transactionId')){
+          $transactionId = $request->query->get('transactionId');
+          $failure = false;
+          $logger->debug("Looking for donation record with Transaction ID ".$transactionId);
+          $donation = $em->getRepository('AppBundle:Donation')->findOneBy(array('transactionId'=>$transactionId, 'campaign' => $campaign));
+          //Updating Donation Record
 
-        //Updating Donation Record
-        $donation->setPaypaltoken($request->query->get('transactionId'));
-        $donation->setPaypalPayerId($request->query->get('PayerID'));
-        $donation->setPaypalToken($request->query->get('token'));
-        $donation->setPaypalPaymentId($request->query->get('paymentId'));
-        $donation->setPaypalSuccessFlag($request->query->get('success'));
 
-         $logger->debug("Looking for success parameter");
-          if ($donation->getPaypalSuccessFlag() == true) {
-              $logger->debug("Payment was a success");
-
-              $payment = Payment::get($donation->getPaypalPaymentId(), $apiContext);
-
-              $execution = new PaymentExecution();
-              $execution->setPayerId($donation->getPaypalPayerId());
-
-              try {
-                  $result = $payment->execute($execution, $apiContext);
-                  try {
-                      $PaypalPaymentDetails = Payment::get($donation->getPaypalPaymentId(), $apiContext);
-                      $donation->setPaypalPaymentDetails(json_decode($PaypalPaymentDetails, true));
-                  } catch (Exception $ex) {
-                      exit(1);
-                  }
-              } catch (Exception $ex) {
-                  exit(1);
-              }
-          } else {
-              exit;
+          if(is_null($donation)){
+            $logger->info("DONATION ISSUE: Unable to find donation linked to campaign_id: ".$campaign->getId()." and transaction_id: ".$transactionId);
+            $failure = true;
           }
 
-        $em->persist($donation);
-        $em->flush();
+          if(null == $request->query->get('PayerID')){
+            $logger->info("DONATION ISSUE: Paypal PayerID was not found. campaign_id: ".$campaign->getId()." and transaction_id: ".$transactionId);
+            $failure = true;
+          }
 
+          if(null == $request->query->get('paymentId')){
+            $logger->info("DONATION ISSUE: Paypal paymentId was not found. campaign_id: ".$campaign->getId()." and transaction_id: ".$transactionId);
+            $failure = true;
+          }
+
+          if(null == $request->query->get('success')){
+            $logger->info("DONATION ISSUE: Paypal success was not found. campaign_id: ".$campaign->getId()." and transaction_id: ".$transactionId);
+            $failure = true;
+          }
+
+          if(!$failure){
+            $donation->setPaypalPayerId($request->query->get('PayerID'));
+            $donation->setPaypalToken($request->query->get('token'));
+            $donation->setPaypalPaymentId($request->query->get('paymentId'));
+            $donation->setPaypalSuccessFlag($request->query->get('success'));
+
+             $logger->debug("Looking for success parameter");
+              if ($donation->getPaypalSuccessFlag() == true) {
+                  $logger->debug("Payment was a success");
+                  $donation->setDonationStatus("ACCEPTED");
+
+
+                  try {
+                    $payment = Payment::get($donation->getPaypalPaymentId(), $apiContext);
+                  } catch (PayPal\Exception\PayPalConnectionException $ex) {
+                      $logger->critical("Paypal Payment PayPalConnectionException Failure. code:".$ex->getCode()." data:".$ex->getData());
+                      exit(1);
+                  } catch (Exception $ex) {
+                      $logger->critical("Paypal Payment getPaymentDetails Failure");
+                      exit(1);
+                  }
+
+
+
+                  $execution = new PaymentExecution();
+                  $execution->setPayerId($donation->getPaypalPayerId());
+
+
+                  try {
+                      $result = $payment->execute($execution, $apiContext);
+                      try {
+                          $PaypalPaymentDetails = Payment::get($donation->getPaypalPaymentId(), $apiContext);
+                          $donation->setPaypalPaymentDetails(json_decode($PaypalPaymentDetails, true));
+                      } catch (PayPal\Exception\PayPalConnectionException $ex) {
+                          $logger->critical("Paypal Payment PayPalConnectionException Failure. code:".$ex->getCode()." data:".$ex->getData());
+                          exit($ex);
+                      } catch (Exception $ex) {
+                          $logger->critical("Paypal Payment getPaymentDetails Failure");
+                          exit(1);
+                      }
+                  } catch (PayPal\Exception\PayPalConnectionException $ex) {
+                      $logger->critical("Paypal Payment PayPalConnectionException Failure. code:".$ex->getCode()." data:".$ex->getData());
+                      exit($ex);
+                  } catch (Exception $ex) {
+                      $logger->critical("Paypal Payment Execution Failure");
+                      exit(1);
+                  }
+              } else {
+                  $donation->setDonationStatus("FAILED");
+                  exit;
+              }
+
+            $em->persist($donation);
+            $em->flush();
+
+        }
+      }else{
+         $referer = $request->headers->get('referer');
+         $logger->info("DONATION INFO: User ended up at donation_done without a TransactionID. Referrer was ".$referer);
+         return $this->redirectToRoute('donation_index', array('campaignUrl'=>$campaign->getUrl()));
+      }
 
         return $this->render('donation/donation.success.html.twig', array(
             'donation' => $donation,

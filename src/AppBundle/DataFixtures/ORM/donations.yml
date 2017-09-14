@@ -5,7 +5,6 @@ AppBundle\Entity\Donation:
         donorFirstName: <firstName()>
         donorLastName: <lastName()>
         donorComment: <paragraph(1,true)>
-        transactionId: <uuid()>
         student: null
         team: null
         type: 'classroom'
@@ -21,7 +20,6 @@ AppBundle\Entity\Donation:
         donorFirstName: <firstName()>
         donorLastName: <lastName()>
         donorComment: <paragraph(1,true)>
-        transactionId: <uuid()>
         team: null
         type: 'student'
         studentName: <firstName()> <randomLetter()>.
@@ -39,7 +37,6 @@ AppBundle\Entity\Donation:
         donorFirstName: <firstName()>
         donorLastName: <lastName()>
         donorComment: <paragraph(1,true)>
-        transactionId: <uuid()>
         classroom: null
         team: '@team*'
         type: 'team'

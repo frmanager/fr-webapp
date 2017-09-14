@@ -11,12 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * donation.
  *
  * @ORM\Entity
- * @ORM\Table(name="donation",uniqueConstraints={@ORM\UniqueConstraint(columns={"donated_at", "campaign_id", "transaction_id"})})
- * @UniqueEntity(
- *     fields={"donatedAt", "campaign", "transactionId"},
- *     errorPath="transactionId",
- *     message="Already received a donation on this day for this campaign...."
- * )
+ * @ORM\Table(name="donation")
  */
 class Donation
 {
@@ -216,6 +211,19 @@ class Donation
     */
    private $paypalSuccessFlag = false;
 
+   /**
+    * @ORM\Column(type="boolean", type="string", length=12, nullable=false)
+    */
+   private $donationStatus;
+
+
+   /**
+    * @var string
+    *
+    * @ORM\Column(name="transaction_id", type="string", nullable=true)
+    *
+    */
+   private $transactionId;
 
    /**
     * Constructor
@@ -245,13 +253,6 @@ class Donation
         return $this->id;
     }
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="transaction_id", type="string", nullable=true)
-     *
-     */
-    private $transactionId;
 
     /**
      * Set amount
@@ -494,29 +495,6 @@ class Donation
         return $this->donorLastName;
     }
 
-    /**
-     * Set transactionId
-     *
-     * @param string $transactionId
-     *
-     * @return Donation
-     */
-    public function setTransactionId($transactionId)
-    {
-        $this->transactionId = $transactionId;
-
-        return $this;
-    }
-
-    /**
-     * Get transactionId
-     *
-     * @return string
-     */
-    public function getTransactionId()
-    {
-        return $this->transactionId;
-    }
 
     /**
      * Set student
@@ -1014,5 +992,77 @@ class Donation
     public function getPaypalPaymentDetails()
     {
         return $this->PaypalPaymentDetails;
+    }
+
+    /**
+     * Set donationStatusIndicator
+     *
+     * @param boolean $donationStatusIndicator
+     *
+     * @return Donation
+     */
+    public function setDonationStatusIndicator($donationStatusIndicator)
+    {
+        $this->donationStatusIndicator = $donationStatusIndicator;
+
+        return $this;
+    }
+
+    /**
+     * Get donationStatusIndicator
+     *
+     * @return boolean
+     */
+    public function getDonationStatusIndicator()
+    {
+        return $this->donationStatusIndicator;
+    }
+
+    /**
+     * Set transactionId
+     *
+     * @param guid $transactionId
+     *
+     * @return Donation
+     */
+    public function setTransactionId($transactionId)
+    {
+        $this->transactionId = $transactionId;
+
+        return $this;
+    }
+
+    /**
+     * Get transactionId
+     *
+     * @return guid
+     */
+    public function getTransactionId()
+    {
+        return $this->transactionId;
+    }
+
+    /**
+     * Set donationStatus
+     *
+     * @param string $donationStatus
+     *
+     * @return Donation
+     */
+    public function setDonationStatus($donationStatus)
+    {
+        $this->donationStatus = $donationStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get donationStatus
+     *
+     * @return string
+     */
+    public function getDonationStatus()
+    {
+        return $this->donationStatus;
     }
 }
