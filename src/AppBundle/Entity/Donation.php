@@ -11,11 +11,11 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * donation.
  *
  * @ORM\Entity
- * @ORM\Table(name="donation",uniqueConstraints={@ORM\UniqueConstraint(columns={"donated_at", "student_id", "transaction_id"})})
+ * @ORM\Table(name="donation",uniqueConstraints={@ORM\UniqueConstraint(columns={"donated_at", "campaign_id", "transaction_id"})})
  * @UniqueEntity(
- *     fields={"student", "donatedAt", "transactionId"},
- *     errorPath="student",
- *     message="Already received a donation from this student on this day...."
+ *     fields={"donatedAt", "campaign", "transactionId"},
+ *     errorPath="transactionId",
+ *     message="Already received a donation on this day for this campaign...."
  * )
  */
 class Donation
@@ -54,6 +54,20 @@ class Donation
      * @Assert\NotNull()
      */
     private $classroom;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $studentName;
+
+    /**
+     * @var Campaign
+     *
+     * @ORM\ManyToOne(targetEntity="Campaign", inversedBy="donations")
+     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     * @Assert\NotNull()
+     */
+    private $campaign;
 
 
     /**
@@ -101,9 +115,16 @@ class Donation
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=100, nullable=true)
+     * @ORM\Column(name="type", type="string", length=100)
      */
     private $type;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="payment_method", type="string", length=100)
+     */
+    private $paymentMethod;
 
     /**
      * @var string
@@ -133,18 +154,6 @@ class Donation
      */
     private $donorLastName;
 
-
-
-    /**
-     * @var Campaign
-     *
-     * @ORM\ManyToOne(targetEntity="Campaign", inversedBy="donations")
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
-     * @Assert\NotNull()
-     */
-    private $campaign;
-
-
     /**
      * @var User
      *
@@ -167,6 +176,45 @@ class Donation
     */
    protected $updatedAt;
 
+
+   /**
+    * @ORM\Column(type="boolean")
+    */
+   private $studentConfirmedFlag = false;
+
+   /**
+    * @var string
+    *
+    * @ORM\Column(name="paypal_payer_id", type="string", length=30, nullable=true)
+    */
+   private $paypalPayerId;
+
+   /**
+    * @var string
+    *
+    * @ORM\Column(name="paypal_payment_id", type="string", length=30, nullable=true)
+    */
+   private $paypalPaymentId;
+
+   /**
+    * @var string
+    *
+    * @ORM\Column(name="paypal_token", type="string", length=30, nullable=true)
+    */
+   private $paypalToken;
+
+   /**
+    * @var json
+    *
+    * @ORM\Column(name="paypal_payment_details", type="json", nullable=true)
+    */
+   private $PaypalPaymentDetails;
+
+
+   /**
+    * @ORM\Column(type="boolean")
+    */
+   private $paypalSuccessFlag = false;
 
 
    /**
@@ -750,5 +798,221 @@ class Donation
     public function getCreatedBy()
     {
         return $this->createdBy;
+    }
+
+    /**
+     * Set studentConfirmedFlag
+     *
+     * @param boolean $studentConfirmedFlag
+     *
+     * @return Donation
+     */
+    public function setStudentConfirmedFlag($studentConfirmedFlag)
+    {
+        $this->studentConfirmedFlag = $studentConfirmedFlag;
+
+        return $this;
+    }
+
+    /**
+     * Get studentConfirmedFlag
+     *
+     * @return boolean
+     */
+    public function getStudentConfirmedFlag()
+    {
+        return $this->studentConfirmedFlag;
+    }
+
+    /**
+     * Set studentName
+     *
+     * @param string $studentName
+     *
+     * @return Donation
+     */
+    public function setStudentName($studentName)
+    {
+        $this->studentName = $studentName;
+
+        return $this;
+    }
+
+    /**
+     * Get studentName
+     *
+     * @return string
+     */
+    public function getStudentName()
+    {
+        return $this->studentName;
+    }
+
+    /**
+     * Set paymentType
+     *
+     * @param string $paymentType
+     *
+     * @return Donation
+     */
+    public function setPaymentType($paymentType)
+    {
+        $this->paymentType = $paymentType;
+
+        return $this;
+    }
+
+    /**
+     * Get paymentType
+     *
+     * @return string
+     */
+    public function getPaymentType()
+    {
+        return $this->paymentType;
+    }
+
+    /**
+     * Set paymentMethod
+     *
+     * @param string $paymentMethod
+     *
+     * @return Donation
+     */
+    public function setPaymentMethod($paymentMethod)
+    {
+        $this->paymentMethod = $paymentMethod;
+
+        return $this;
+    }
+
+    /**
+     * Get paymentMethod
+     *
+     * @return string
+     */
+    public function getPaymentMethod()
+    {
+        return $this->paymentMethod;
+    }
+
+    /**
+     * Set paypalPayerId
+     *
+     * @param string $paypalPayerId
+     *
+     * @return Donation
+     */
+    public function setPaypalPayerId($paypalPayerId)
+    {
+        $this->paypalPayerId = $paypalPayerId;
+
+        return $this;
+    }
+
+    /**
+     * Get paypalPayerId
+     *
+     * @return string
+     */
+    public function getPaypalPayerId()
+    {
+        return $this->paypalPayerId;
+    }
+
+    /**
+     * Set paypalPaymentId
+     *
+     * @param string $paypalPaymentId
+     *
+     * @return Donation
+     */
+    public function setPaypalPaymentId($paypalPaymentId)
+    {
+        $this->paypalPaymentId = $paypalPaymentId;
+
+        return $this;
+    }
+
+    /**
+     * Get paypalPaymentId
+     *
+     * @return string
+     */
+    public function getPaypalPaymentId()
+    {
+        return $this->paypalPaymentId;
+    }
+
+    /**
+     * Set paypalTOken
+     *
+     * @param string $paypalToken
+     *
+     * @return Donation
+     */
+    public function setPaypalTOken($paypalToken)
+    {
+        $this->paypalTOken = $paypalToken;
+
+        return $this;
+    }
+
+    /**
+     * Get paypalTOken
+     *
+     * @return string
+     */
+    public function getPaypalTOken()
+    {
+        return $this->paypalTOken;
+    }
+
+    /**
+     * Set paypalSuccessFlag
+     *
+     * @param boolean $paypalSuccessFlag
+     *
+     * @return Donation
+     */
+    public function setPaypalSuccessFlag($paypalSuccessFlag)
+    {
+        $this->paypalSuccessFlag = $paypalSuccessFlag;
+
+        return $this;
+    }
+
+    /**
+     * Get paypalSuccessFlag
+     *
+     * @return boolean
+     */
+    public function getPaypalSuccessFlag()
+    {
+        return $this->paypalSuccessFlag;
+    }
+
+    /**
+     * Set paypalPaymentDetails
+     *
+     * @param json $paypalPaymentDetails
+     *
+     * @return Donation
+     */
+    public function setPaypalPaymentDetails($paypalPaymentDetails)
+    {
+        $this->PaypalPaymentDetails = $paypalPaymentDetails;
+
+        return $this;
+    }
+
+    /**
+     * Get paypalPaymentDetails
+     *
+     * @return json
+     */
+    public function getPaypalPaymentDetails()
+    {
+        return $this->PaypalPaymentDetails;
     }
 }

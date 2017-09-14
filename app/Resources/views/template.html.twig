@@ -151,7 +151,7 @@
   <br>
 	 {% for type, messages in app.session.flashBag.all() %} {% for message in messages %}
 	<div class="row">
-		<div class="col-md-8 col-md-offset-2">
+		<div class="col-md-8 offset-md-2">
 			<div class="alert alert-{{type}} alert-dismissible" role="alert">
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
