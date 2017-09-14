@@ -630,26 +630,6 @@
   </div>
   <!-- /Row -->
 </form>
-{% if app.environment == "dev" %}
-  <hr>
-  <div class="card card-outline-danger" id="debug">
-    <div class="card-header card-danger card-inverse">DEBUG PANEL</div>
-    <div class="card-block">
-      <p class="card-text">DonationType Object:
-        {{dump(donationType)}}</p>
-      <p class="card-text">formData Object:
-        {{dump(formData)}}</p>
-      <p class="card-text">Classroom Object:
-        {{dump(teams)}}</p>
-      <p class="card-text">Classrooms Object:
-        {{dump(classrooms)}}</p>
-      <p class="card-text">Teams Object:
-        {{dump(teams)}}</p>
-      <p class="card-text">Campaign Object:
-        {{dump(campaign)}}</p>
-    </div>
-  </div>
-{% endif %}
 {% endblock %}
 
 {% block javascripts %}
