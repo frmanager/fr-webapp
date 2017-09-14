@@ -530,7 +530,6 @@ class DonationController extends Controller
         return $this->render('donation/donation.success.html.twig', array(
             'donation' => $donation,
             'campaign' => $campaign,
-            'paymentDetails' => $payment
         ));
 
     }
