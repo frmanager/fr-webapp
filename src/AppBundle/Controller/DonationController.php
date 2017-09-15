@@ -297,7 +297,7 @@ class DonationController extends Controller
                   'log.FileName' => '../var/logs/PayPal.log',
                   'log.LogLevel' => ($this->container->getParameter('kernel.environment') == "dev" ? 'DEBUG' : 'INFO'), // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
                   // 'cache.enabled' => true,
-                  'http.CURLOPT_SSL_CIPHER_LIST' => 'TLSv1',
+                  //'http.CURLOPT_SSL_CIPHER_LIST' => 'TLSv1',
                   // 'http.headers.PayPal-Partner-Attribution-Id' => '123123123'
                   //'log.AdapterFactory' => '\PayPal\Log\DefaultLogFactory' // Factory class implementing \PayPal\Log\PayPalLogFactory
               )
@@ -458,7 +458,7 @@ class DonationController extends Controller
                 'log.FileName' => '../var/logs/PayPal.log',
                 'log.LogLevel' => ($this->container->getParameter('kernel.environment') == "dev" ? 'DEBUG' : 'INFO'), // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
                 // 'cache.enabled' => true,
-                'http.CURLOPT_SSL_CIPHER_LIST' => 'TLSv1',
+                //'http.CURLOPT_SSL_CIPHER_LIST' => 'TLSv1',
                 // 'http.headers.PayPal-Partner-Attribution-Id' => '123123123'
                 //'log.AdapterFactory' => '\PayPal\Log\DefaultLogFactory' // Factory class implementing \PayPal\Log\PayPalLogFactory
             )
