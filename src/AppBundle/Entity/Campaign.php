@@ -125,6 +125,13 @@ Class Campaign
    *
    * @ORM\Column(type="boolean", length=100)
    */
+  private $paypalSanboxFlag = true;
+
+  /**
+   *  @var boolean
+   *
+   * @ORM\Column(type="boolean", length=100)
+   */
   private $donationFlag = false;
 
   /**
@@ -918,5 +925,29 @@ Class Campaign
     public function getTeamsFlag()
     {
         return $this->teamsFlag;
+    }
+
+    /**
+     * Set paypalSanboxFlag
+     *
+     * @param boolean $paypalSanboxFlag
+     *
+     * @return Campaign
+     */
+    public function setPaypalSanboxFlag($paypalSanboxFlag)
+    {
+        $this->paypalSanboxFlag = $paypalSanboxFlag;
+
+        return $this;
+    }
+
+    /**
+     * Get paypalSanboxFlag
+     *
+     * @return boolean
+     */
+    public function getPaypalSanboxFlag()
+    {
+        return $this->paypalSanboxFlag;
     }
 }
