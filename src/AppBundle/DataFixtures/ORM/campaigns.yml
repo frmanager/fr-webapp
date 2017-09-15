@@ -11,7 +11,8 @@ AppBundle\Entity\Campaign:
         fundingGoal: <numberBetween(1000, 30000)>
         onlineFlag: true
         donationFlag: true
-        teamsFlag: true        
-        paypalEmail: davidlarrimore@gmail.com
+        teamsFlag: true
+        paypalEmail: davidlarrimore@lrespto.org
+        paypalSandboxFlag: true
         tippingFlag: true
         donationReceiptText: "BLAHBLAHBLAH"

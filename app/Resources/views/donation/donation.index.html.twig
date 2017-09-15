@@ -156,12 +156,12 @@
             </div>
             <div class="form-check form-check-inline">
               <label class="form-check-label">
-                <input type="radio" name="donation[paymentMethod]" id="donation_paymentMethod_2" value="cc">
+                <input type="radio" name="donation[paymentMethod]" id="donation_paymentMethod_2" value="cc" disabled>
                 Credit Card (<i class="fa fa-cc-paypal" aria-hidden="true"></i>
                 <i class="fa fa-cc-visa" aria-hidden="true"></i>
                 <i class="fa fa-cc-mastercard" aria-hidden="true"></i>
                 <i class="fa fa-cc-discover" aria-hidden="true"></i>
-                <i class="fa fa-cc-amex" aria-hidden="true"></i>)
+                <i class="fa fa-cc-amex" aria-hidden="true"></i>) <small>(Comming Soon!)</small>
               </label>
             </div>
           </div><!-- ./form-group -->
@@ -630,26 +630,6 @@
   </div>
   <!-- /Row -->
 </form>
-{% if app.environment == "dev" %}
-  <hr>
-  <div class="card card-outline-danger" id="debug">
-    <div class="card-header card-danger card-inverse">DEBUG PANEL</div>
-    <div class="card-block">
-      <p class="card-text">DonationType Object:
-        {{dump(donationType)}}</p>
-      <p class="card-text">formData Object:
-        {{dump(formData)}}</p>
-      <p class="card-text">Classroom Object:
-        {{dump(teams)}}</p>
-      <p class="card-text">Classrooms Object:
-        {{dump(classrooms)}}</p>
-      <p class="card-text">Teams Object:
-        {{dump(teams)}}</p>
-      <p class="card-text">Campaign Object:
-        {{dump(campaign)}}</p>
-    </div>
-  </div>
-{% endif %}
 {% endblock %}
 
 {% block javascripts %}

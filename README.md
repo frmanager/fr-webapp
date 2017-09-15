@@ -130,3 +130,13 @@ php bin/console hautelook:fixtures:load
 ## TODO: TimeZone
 
 Need to set default timezone as date.timezone = "America/New_York"
+
+##Paypal CURL issue with Dreamhost
+
+There is an active issue I am investigating related to the dreamhost hosting. The Paypal PHP Rest SDK does not appear to work (At Least for Sandbox mode). I have narrowed the issue down to the local CURL version/configuration.
+
+Until things get fixed, the vendor/paypal/rest-api-sdk-php/lib/PayPal/Core/PayPalHttpConfig.php
+
+Comment out:
+
+  //CURLOPT_SSL_CIPHER_LIST => 'TLSv1:TLSv1.2'
