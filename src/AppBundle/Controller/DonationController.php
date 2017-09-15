@@ -297,7 +297,7 @@ class DonationController extends Controller
                   'log.FileName' => '../var/logs/PayPal.log',
                   'log.LogLevel' => ($this->container->getParameter('kernel.environment') == "dev" ? 'DEBUG' : 'INFO'), // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
                   // 'cache.enabled' => true,
-                  'http.CURLOPT_SSL_CIPHER_LIST' => null,
+                  'http.CURLOPT_SSL_CIPHER_LIST' => 'TLSv1',
                   // 'http.headers.PayPal-Partner-Attribution-Id' => '123123123'
                   //'log.AdapterFactory' => '\PayPal\Log\DefaultLogFactory' // Factory class implementing \PayPal\Log\PayPalLogFactory
               )
@@ -448,6 +448,20 @@ class DonationController extends Controller
                     $this->getParameter('paypal.paypal_rest.client_id'),     // ClientID
                     $this->getParameter('paypal.paypal_rest.client_secret')      // ClientSecret
                 )
+        );
+
+
+        $apiContext->setConfig(
+            array(
+                'mode' => ($campaign->getPaypalSandboxFlag() ? 'sandbox' : 'live'),
+                'log.LogEnabled' => true,
+                'log.FileName' => '../var/logs/PayPal.log',
+                'log.LogLevel' => ($this->container->getParameter('kernel.environment') == "dev" ? 'DEBUG' : 'INFO'), // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
+                // 'cache.enabled' => true,
+                'http.CURLOPT_SSL_CIPHER_LIST' => 'TLSv1',
+                // 'http.headers.PayPal-Partner-Attribution-Id' => '123123123'
+                //'log.AdapterFactory' => '\PayPal\Log\DefaultLogFactory' // Factory class implementing \PayPal\Log\PayPalLogFactory
+            )
         );
 
         //We assume a TransactionID is required for us to do anything
