@@ -196,7 +196,7 @@ class DonationController extends Controller
           }
 
           if(!$fail && empty($params['donation']['cc']['country'])){
-            $this->addFlash('warning','Country is required');
+            $this->addFlash('warning','Country Code is required');
             $fail = true;
           }
 
@@ -290,8 +290,6 @@ class DonationController extends Controller
                   )
           );
 
-          $payer = new Payer();
-
           $item1 = new Item();
           $item1->setName('Donation to '.$campaign->getName())
               ->setCurrency('USD')
@@ -324,6 +322,8 @@ class DonationController extends Controller
 
           //TODO: Create "Batch" Payout to receive funds https://paypal.github.io/PayPal-PHP-SDK/sample/doc/payouts/CreateBatchPayout.html
 
+          $payer = new Payer();
+          $payment = new Payment();
           //IF A PAYPAL PAYMENT
           if($params['donation']['paymentMethod'] == "paypal"){
             $payer->setPaymentMethod("paypal");
@@ -336,29 +336,57 @@ class DonationController extends Controller
             $redirectUrls->setReturnUrl($this->container->getParameter('main_app_url').$successRoute)
                 ->setCancelUrl($this->container->getParameter('main_app_url').$failRoute);
 
-
-            $payment = new Payment();
             $payment->setIntent("sale")
                 ->setPayer($payer)
                 ->setRedirectUrls($redirectUrls)
                 ->setTransactions(array($transaction));
 
-            $request = clone $payment;
+          }else {
 
-            try {
-                $payment->create($apiContext);
-            } catch (Exception $ex) {
-                exit(1);
-            }
+            $card = new PaymentCard();
 
-            $approvalUrl = $payment->getApprovalLink();
+            $array = explode(" ",$params['donation']['cc']['cardholderName']);
+            $firstName = $array[0];
+            $lastName  = $array[count($array)-1];
 
-            return $this->redirect($approvalUrl);
+            $card->setType($cardType)
+                ->setNumber($params['donation']['cc']['number'])
+                ->setExpireMonth($params['donation']['cc']['expirationMonth'])
+                ->setExpireYear($params['donation']['cc']['expirationYear'])
+                ->setCvv2($params['donation']['cc']['cvv'])
+                ->setFirstName($firstName)
+                ->setBillingCountry($params['donation']['cc']['country'])
+                ->setLastName($lastName);
+
+            $fi = new FundingInstrument();
+            $fi->setPaymentCard($card);
+
+            $payer->setPaymentMethod("credit_card")
+                ->setFundingInstruments(array($fi));
+
+            $payment = new Payment();
+            $payment->setIntent("sale")
+                ->setPayer($payer)
+                ->setTransactions(array($transaction));
           }
 
 
+          try {
+              $payment->create($apiContext);
+          } catch (Exception $ex) {
+              exit(1);
+          }
 
+          //IF A PAYPAL PAYMENT
+          if($params['donation']['paymentMethod'] == "paypal"){
+            $approvalUrl = $payment->getApprovalLink();
+            return $this->redirect($approvalUrl);
+          }else {
+            $payment->setPaypalPaymentId = $payment->getId();
+            return $this->redirectToRoute('donation_done', array('campaignUrl'=> $campaignUrl, 'success'=>true, 'transactionId'=>$donation->getTransactionId()));
+          }
         }
+
     }
 
 
@@ -380,7 +408,6 @@ class DonationController extends Controller
 
     // replace this example code with whatever you need
     return $this->render('donation/donation.index.html.twig', $data);
-
 
 
   }
@@ -478,7 +505,6 @@ class DonationController extends Controller
                   $logger->debug("Payment was a success");
                   $donation->setDonationStatus("ACCEPTED");
 
-
                   try {
                     $payment = Payment::get($donation->getPaypalPaymentId(), $apiContext);
                   } catch (PayPal\Exception\PayPalConnectionException $ex) {
@@ -489,11 +515,8 @@ class DonationController extends Controller
                       exit(1);
                   }
 
-
-
                   $execution = new PaymentExecution();
                   $execution->setPayerId($donation->getPaypalPayerId());
-
 
                   try {
                       $result = $payment->execute($execution, $apiContext);
