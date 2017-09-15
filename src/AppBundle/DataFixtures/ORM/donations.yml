@@ -11,6 +11,7 @@ AppBundle\Entity\Donation:
         amount: <randomFloat(2, 1, 50)>
         donatedAt: <dateTimeBetween('-30 days', '0 days')>
         paymentMethod: "paypal"
+        donationStatus: "ACCEPTED"
         __calls:
             - setCampaignFromClassroom:
                   0: null
@@ -26,6 +27,7 @@ AppBundle\Entity\Donation:
         amount: <randomFloat(2, 1, 50)>
         donatedAt: <dateTimeBetween('-30 days', '0 days')>
         paymentMethod: "paypal"
+        donationStatus: "ACCEPTED"
         __calls:
             - setClassroomFromStudent:
                   0: null
@@ -43,6 +45,7 @@ AppBundle\Entity\Donation:
         amount: <randomFloat(2, 1, 50)>
         donatedAt: <dateTimeBetween('-30 days', '0 days')>
         paymentMethod: "paypal"
+        donationStatus: "ACCEPTED"
         __calls:
             - setCampaignFromTeam:
                   0: null

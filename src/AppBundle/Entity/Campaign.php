@@ -125,7 +125,7 @@ Class Campaign
    *
    * @ORM\Column(type="boolean", length=100)
    */
-  private $paypalSanboxFlag = true;
+  private $paypalSandboxFlag = true;
 
   /**
    *  @var boolean
@@ -930,13 +930,13 @@ Class Campaign
     /**
      * Set paypalSanboxFlag
      *
-     * @param boolean $paypalSanboxFlag
+     * @param boolean $paypalSandboxFlag
      *
      * @return Campaign
      */
-    public function setPaypalSanboxFlag($paypalSanboxFlag)
+    public function setPaypalSanboxFlag($paypalSandboxFlag)
     {
-        $this->paypalSanboxFlag = $paypalSanboxFlag;
+        $this->paypalSanboxFlag = $paypalSandboxFlag;
 
         return $this;
     }
@@ -949,5 +949,29 @@ Class Campaign
     public function getPaypalSanboxFlag()
     {
         return $this->paypalSanboxFlag;
+    }
+
+    /**
+     * Set paypalSandboxFlag
+     *
+     * @param boolean $paypalSandboxFlag
+     *
+     * @return Campaign
+     */
+    public function setPaypalSandboxFlag($paypalSandboxFlag)
+    {
+        $this->paypalSandboxFlag = $paypalSandboxFlag;
+
+        return $this;
+    }
+
+    /**
+     * Get paypalSandboxFlag
+     *
+     * @return boolean
+     */
+    public function getPaypalSandboxFlag()
+    {
+        return $this->paypalSandboxFlag;
     }
 }
