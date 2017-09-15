@@ -290,13 +290,12 @@ class DonationController extends Controller
                   )
           );
 
-
           $apiContext->setConfig(
               array(
                   'mode' => 'sandbox',
-                  //'log.LogEnabled' => true,
-                  //'log.FileName' => '../PayPal.log',
-                  //'log.LogLevel' => 'DEBUG', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
+                  'log.LogEnabled' => true,
+                  'log.FileName' => '../var/logs/PayPal.log',
+                  'log.LogLevel' => 'DEBUG', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
                   //'cache.enabled' => true,
                   // 'http.CURLOPT_CONNECTTIMEOUT' => 30
                   // 'http.headers.PayPal-Partner-Attribution-Id' => '123123123'
