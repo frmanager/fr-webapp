@@ -6,7 +6,9 @@
   {% set donation_amount = 0 %}
   {% for donation in classroom.donations %}
     {% set number_of_donations = number_of_donations + 1 %}
-    {% set donation_amount = donation_amount + donation.amount %}
+    {% if donation.donationStatus == "ACCEPTED"%}
+      {% set donation_amount = donation_amount + donation.amount %}
+    {% endif %}
   {% endfor %}
 
   <div class="row" style="">
