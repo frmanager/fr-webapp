@@ -289,6 +289,7 @@ class DonationController extends Controller
                       $this->getParameter('paypal.paypal_rest.client_secret')      // ClientSecret
                   )
           );
+
           if($this->container->getParameter('kernel.environment') == "dev" || $this->container->getParameter('kernel.environment') == "test"){
           $apiContext->setConfig(array('mode' => 'sandbox'));
           }else{
@@ -514,6 +515,12 @@ class DonationController extends Controller
                         $this->getParameter('paypal.paypal_rest.client_secret')      // ClientSecret
                     )
             );
+
+            if($this->container->getParameter('kernel.environment') == "dev" || $this->container->getParameter('kernel.environment') == "test"){
+            $apiContext->setConfig(array('mode' => 'sandbox'));
+            }else{
+              $apiContext->setConfig(array('mode' => 'live'));
+            }
 
             $donation->setPaypalPayerId($request->query->get('PayerID'));
             $donation->setPaypalToken($request->query->get('token'));
