@@ -84,7 +84,7 @@
 
 </head>
 <body>
-<nav class="navbar fixed-top navbar-toggleable-md navbar-inverse bg-primary">
+<nav class="navbar fixed-top navbar-toggleable-sm navbar-inverse bg-primary">
   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
   </button>
@@ -115,7 +115,7 @@
     {% endif %}
     {% if not notStarted %}
       {% if is_granted('ROLE_USER') and campaign is defined %}
-        <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav ml-auto">
     			<li class="dropdown nav-item">
     			<a href="#" class="nav-link dropdown-toggle" id="dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
     			<i class="fa fa-user"></i>&nbsp; {{ app.user.username }}&nbsp; <span class="caret"></span>
@@ -131,7 +131,7 @@
     			</li>
         	</ul>
 			 {% elseif (app.request.attributes.get('_route') not in ['homepage']) %}
-         <ul class="navbar-nav mr-auto">
+         <ul class="navbar-nav ml-auto">
              <li class="nav-item">
          			<a class="nav-link" href="{{ path('user_registration', {'campaignUrl': campaignUrl}) }}" role="button">SIGN UP!</a>
          			</li>
