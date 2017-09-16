@@ -289,6 +289,11 @@ class DonationController extends Controller
                       $this->getParameter('paypal.paypal_rest.client_secret')      // ClientSecret
                   )
           );
+          if($this->container->getParameter('kernel.environment') == "dev" || $this->container->getParameter('kernel.environment') == "test"){
+          $apiContext->setConfig(array('mode' => 'sandbox'));
+          }else{
+            $apiContext->setConfig(array('mode' => 'live'));
+          }
 
           $item1 = new Item();
           $item1->setName('Donation to '.$campaign->getName())
