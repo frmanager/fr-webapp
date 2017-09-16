@@ -263,7 +263,7 @@ class DonationController extends Controller
           $donation->setDonorLastName($params['donation']['lastName']);
           $donation->setDonorEmail($params['donation']['email']);
           $donation->setDonatedAt(new DateTime('now'));
-          if(!empty($donation->setDonorEmail($params['donation']['message']))){
+          if(!empty($params['donation']['message'])){
             $donation->setDonorComment($params['donation']['message']);
           }
           if($donationType == "team"){
@@ -457,27 +457,40 @@ class DonationController extends Controller
         }
 
 
-        $apiContext = new \PayPal\Rest\ApiContext(
-                new \PayPal\Auth\OAuthTokenCredential(
-                    $this->getParameter('paypal.paypal_rest.client_id'),     // ClientID
-                    $this->getParameter('paypal.paypal_rest.client_secret')      // ClientSecret
-                )
-        );
 
-
-        //We assume a TransactionID is required for us to do anything
-        if(null !== $request->query->get('transactionId')){
+        $failure = false;
+        if(null == $request->query->get('transactionId')){
+          $logger->info("DONATION ISSUE: transactionId was not found. campaign_id: ".$campaign->getId()." and transaction_id: ".$transactionId);
+          $failure = true;
+        }else{
           $transactionId = $request->query->get('transactionId');
-          $failure = false;
+        }
+
+        if(!$failure){
           $logger->debug("Looking for donation record with Transaction ID ".$transactionId);
           $donation = $em->getRepository('AppBundle:Donation')->findOneBy(array('transactionId'=>$transactionId, 'campaign' => $campaign));
-          //Updating Donation Record
+        }
 
+        if(!$failure && is_null($donation)){
+          $logger->info("DONATION ISSUE: Unable to find donation linked to campaign_id: ".$campaign->getId()." and transaction_id: ".$transactionId);
+          $failure = true;
+        }
 
-          if(is_null($donation)){
-            $logger->info("DONATION ISSUE: Unable to find donation linked to campaign_id: ".$campaign->getId()." and transaction_id: ".$transactionId);
-            $failure = true;
-          }
+        if(!$failure && null == $request->query->get('success')){
+          $logger->info("DONATION ISSUE: success was not found. campaign_id: ".$campaign->getId()." and transaction_id: ".$transactionId);
+          $failure = true;
+          $success = false;
+        }else{
+          $success = $request->query->get('success');
+        }
+
+        if(!$success){
+          $logger->info("Donation was cancelled on the paypal side.");
+          $failure = true;
+        }
+
+        //We assume a TransactionID and success is required for us to do anything
+        if(!$failure){
 
           if(null == $request->query->get('PayerID')){
             $logger->info("DONATION ISSUE: Paypal PayerID was not found. campaign_id: ".$campaign->getId()." and transaction_id: ".$transactionId);
@@ -489,12 +502,14 @@ class DonationController extends Controller
             $failure = true;
           }
 
-          if(null == $request->query->get('success')){
-            $logger->info("DONATION ISSUE: Paypal success was not found. campaign_id: ".$campaign->getId()." and transaction_id: ".$transactionId);
-            $failure = true;
-          }
-
           if(!$failure){
+            $apiContext = new \PayPal\Rest\ApiContext(
+                    new \PayPal\Auth\OAuthTokenCredential(
+                        $this->getParameter('paypal.paypal_rest.client_id'),     // ClientID
+                        $this->getParameter('paypal.paypal_rest.client_secret')      // ClientSecret
+                    )
+            );
+
             $donation->setPaypalPayerId($request->query->get('PayerID'));
             $donation->setPaypalToken($request->query->get('token'));
             $donation->setPaypalPaymentId($request->query->get('paymentId'));
@@ -542,20 +557,39 @@ class DonationController extends Controller
                   exit;
               }
 
+            //Save Data
             $em->persist($donation);
             $em->flush();
+
+            //Send Email
+            $message = (new \Swift_Message("Thank you for your Donation to ".$campaign->getName()))
+              ->setFrom($campaign->getEmail())
+              ->setTo($donation->getDonorEmail())
+              ->setContentType("text/html")
+              ->setBody(
+                  $this->renderView('email/donation.success.email.twig', array('donation' => $donation,'campaign' => $campaign))
+              );
+
+            $this->get('mailer')->send($message);
 
         }
       }else{
          $referer = $request->headers->get('referer');
          $logger->info("DONATION INFO: User ended up at donation_done without a TransactionID. Referrer was ".$referer);
-         return $this->redirectToRoute('donation_index', array('campaignUrl'=>$campaign->getUrl()));
       }
 
-        return $this->render('donation/donation.success.html.twig', array(
-            'donation' => $donation,
+      if(null !== $request->query->get('success') && !$request->query->get('success')){
+        $logger->info("DONATION INFO: Donation was cancelled by paypal....success flag set as false");
+
+        return $this->render('donation/donation.cancelled.html.twig', array(
             'campaign' => $campaign,
         ));
+      }
+
+      return $this->render('donation/donation.success.html.twig', array(
+          'donation' => $donation,
+          'campaign' => $campaign,
+      ));
 
     }
 }

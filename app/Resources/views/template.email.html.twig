@@ -1,0 +1,95 @@
+<html>
+<head>
+<base target="_parent"/>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+{% block meta %}{% endblock %}
+
+<title>{% block title %}{% endblock %}</title>
+
+<link rel="stylesheet" href="{{ asset('assets/css/bootswatch_v4/superhero.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/template.css') }}">
+<link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+
+<!-- Icons -->
+<link href="{{ asset('assets/css/font-awesome.min.css') }}" rel="stylesheet">
+<link href="{{ asset('assets/css/simple-line-icons.css') }}" rel="stylesheet">
+
+{% block css %}{% endblock %}
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]> <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script> <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script> <![endif]-->
+
+
+</head>
+<body>
+  <br>
+<div class="container body-container">
+  <br>
+	<div id="content">
+		 {% block body %}{% endblock %}
+	</div>
+  <br>
+ </div><!-- ./body-container -->
+	<a id="back-to-top" href="#" class="btn btn-primary btn-lg back-to-top" role="button" data-toggle="tooltip" data-placement="left">
+	<i class="fa fa-chevron-up"></i>
+	</a>
+<script type='application/javascript' src="{{ asset('assets/js/libs/jquery-3.2.1.min.js') }}"></script>
+<script type='application/javascript' src="{{ asset('assets/js/libs/tether.min.js') }}"></script>
+<script type='application/javascript' src="{{ asset('assets/js/libs/bootstrap-v4.0.0-alpha.6.min.js') }}"></script>
+<script type='application/javascript' src="{{ asset('assets/js/libs/fastclick.js') }}"></script>
+<script type='application/javascript' src="{{ asset('assets/js/libs/moment.js') }}"></script>
+<script type='application/javascript' src="{{ asset('assets/js/libs/jquery.matchHeight-min.js') }}"></script>
+
+ {% block javascripts %}{% endblock %}
+<!-- IE 10 Viewport Bug Fix -->
+<script src="{{ asset('assets/js/ie10-viewport-bug-workaround.js') }}"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    /*
+    $(".alert-success").fadeTo(2000, 1000).slideUp(1000, function() {
+        $(".alert-success").slideUp(1000);
+    });
+    $(".alert-default").fadeTo(2000, 1000).slideUp(2000, function() {
+        $(".alert-success").slideUp(2000);
+    });
+    $(".alert-info").fadeTo(2000, 1000).slideUp(2000, function() {
+        $(".alert-success").slideUp(2000);
+    });
+*/
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 50) {
+            $('#back-to-top').fadeIn();
+        } else {
+            $('#back-to-top').fadeOut();
+        }
+    });
+    // scroll body to 0px on click
+    $('#back-to-top').click(function() {
+        $('#back-to-top').tooltip('hide');
+        $('body,html').animate({
+            scrollTop: 0
+        }, 800);
+        return false;
+    });
+    $('#back-to-top').tooltip('show');
+    $(function() {
+        FastClick.attach(document.body);
+    });
+
+
+      $(document).ready(function($) {
+          $(".clickable-row").click(function() {
+              window.location = $(this).data("href");
+          });
+          $(".clickable-row").css('cursor', 'pointer');
+
+      });
+
+});
+</script>
+</body>
+</html>
