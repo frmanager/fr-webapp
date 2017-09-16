@@ -67,7 +67,7 @@
 <hr/>
 <div class="row">
     <div class="col-sm-12">
-      <h3>About this Team:</h3>
+      <h3>About this Team</h3>
       <p class="lead">{{ team.description }}</p>
     </div>
 </div>
@@ -75,13 +75,13 @@
 {% if team.teamType.value == "family" %}
 <div class="row">
     <div class="col-sm-12">
-      <h3>Children:</h3>
-    </div>
-</div>
+      <h3>Children</h3>
+    </div><!-- ./column -->
+</div><!-- ./row -->
 <div class="row">
     {% for teamStudent in teamStudents %}
     <div class="col-sm-6">
-      <div class="card">
+      <div class="card card-outline-primary">
         <div class="card-block" style="padding-top: 5px;padding-bottom: 5px;">
           <div class="row">
             <div class="col-sm-2" style="padding: 0px 0px 0px 5px;">
@@ -97,11 +97,42 @@
         </div>
       </div>
     </div>
-  </div>
-    {% if loop.index == 2 or  loop.index == 4 %}
+  </div><!-- ./column -->
+    {% if loop.index is even %}
      {{'</div><br><div class="row">'}}
     {% endif %}
     {% endfor %}
-</div>
+</div><!-- ./row -->
 {% endif %}
+
+<hr>
+{% if team.donations is defined and team.donations|length > 0 %}
+<div class="row">
+    <div class="col-sm-12">
+      <h3>Donations</h3>
+    </div><!-- ./column -->
+</div><!-- ./row -->
+<div class="row">
+    {% for donation in team.donations %}
+      {% if donation.donationStatus == "ACCEPTED" %}
+        <div class="col-sm-6">
+          <div class="card card-outline-primary">
+            <div class="card-block" style="padding-top: 5px;padding-bottom: 5px;">
+                  <p class="card-text">
+                    <strong>${{donation.amount|number_format(2, '.', ',')}}</strong> on {{ donation.donatedAt|date('m/d') }}
+                    <br>
+                    {% if donation.donorComment is defined and donation.donorComment != '' %}"{{ donation.donorComment }}" ~ {{donation.donorFirstName|capitalize}} {{donation.donorLastName|capitalize}}{% else %}{{donation.donorFirstName|capitalize}} {{donation.donorLastName|capitalize}}{% endif %}
+                  </p>
+              </div><!-- ./card-block -->
+          </div><!-- ./card -->
+        </div><!-- ./column -->
+        {% if loop.index is even %}
+         {{'</div><br><div class="row">'}}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+</div><!-- ./row -->
+{% endif %}
+
+
 {% endblock %}
