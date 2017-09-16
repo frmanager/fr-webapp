@@ -21,18 +21,24 @@
                     <tr>
                         <th>Type</th>
                         <th>Name</th>
+                        <th>Donations</th>
+                        <th>Rank</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for team in teams %}
                         <tr>
-                            <td>{{ team.teamType.name }}</td>
+                            <td>{{ team.team_type_name }}</td>
                             <td>
-                                <a href="{{ path('team_show', {'campaignUrl':campaign.url, 'teamUrl': team.url }) }}">{{ team.name }}</a>
+                                <a href="{{ path('team_show', {'campaignUrl':campaign.url, 'teamUrl': team.team_url }) }}">{{ team.team_name }}</a>
+                            </td>
+                            <td style="text-align:right;">{% if not team.donation_amount == 0 %}${{ team.donation_amount|number_format(2, '.', ',')}}</span>{% endif %}</td>
+                            <td style="text-align:center;vertical-align: middle;">
+                              <span class="badge badge-{% if team.rank == 1 %}success{% elseif team.rank == 2 %}warning{% elseif team.rank == 3 %}primary{% else %}default{% endif %}">{{ team.rank }}</span>
                             </td>
                             <td style="text-align:center;">
-                                <a href="{{ path('team_show', {'campaignUrl':campaign.url, 'teamUrl': team.url }) }}" class="btn btn-sm btn-info">
+                                <a href="{{ path('team_show', {'campaignUrl':campaign.url, 'teamUrl': team.team_url }) }}" class="btn btn-sm btn-info">
                                     <i class="glyphicon glyphicon-eye-open"></i>
                                     <span class="hidden-xs hidden-sm">
                                         View</span>
