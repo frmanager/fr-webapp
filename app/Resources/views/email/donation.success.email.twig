@@ -1,4 +1,4 @@
-{% extends 'template.html.twig' %}
+{% extends 'template.email.html.twig' %}
 
 {% block body %}
     <div class="row">
@@ -13,7 +13,7 @@
             Donation Summary
           </div>
           <div class="card-block">
-            <p class="card-text">An email will be sent to the email address below.</p>
+            <p class="card-text">Please Keep this email for your records</p>
             <hr>
             <p class="card-text">The {{campaign.name}} campaign thanks you for your generous donation.</p>
             {% if donation.type == 'teacher' %}
@@ -24,7 +24,6 @@
               <p class="card-text">Donation to: {{donation.team.name}}</p>
             {% else %}
             {% endif %}
-            <p class="card-text">Donor Email: {{donation.donorEmail}}</p>            
             <p class="card-text">Donation Date {{donation.donatedAt|date('Y/m/d')}}</p>
             <p class="card-text">Donation Amount: ${{donation.amount}}</p>
             <p class="card-text">Payment Method: {{donation.paymentMethod}}</p>
@@ -37,7 +36,7 @@
 <br>
 <div class="row">
     <div class="col-md-12 text-center">
-        <a href="{{ path('campaign_index', {'campaignUrl':campaign.url}) }}" class="btn btn-primary">Back to Campaign</a>
+        <a href="{{ path('campaign_index', {'campaignUrl':campaign.url}) }}" class="btn btn-primary">back to Campaign</a>
     </div><!-- ./column -->
 </div><!-- ./row -->
 {% endblock %}

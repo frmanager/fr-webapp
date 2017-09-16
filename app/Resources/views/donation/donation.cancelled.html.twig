@@ -1,0 +1,18 @@
+{% extends 'template.html.twig' %}
+
+{% block body %}
+  <!-- ./row -->
+  <div class="row">
+    <div class="col-md-8 offset-md-2 text-center"><h3>Donation was successfully cancelled</h3></div>
+    <!-- ./column -->
+  </div>
+  <!-- ./row -->
+  <br>
+  <div class="row">
+    <div class="col-md-12 text-center">
+      <a href="{{ path('campaign_index', {'campaignUrl':campaign.url}) }}" class="btn btn-primary">Back to Campaign</a>
+    </div>
+    <!-- ./column -->
+  </div>
+  <!-- ./row -->
+{% endblock %}
