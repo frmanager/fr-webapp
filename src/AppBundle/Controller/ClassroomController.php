@@ -62,13 +62,6 @@ class ClassroomController extends Controller
         return $this->redirectToRoute('campaign_splash', array('campaignUrl'=>$campaign->getUrl(), 'campaign'=>$campaign));
       }
 
-
-
-
-
-
-
-      $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
       $queryHelper = new QueryHelper($em, $logger);
       $tempDate = new DateTime();
       $dateString = $tempDate->format('Y-m-d').' 00:00:00';

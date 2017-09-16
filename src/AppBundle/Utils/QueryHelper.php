@@ -29,6 +29,11 @@ class QueryHelper
         return $this->getData($this->getClassroomsDataQuery($options));
     }
 
+    public function getTeamsData(array $options)
+    {
+        return $this->getData($this->getTeamsDataQuery($options));
+    }
+
     public function getData($queryString)
     {
         //$em = $this->em->getManager();
@@ -46,6 +51,50 @@ class QueryHelper
 
         return $data[0];
     }
+
+
+    public function getTeamsDataQuery(array $options)
+    {
+        $campaign = $options['campaign'];
+
+        if (isset($options['before_date'])) {
+            $date = "AND d.donatedAt <= '".$this->convertToDay($options['before_date'])->format('Y-m-d H:i:s')."' ";
+        } else {
+            $date = '';
+        }
+
+        if (isset($options['id'])) {
+            $whereId = 'WHERE t.id = '.$options['id'];
+        } else {
+            $whereId = '';
+        }
+
+        $queryString = sprintf('SELECT t.id as id,
+                      t.name as team_name,
+                      t.description as team_description,
+                      t.url as team_url,
+                      tt.name as team_type_name,
+                      tt.value as team_type_value,
+                      t.fundingGoal as team_funding_goal,
+                      sum(d.amount) as donation_amount,
+                      count(d.amount) as total_donations
+                 FROM AppBundle:Team t
+      LEFT OUTER JOIN AppBundle:TeamType tt
+                 WITH tt.id = t.teamType
+      LEFT OUTER JOIN AppBundle:Donation d
+                 WITH t.id = d.team
+                  AND d.donationStatus = \'ACCEPTED\'
+                   %s
+                   %s
+                WHERE t.campaign = %s
+             GROUP BY t.id
+             ORDER BY donation_amount DESC', $date, $whereId, $campaign->getId());
+
+        $this->logger->debug('Query : '.$queryString);
+
+        return $queryString;
+    }
+
 
     public function getStudentsDataQuery(array $options)
     {
@@ -78,6 +127,7 @@ class QueryHelper
                  WITH t.id = s.classroom
       LEFT OUTER JOIN AppBundle:Donation d
                  WITH s.id = d.student
+                  AND d.donationStatus = \'ACCEPTED\'
                    %s
       LEFT OUTER JOIN AppBundle:Grade g
                  WITH g.id = t.grade
@@ -105,6 +155,7 @@ class QueryHelper
                                        count(d.amount) as total_donations
                                   FROM AppBundle:Donation d
                                  WHERE d.campaign = %s
+                                   AND d.donationStatus = \'ACCEPTED\'
                                   %s', $campaign->getId(), $date);
 
         $this->logger->debug('Query : '.$queryString);
@@ -139,6 +190,7 @@ class QueryHelper
                                   FROM AppBundle:Classroom t
                        LEFT OUTER JOIN AppBundle:Donation d
                                   WITH t.id = d.classroom
+                                   AND d.donationStatus = \'ACCEPTED\'
                                    %s
                                   JOIN AppBundle:Grade g
                                   WITH g.id = t.grade
@@ -180,6 +232,7 @@ class QueryHelper
                    FROM AppBundle:Classroom t
                    JOIN AppBundle:Donation d
                    WITH t.id = d.classroom
+                    AND d.donationStatus = \'ACCEPTED\'
                       %s
                    JOIN AppBundle:Grade g
                    WITH g.id = t.grade
@@ -192,6 +245,50 @@ class QueryHelper
 
         return $queryString;
     }
+
+
+    public function getTeamDonationsByDayQuery(array $options)
+    {
+        $campaign = $options['campaign'];
+
+        if (isset($options['before_date'])) {
+            $date = "AND d.donatedAt <= '".$this->convertToDay($options['before_date'])->format('Y-m-d H:i:s')."' ";
+        } else {
+            $date = '';
+        }
+
+        if (isset($options['id'])) {
+            $whereId = 'WHERE t.id = '.$options['id'];
+        } else {
+            $whereId = '';
+        }
+
+        $queryString = sprintf('SELECT s.id as id,
+                      t.name as team_name,
+                      t.description as team_description,
+                      t.url as team_url,
+                      tt.name as team_type_name,
+                      tt.value as team_type_value,
+                      t.funding_goal as team_funding_goal
+                      sum(d.amount) as donation_amount,
+                      count(d.amount) as total_donations
+                 FROM AppBundle:Teams t
+      LEFT OUTER JOIN AppBundle:TeamType tt
+                 WITH tt.id = t.teamType
+      LEFT OUTER JOIN AppBundle:Donation d
+                 WITH t.id = d.team
+                  AND d.donationStatus = \'ACCEPTED\'
+                   %s
+                   %s
+                WHERE s.campaign = %s
+             GROUP BY d.donatedAt, t.id
+             ORDER BY donation_amount DESC', $date, $whereId, $campaign->getId());
+
+        $this->logger->debug('Query : '.$queryString);
+
+        return $queryString;
+    }
+
 
 
     /*
@@ -227,6 +324,7 @@ class QueryHelper
 
         return $newObjectArray;
     }
+
 
     public function getRanks(array $objects, array $settings)
     {
@@ -346,6 +444,16 @@ class QueryHelper
     public function getClassroomRank($id, array $options)
     {
         return $this->getRank($this->getClassroomsData($options), $id, $options);
+    }
+
+    public function getTeamRanks(array $options)
+    {
+        return $this->getRanks($this->getTeamsData($options), $options);
+    }
+
+    public function getTeamRank($id, array $options)
+    {
+        return $this->getRank($this->getTeamsData($options), $id, $options);
     }
 
     public function getStudentRanks(array $options)
@@ -500,6 +608,7 @@ class QueryHelper
 
         return $loaddedAwardArray;
     }
+
 
     public function convertToDay($inDate)
     {

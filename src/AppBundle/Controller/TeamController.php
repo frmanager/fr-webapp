@@ -60,10 +60,13 @@ class TeamController extends Controller
         return $this->redirectToRoute('campaign_splash', array('campaignUrl'=>$campaign->getUrl(), 'campaign'=>$campaign));
       }
 
+      $queryHelper = new QueryHelper($em, $logger);
+      $tempDate = new DateTime();
+      $dateString = $tempDate->format('Y-m-d').' 00:00:00';
+      $reportDate = DateTime::createFromFormat('Y-m-d H:i:s', $dateString);
 
-      // replace this example code with whatever you need
       return $this->render('team/team.index.html.twig', array(
-        'teams' => $em->getRepository('AppBundle:Team')->findByCampaign($campaign),
+        'teams' => $queryHelper->getTeamRanks(array('campaign' => $campaign, 'limit'=> 0)),
         'entity' => strtolower($entity),
         'campaign' => $campaign,
       ));
@@ -115,8 +118,14 @@ class TeamController extends Controller
           return $this->redirectToRoute('team_index', array('campaignUrl'=>$campaign->getUrl()));
         }
 
+        $queryHelper = new QueryHelper($em, $logger);
+        $tempDate = new DateTime();
+        $dateString = $tempDate->format('Y-m-d').' 00:00:00';
+        $reportDate = DateTime::createFromFormat('Y-m-d H:i:s', $dateString);
+
         return $this->render('team/team.show.html.twig', array(
             'team' => $team,
+            'team_rank' => $queryHelper->getTeamRank($team->getId(), array('campaign' => $campaign, 'limit'=> 0)),
             'entity' => $entity,
             'campaign' => $campaign,
             'teamStudents' => $team->getTeamStudents(),
