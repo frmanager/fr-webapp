@@ -27,14 +27,23 @@
               <div class="col-sm-7">
                   <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                       <div class="btn-group mr-3" aria-label="First group">
-                          <a href="{{ path('profile_show', {'campaignUrl':campaign.url}) }}" class="btn btn-outline-primary"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Profile</a>
+                          <!-- <a href="{{ path('profile_show', {'campaignUrl':campaign.url}) }}" class="btn btn-outline-primary"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Profile</a>-->
                       </div>
                   </div>
               </div><!--/.col-->
           </div>
           <hr>
           <div class="row">
-            <div class="col-sm-3">
+            <div class="col-sm-3 text-right">
+              Name:
+            </div><!-- ./column -->
+            <div class="col-sm-9">
+              {{ user.firstName }} {{ user.lastName }}
+            </div><!-- ./column -->
+          </div><!-- ./row -->
+          <br>
+          <div class="row">
+            <div class="col-sm-3 text-right">
               Email Address:
             </div><!-- ./column -->
             <div class="col-sm-9">
@@ -42,20 +51,32 @@
             </div><!-- ./column -->
           </div><!-- ./row -->
           {% if user.userStatus.name != "Confirmed" %}
-
           <div class="row">
             <div class="col-sm-9 offset-sm-3 text-muted">
-              Click <a href="{{ path('profile_show', {'campaignUrl':campaign.url, "action":"resend_email_confirmation"}) }}" >here</a> to send another confirmation email
+              Click <a href="{{ path('confirm_email', {'campaignUrl':campaign.url, "action":"resend_email_confirmation"}) }}" >here</a> to send another confirmation email
             </div><!-- ./column -->
           </div><!-- ./row -->
           {% endif %}
-          <hr>
+          <br>
           <div class="row">
-            <div class="col-sm-3">
+            <div class="col-sm-3 text-right">
               Password:
             </div><!-- ./column -->
             <div class="col-sm-9">
-              <a href="{{ path('profile_show', {'campaignUrl':campaign.url}) }}" class="btn btn-sm btn-outline-info"><i class="fa fa-unlock" aria-hidden="true"></i> Change Password</a>
+              <a href="{{ path('profile_change_password', {'campaignUrl':campaign.url}) }}" class="btn btn-sm btn-outline-info"><i class="fa fa-unlock" aria-hidden="true"></i> Change Password</a>
+            </div><!-- ./column -->
+          </div><!-- ./row -->
+          <br>
+          <div class="row">
+            <div class="col-sm-3 text-right">
+              Team:
+            </div><!-- ./column -->
+            <div class="col-sm-9">
+              {% if team is defined %}
+              <a href="{{ path('team_show', {'campaignUrl':campaign.url, 'teamUrl':team.url}) }}" >{{ team.name }}</a>
+              {% else %}
+              <a href="{{ path('register_team_select', {'campaignUrl':campaign.url}) }}" >Create one Now!</a>
+              {% endif %}
             </div><!-- ./column -->
           </div><!-- ./row -->
         </div><!-- ./card-block -->

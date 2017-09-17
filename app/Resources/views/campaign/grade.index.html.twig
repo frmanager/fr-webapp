@@ -20,22 +20,22 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Actions</th>
+                        <th>Donations</th>
+                        <th>Rank</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for grade in grades %}
                         <tr>
                             <td>
-                                <a href="{{ path('grade_show', {'campaignUrl':campaign.url, 'id': grade.id }) }}">{{ grade.name }}</a>
+                                {{ grade.name }}
                             </td>
                             <td style="text-align:center;">
-                                <a href="{{ path('grade_show', {'campaignUrl':campaign.url, 'id': grade.id }) }}" class="btn btn-sm btn-info">
-                                    <i class="glyphicon glyphicon-eye-open"></i>
-                                    <span class="hidden-xs hidden-sm">
-                                        View</span>
-                                </a>
+                                TBD
                             </td>
+                            <td style="text-align:center;">
+                                TBD
+                            </td>                            
                         </tr>
                     {% endfor %}
                 </tbody>

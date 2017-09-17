@@ -303,6 +303,7 @@ class RegistrationController extends Controller
                 $user->setEmailConfirmationCode = null;
                 $userStatus =  $em->getRepository('AppBundle:UserStatus')->findOneByName("CONFIRMED");
                 $user->setUserStatus($userStatus);
+                $user->setIsActive(true);
                 $em->persist($user);
                 $em->flush();
 
