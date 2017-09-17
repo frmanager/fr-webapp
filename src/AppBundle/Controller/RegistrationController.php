@@ -33,9 +33,6 @@ class RegistrationController extends Controller
     public function registerAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
         $logger = $this->get('logger');
-        // 1) build the form
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
 
         if(!empty($request->attributes->get('_route_params'))){
           $routeParams = $request->attributes->get('_route_params');
@@ -45,17 +42,29 @@ class RegistrationController extends Controller
           }
         }
 
-
+        //Verifying if user is logged in, if their account is confirmed, and if their team already exists
         $securityContext = $this->container->get('security.authorization_checker');
         if ($securityContext->isGranted('ROLE_USER')) {
-          return $this->redirectToRoute('register_team_select', array('campaignUrl' => $campaign->getUrl()));
+          $logger->debug("User is already logged in and has an account. Checking for email confirmation");
+          $user = $this->get('security.token_storage')->getToken()->getUser();
+          if($user->getUserStatus()->getName() == "Confirmed"){
+            $team = $em->getRepository('AppBundle:Team')->findOneBy(array('user' => $user, 'campaign' => $campaign));
+            if(is_null($team)){
+              $this->get('session')->getFlashBag()->add('warning', 'Hi, it looks like you have not completed your team registration yet');
+              return $this->redirectToRoute('register_team_select', array('campaignUrl' => $campaign->getUrl()));
+            }
+          }else{
+            return $this->redirectToRoute('confirm_email', array('campaignUrl' => $campaign->getUrl()));
+          }
         }
 
+        // 1) build the form
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user);
 
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
-
 
             $userCheck = $em->getRepository('AppBundle:User')->findOneByEmail($user->getEmail());
             if(!is_null($userCheck)){
@@ -72,7 +81,8 @@ class RegistrationController extends Controller
             $user->setPassword($password);
             $user->setApiKey($password);
             $user->setUsername($user->getEmail());
-            $user->setEmailConfirmationCode(base64_encode(random_bytes(20)));
+            $user->setFundraiserFlag(true);
+            $user->setEmailConfirmationCode($this->generateRandomString(8));
             $user->setEmailConfirmationCodeTimestamp(new \DateTime());
             //Get User Status
             $userStatus = $em->getRepository('AppBundle:UserStatus')->findOneByName('Registered');
@@ -88,6 +98,19 @@ class RegistrationController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
 
+            //Send Confirmation Email
+            //Send Email
+            $message = (new \Swift_Message("FR Manager account activation code"))
+              ->setFrom('funrun@lrespto.org') //TODO: Change this to parameter for support email
+              ->setTo($user->getEmail())
+              ->setContentType("text/html")
+              ->setBody(
+                  $this->renderView('email/email_confirmation.email.twig', array('campaign' => $campaign, 'user' => $user))
+              );
+
+            $this->get('mailer')->send($message);
+
+
             //Create CampaignUser
             $campaignUser = new CampaignUser();
             $campaignUser->setUser($user);
@@ -100,7 +123,7 @@ class RegistrationController extends Controller
             $this->authenticateUser($user);
             $this->addFlash('success','Thanks for registering. You should receive an email with instructions on how to fully activate your account.');
 
-            return $this->redirectToRoute('register_team_select', array('campaignUrl' => $campaign->getUrl()));
+            return $this->redirectToRoute('confirm_email', array('campaignUrl' => $campaign->getUrl()));
         }
 
         return $this->render('registration/register.html.twig',
@@ -157,6 +180,13 @@ class RegistrationController extends Controller
         return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
       }
 
+      //Verifying if user has completed email confirmation
+      $user = $this->get('security.token_storage')->getToken()->getUser();
+      if($user->getUserStatus()->getName() !== "Confirmed"){
+          $this->get('session')->getFlashBag()->add('warning', 'Hi, it looks like you have not confirmed your email yet.');
+          return $this->redirectToRoute('confirm_email', array('campaignUrl' => $campaign->getUrl()));
+      }
+
       //Make sure user doesn't already have a team setup for this campaign.
       $teamCheck = $em->getRepository('AppBundle:Team')->findOneBy(array('campaign' => $campaign, 'user' => $this->get('security.token_storage')->getToken()->getUser()));
       if(!is_null($teamCheck)){
@@ -164,11 +194,138 @@ class RegistrationController extends Controller
         return $this->redirectToRoute('team_show', array('campaignUrl' => $campaign->getUrl(), 'teamUrl' => $teamCheck->getUrl()));
       }
 
+
       return $this->render('team/team.type.select.html.twig', array(
         'campaign' => $campaign,
         'teamTypes' => $teamTypes
       ));
     }
+
+
+
+    /**
+     * Confirms Email Address
+     *
+     * @Route("/confirm_email", name="confirm_email")
+     *
+     */
+      public function emailConfirmationAction(Request $request, $campaignUrl)
+      {
+
+          $logger = $this->get('logger');
+          $logger->debug("Entering RegistrationController->emailConfirmationAction");
+          $em = $this->getDoctrine()->getManager();
+
+          $this->denyAccessUnlessGranted('ROLE_USER');
+
+          //CODE TO CHECK TO SEE IF CAMPAIGN EXISTS
+          $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
+          $accessFail = false;
+          //Does Campaign Exist? if not, fail
+          if(is_null($campaign)){
+            $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
+            return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
+          //If it does exist, is it "offline"? if not, fail
+          }elseif(!$campaign->getOnlineFlag()){
+            $securityContext = $this->container->get('security.authorization_checker');
+            //If it is offline, is a user logged in? If not, fail
+            if ($securityContext->isGranted('ROLE_USER')) {
+              $campaignHelper = new CampaignHelper($em, $logger);
+              //Does that user have access to the campaign? If not, fail
+              if(!$campaignHelper->campaignPermissionsCheck($this->get('security.token_storage')->getToken()->getUser(), $campaign)){
+                $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
+                return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
+              }
+            }else{
+              $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
+              return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
+            }
+          }elseif($campaign->getStartDate() > new DateTime("now")){
+            return $this->redirectToRoute('campaign_splash', array('campaignUrl'=>$campaign->getUrl(), 'campaign'=>$campaign));
+          }
+
+          $user = $this->get('security.token_storage')->getToken()->getUser();
+          if(null !== $request->query->get('action')){
+              $action = $request->query->get('action');
+
+              if($action === 'resend_email_confirmation'){
+                $user->setEmailConfirmationCode($this->generateRandomString(8));
+                $user->setEmailConfirmationCodeTimestamp(new \DateTime());
+                $em->persist($user);
+                $em->flush();
+
+                //Send Email
+                $message = (new \Swift_Message("FR Manager account activation code"))
+                  ->setFrom('funrun@lrespto.org') //TODO: Change this to parameter for support email
+                  ->setTo($user->getEmail())
+                  ->setContentType("text/html")
+                  ->setBody(
+                      $this->renderView('email/email_confirmation.email.twig', array('campaign' => $campaign, 'user' => $user))
+                  );
+
+                $this->get('mailer')->send($message);
+
+                $this->get('session')->getFlashBag()->add('info', 'New code has been sent to your email, please check your inbox');
+                return $this->redirectToRoute('confirm_email', array('campaignUrl' => $campaign->getUrl()));
+              }
+          }
+
+          if ($request->isMethod('POST')) {
+              $fail = false;
+              $params = $request->request->all();
+
+              if(empty($params['user']['emailConfirmationCode'])){
+                $this->addFlash('warning','Please input the Email Confirmation Code');
+                $fail = true;
+              }else{
+                $confirmationCode = $params['user']['emailConfirmationCode'];
+              }
+
+              //see if the emailConfirmationCode is still Valid
+              //Its only valid for 30 minutes
+              //We take the timestamp in the database, add 30 minutes, and see if it is still greater than Now...
+              $dateNow = (new \DateTime());
+              $userEmailConfirmationCodeTimestamp = $user->getEmailConfirmationCodeTimestamp()->modify('+30 minutes');
+              if(!$fail && $userEmailConfirmationCodeTimestamp < $dateNow){
+                $logger->debug("Code is expired");
+                $this->addFlash('warning','This confirmation code is expired');
+                $fail = true;
+              }
+
+              if(!$fail && $user->getEmailConfirmationCode() !== $confirmationCode){
+                $logger->debug("Code does not match what is in the database");
+                $this->addFlash('warning','Confirmation code does not match our records');
+                $fail = true;
+              }
+
+              if(!$fail){
+                $this->addFlash('warning','Thank you for confirming your account');
+                $user->setEmailConfirmationCode = null;
+                $userStatus =  $em->getRepository('AppBundle:UserStatus')->findOneByName("CONFIRMED");
+                $user->setUserStatus($userStatus);
+                $em->persist($user);
+                $em->flush();
+
+                $logger->debug("User is confirmed, checking to see if they have already registered their team");
+                $team = $em->getRepository('AppBundle:Team')->findOneBy(array('user' => $user, 'campaign' => $campaign));
+                if(is_null($team)){
+                  $logger->debug("Team is not registered, forwarding them to the correct page");
+                  return $this->redirectToRoute('register_team_select', array('campaignUrl' => $campaign->getUrl()));
+                }else{
+                  return $this->redirectToRoute('campaign_index', array('campaignUrl' => $campaign->getUrl()));
+                }
+
+              }
+
+          }
+
+          return $this->render('registration/confirmed.html.twig', array(
+            'campaign' => $campaign,
+            'user' => $user,
+          ));
+
+
+      }
 
 
 
@@ -194,7 +351,6 @@ class RegistrationController extends Controller
         $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this teamType.');
         return $this->redirectToRoute('register_team_select', array('campaignUrl' => $campaign->getUrl()));
       }
-
 
       if ($request->isMethod('POST')) {
           $fail = false;
@@ -258,6 +414,11 @@ class RegistrationController extends Controller
             $team->setUser($this->get('security.token_storage')->getToken()->getUser());
             $team->setCreatedBy($this->get('security.token_storage')->getToken()->getUser());
             $em->persist($team);
+            $em->flush();
+
+            $user = $em->getRepository('AppBundle:User')->find($this->get('security.token_storage')->getToken()->getUser()->getId());
+            $user->setFundraiserFlag(true);
+            $em->persist($user);
             $em->flush();
 
             //If is a "family" page, we need to add students
@@ -372,5 +533,17 @@ class RegistrationController extends Controller
       }
       return $newUrl;
     }
+
+
+    private function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
 
 }

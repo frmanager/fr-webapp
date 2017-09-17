@@ -122,7 +122,7 @@
     			</a>
     			<div class="dropdown-menu" aria-labelledby="drop3">
             {% if hasTeamFlag and userTeam is defined %}
-            <a class="dropdown-item" href="{{ path('team_show', {'campaignUrl': campaignUrl, 'teamUrl': userTeam.url}) }}">View Teaam</a>
+            <a class="dropdown-item" href="{{ path('team_show', {'campaignUrl': campaignUrl, 'teamUrl': userTeam.url}) }}">View Team</a>
             {% else %}
             <a class="dropdown-item" href="{{ path('register_team_select', {'campaignUrl': campaignUrl}) }}">Register Team</a>
             {% endif %}

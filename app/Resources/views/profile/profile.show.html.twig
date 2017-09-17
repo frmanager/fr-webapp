@@ -1,0 +1,66 @@
+{% extends 'template.html.twig' %}
+{% block meta %}{% endblock %}
+
+{% block title %}
+  {{ user.firstName }}
+  {{ user.lastName }}'s' Profile
+{% endblock %}
+
+{% block body %}
+<div class="row">
+  <div class="col-sm-8 offset-sm-2">
+    <h1>Profile</h1>
+  </div>
+  <!-- ./column -->
+</div>
+<!-- ./row -->
+<hr>
+  <div class="row">
+    <div class="col-sm-8 offset-sm-2">
+      <div class="card">
+        <div class="card-block">
+          <div class="row">
+              <div class="col-sm-5">
+                  <h4 class="card-title mb-0">{{ user.firstName }} {{ user.lastName }}</h4>
+                  <div class="small text-muted">Joined {{ user.createdAt|date('F d, Y') }}</div>
+              </div><!--/.col-->
+              <div class="col-sm-7">
+                  <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                      <div class="btn-group mr-3" aria-label="First group">
+                          <a href="{{ path('profile_show', {'campaignUrl':campaign.url}) }}" class="btn btn-outline-primary"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Profile</a>
+                      </div>
+                  </div>
+              </div><!--/.col-->
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-sm-3">
+              Email Address:
+            </div><!-- ./column -->
+            <div class="col-sm-9">
+              {{ user.email }} {{ user.userStatus.name == "Confirmed" ? '<span class="badge badge-success">Verified!</span>' : '<span class="badge badge-danger">Not Verified</span>'}}
+            </div><!-- ./column -->
+          </div><!-- ./row -->
+          {% if user.userStatus.name != "Confirmed" %}
+
+          <div class="row">
+            <div class="col-sm-9 offset-sm-3 text-muted">
+              Click <a href="{{ path('profile_show', {'campaignUrl':campaign.url, "action":"resend_email_confirmation"}) }}" >here</a> to send another confirmation email
+            </div><!-- ./column -->
+          </div><!-- ./row -->
+          {% endif %}
+          <hr>
+          <div class="row">
+            <div class="col-sm-3">
+              Password:
+            </div><!-- ./column -->
+            <div class="col-sm-9">
+              <a href="{{ path('profile_show', {'campaignUrl':campaign.url}) }}" class="btn btn-sm btn-outline-info"><i class="fa fa-unlock" aria-hidden="true"></i> Change Password</a>
+            </div><!-- ./column -->
+          </div><!-- ./row -->
+        </div><!-- ./card-block -->
+      </div><!-- ./card -->
+    </div><!-- ./column -->
+  </div><!-- ./row -->
+
+{% endblock %}

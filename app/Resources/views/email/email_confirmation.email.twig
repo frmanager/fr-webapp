@@ -1,0 +1,23 @@
+{% extends 'template.email.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1 class="display-4">Confirm your email to join the {{ campaign.name }} campaign</h1>
+        </div><!-- ./column -->
+    </div><!-- ./row -->
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+        <div class="card">
+          <div class="card-block">
+            <p class="card-text">Please use the code below to confirm your FR Manager Account</p>
+            <h3 class="card-title">{{ user.emailConfirmationCode }}</h3>
+            <br>
+            <p class="card-text">If you have closed the page, click <a href="{{ main_app_url }}{{ path('confirm_email', {'campaignUrl': campaign.url}) }}">here</a> to go to the account confirmation page.</p>            
+            <br>
+            <p class="card-text">Thanks!<br>~ FR Manager support team</p>
+          </div>
+        </div><!-- ./card -->
+    </div><!-- ./column -->
+</div><!-- ./row -->
+{% endblock %}
