@@ -30,7 +30,7 @@
               <tbody>
                   {% for classroom in classrooms %}
                       <tr>
-                          <td><a href="{{ path('grade_show', {'campaignUrl': campaign.url, 'id': classroom.grade_id }) }}">{{ classroom.grade_name}}</a></td>
+                          <td>{{ classroom.grade_name}}</td>
                           <td><a href="{{ path(entity|lower ~ '_show', {'campaignUrl': campaign.url, 'id': classroom.id }) }}">{{ classroom.classroom_name }}</a></td>
                           <td style="text-align:right;">{% if not classroom.donation_amount == 0 %}${{ classroom.donation_amount|number_format(2, '.', ',')}}</span>{% endif %}</td>
                           <td style="text-align:center;vertical-align: middle;"><span class="badge badge-{% if classroom.rank == 1 %}success{% elseif classroom.rank == 2 %}warning{% elseif classroom.rank == 3 %}primary{% else %}default{% endif %}">{{ classroom.rank}}</span></td>

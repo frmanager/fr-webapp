@@ -88,13 +88,13 @@
   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
   </button>
-  <a class="navbar-brand" href="#">{{campaign.name}}</a>
+  <a class="navbar-brand" href="{{ path('campaign_index', {'campaignUrl': campaignUrl}) }}">{{campaign.name}}</a>
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
     {% if campaign is defined %}
 		<ul class="navbar-nav mr-auto">
 			<li class="nav-item{% if app.request.attributes.get('_route')=='campaign_index'%} active{% endif %}">
 			<a href="{{ path('campaign_index', {'campaignUrl': campaignUrl}) }}" class="nav-link">
-			HOME </a>
+			DASHBOARD </a>
 			</li>
       {% if not notStarted %}
         <li class="dropdown nav-item">
@@ -121,12 +121,14 @@
     			<i class="fa fa-user"></i>&nbsp; {{ app.user.username }}&nbsp; <span class="caret"></span>
     			</a>
     			<div class="dropdown-menu" aria-labelledby="drop3">
+            <a class="dropdown-item" href="{{ path('profile_show', {'campaignUrl': campaignUrl}) }}"><i class="fa fa-user" aria-hidden="true"></i> View Profile</a>
             {% if hasTeamFlag and userTeam is defined %}
-            <a class="dropdown-item" href="{{ path('team_show', {'campaignUrl': campaignUrl, 'teamUrl': userTeam.url}) }}">View Team</a>
+            <a class="dropdown-item" href="{{ path('team_show', {'campaignUrl': campaignUrl, 'teamUrl': userTeam.url}) }}"><i class="fa fa-users" aria-hidden="true"></i> View Team</a>
             {% else %}
             <a class="dropdown-item" href="{{ path('register_team_select', {'campaignUrl': campaignUrl}) }}">Register Team</a>
             {% endif %}
-    				<a class="dropdown-item" href="{{ path('logout', {'campaignUrl': campaignUrl}) }}">Logout</a>
+            <hr>
+    				<a class="dropdown-item" href="{{ path('logout', {'campaignUrl': campaignUrl}) }}"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
     			</div>
     			</li>
         	</ul>
