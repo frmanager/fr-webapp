@@ -75,16 +75,24 @@ class SecurityController extends Controller
         return $this->redirectToRoute('homepage', array('action' => 'list_campaigns'));
       }
 
+      $logger->debug("Checking to see if user is confirmed");
       $user = $this->get('security.token_storage')->getToken()->getUser();
       //CODE TO CHECK TO SEE IF A USERS TEAM EXISTS, IF NOT, THEY NEED TO CREATE ONE
-      $team = $em->getRepository('AppBundle:Team')->findOneBy(array('user' => $user, 'campaign' => $campaign));
-      if(is_null($team)){
-        $this->get('session')->getFlashBag()->add('warning', 'Hi, it looks like you have not completed your team registration yet');
-        return $this->redirectToRoute('register_team_select', array('campaignUrl'=>$campaign->getUrl()));
+      if($user->getUserStatus()->getName() == "Confirmed"){
+        $logger->debug("User is confirmed, checking to see if they have already registered their team");
+        $team = $em->getRepository('AppBundle:Team')->findOneBy(array('user' => $user, 'campaign' => $campaign));
+        if(is_null($team)){
+          $logger->debug("Team is not registered, forwarding them to the correct page");
+          $this->get('session')->getFlashBag()->add('warning', 'Hi, it looks like you have not completed your team registration yet');
+          return $this->redirectToRoute('register_team_select', array('campaignUrl' => $campaign->getUrl()));
+        }
+      }else{
+        $logger->debug("User is not fully registered, sending to confirm_email");
+        $this->get('session')->getFlashBag()->add('warning', 'Hi, it looks like you have not confirmed your email yet.');
+        return $this->redirectToRoute('confirm_email', array('campaignUrl' => $campaign->getUrl()));
       }
 
       return $this->redirectToRoute('campaign_index', array('campaignUrl' => $campaign->getUrl()));
-
   }
 
 

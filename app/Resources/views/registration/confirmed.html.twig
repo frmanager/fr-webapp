@@ -1,8 +1,50 @@
 {% extends 'template.html.twig' %}
+{% block meta %}{% endblock %}
+
+{% block title %}
+  Confirm your account
+{% endblock %}
 
 {% block body %}
-    <p>{{ 'registration.confirmed'|trans({'%username%': user.username}) }}</p>
-    {% if targetUrl %}
-    <p><a href="{{ targetUrl }}">{{ 'registration.back'|trans }}</a></p>
-    {% endif %}
+  <div class="row">
+    <div class="col-sm-8 offset-sm-2">
+      <div class="card">
+        <div class="card-block">
+          <h5 class="card-title">Please input the confirmation code from your email in the box below.</h5>
+          <br>
+          <form name="user" method="post" class="">
+            <div class="form-group">
+              <div class="col-sm-6">
+                <label for="user_emailConfirmationCode" class="required" class="sr-only">Email Confirmation Code</label>
+                <input class="form-control" type="text" id="user_emailConfirmationCode" name="user[emailConfirmationCode]" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-12">
+                <p>
+                  Didn't receive a confirmation email? click
+                  <a href="{{ path('confirm_email', {'campaignUrl':campaign.url, 'action': 'resend_email_confirmation' }) }}">here</a>
+                  to send another one.
+                </p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col">
+                <button type="submit" id="submit" class="btn btn-primary">Confirm your account</button>
+              </div>
+              <!-- ./col -->
+            </div>
+            <!-- ./row -->
+          </form>
+          <!-- ./form -->
+        </div>
+        <!-- ./card-block -->
+      </div>
+      <!-- ./card -->
+    </div>
+    <!-- ./col -->
+  </div>
+  <!-- ./row -->
+
 {% endblock body %}

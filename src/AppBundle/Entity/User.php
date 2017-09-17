@@ -105,19 +105,43 @@ class User implements UserInterface
      */
     private $campaignManagerFlag = false;
 
+    /**
+    * @ORM\Column(type="datetime")
+    */
+   protected $createdAt;
+
+
+   /**
+    * @ORM\Column(type="datetime")
+    */
+   protected $updatedAt;
+
 
     /**
      * @ORM\Column(name="is_active", type="boolean")
      */
-    private $isActive;
+    private $isActive = false;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
-        $this->isActive = true;
-        // may not be needed, see section on salt below
-        // $this->salt = md5(uniqid(null, true));
+        $this->createdAt= new \DateTime();
+        $this->updatedAt= new \DateTime();
+        $this->joinDate= new \DateTime();
     }
 
+
+    /**
+     * @ORM\PreUpdate()
+     */
+    public function preUpdate()
+    {
+        $this->updatedAt= new \DateTime();
+    }
+
+    
     public function getUsername()
     {
         return $this->email;
@@ -542,4 +566,52 @@ class User implements UserInterface
     }
 
 
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     *
+     * @return User
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return User
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
 }

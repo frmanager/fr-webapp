@@ -3,7 +3,7 @@ app:
     type:     annotation
 
 secure:
-    path:     /secure
+    path:     /
     defaults: { _controller: AppBundle:Main:secure }
     schemes:  [https]
 

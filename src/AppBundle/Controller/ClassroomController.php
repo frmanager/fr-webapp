@@ -75,65 +75,6 @@ class ClassroomController extends Controller
 
   }
 
-    /**
-     * Creates a new Classroom entity.
-     *
-     * @Route("/new", name="classroom_new")
-     * @Method({"GET", "POST"})
-     */
-    public function newAction(Request $request, $campaignUrl)
-    {
-        $entity = 'Classroom';
-        $classroom = new Classroom();
-
-
-        //CODE TO CHECK TO SEE IF CAMPAIGN EXISTS
-        $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
-        $accessFail = false;
-        //Does Campaign Exist? if not, fail
-        if(is_null($campaign)){
-          $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
-          return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
-        //If it does exist, is it "offline"? if not, fail
-        }elseif(!$campaign->getOnlineFlag()){
-          $securityContext = $this->container->get('security.authorization_checker');
-          //If it is offline, is a user logged in? If not, fail
-          if ($securityContext->isGranted('ROLE_USER')) {
-            $campaignHelper = new CampaignHelper($em, $logger);
-            //Does that user have access to the campaign? If not, fail
-            if(!$campaignHelper->campaignPermissionsCheck($this->get('security.token_storage')->getToken()->getUser(), $campaign)){
-              $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
-              return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
-            }
-          }else{
-            $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
-            return $this->redirectToRoute('homepage', array('action'=>'list_campaigns'));
-          }
-        }elseif($campaign->getStartDate() > new DateTime("now")){
-          return $this->redirectToRoute('campaign_splash', array('campaignUrl'=>$campaign->getUrl(), 'campaign'=>$campaign));
-        }
-
-
-
-
-
-        $form = $this->createForm('AppBundle\Form\ClassroomType', $classroom);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($classroom);
-            $em->flush();
-
-            return $this->redirectToRoute('classroom_index', array('id' => $classroom->getId()));
-        }
-
-        return $this->render('crud/new.html.twig', array(
-            'classroom' => $classroom,
-            'form' => $form->createView(),
-            'entity' => $entity,
-        ));
-    }
 
     /**
      * Finds and displays a Classroom entity.

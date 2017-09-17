@@ -9,13 +9,13 @@
 
 <title>{% block title %}{% endblock %}</title>
 
-<link rel="stylesheet" href="{{ asset('assets/css/bootswatch_v4/superhero.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/template.css') }}">
+<link rel="stylesheet" href="{{ main_app_url }}{{ asset('assets/css/bootswatch_v4/superhero.min.css') }}">
+<link rel="stylesheet" href="{{ main_app_url }}{{ asset('assets/css/template.css') }}">
 <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
 
 <!-- Icons -->
-<link href="{{ asset('assets/css/font-awesome.min.css') }}" rel="stylesheet">
-<link href="{{ asset('assets/css/simple-line-icons.css') }}" rel="stylesheet">
+<link href="{{ main_app_url }}{{ asset('assets/css/font-awesome.min.css') }}" rel="stylesheet">
+<link href="{{ main_app_url }}{{ asset('assets/css/simple-line-icons.css') }}" rel="stylesheet">
 
 {% block css %}{% endblock %}
 
@@ -37,16 +37,14 @@
 	<a id="back-to-top" href="#" class="btn btn-primary btn-lg back-to-top" role="button" data-toggle="tooltip" data-placement="left">
 	<i class="fa fa-chevron-up"></i>
 	</a>
-<script type='application/javascript' src="{{ asset('assets/js/libs/jquery-3.2.1.min.js') }}"></script>
-<script type='application/javascript' src="{{ asset('assets/js/libs/tether.min.js') }}"></script>
-<script type='application/javascript' src="{{ asset('assets/js/libs/bootstrap-v4.0.0-alpha.6.min.js') }}"></script>
-<script type='application/javascript' src="{{ asset('assets/js/libs/fastclick.js') }}"></script>
-<script type='application/javascript' src="{{ asset('assets/js/libs/moment.js') }}"></script>
-<script type='application/javascript' src="{{ asset('assets/js/libs/jquery.matchHeight-min.js') }}"></script>
+<script type='application/javascript' src="{{ main_app_url }}{{ asset('assets/js/libs/jquery-3.2.1.min.js') }}"></script>
+<script type='application/javascript' src="{{ main_app_url }}{{ asset('assets/js/libs/tether.min.js') }}"></script>
+<script type='application/javascript' src="{{ main_app_url }}{{ asset('assets/js/libs/bootstrap-v4.0.0-alpha.6.min.js') }}"></script>
+<script type='application/javascript' src="{{ main_app_url }}{{ asset('assets/js/libs/fastclick.js') }}"></script>
 
  {% block javascripts %}{% endblock %}
 <!-- IE 10 Viewport Bug Fix -->
-<script src="{{ asset('assets/js/ie10-viewport-bug-workaround.js') }}"></script>
+<script src="{{ main_app_url }}{{ asset('assets/js/ie10-viewport-bug-workaround.js') }}"></script>
 <script type="text/javascript">
 $(document).ready(function() {
     /*
