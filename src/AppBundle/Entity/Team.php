@@ -99,6 +99,11 @@ class Team
     */
    private $donations;
 
+   /**
+    * @ORM\OneToMany(targetEntity="DonationDatabase", mappedBy="team", cascade={"remove"})
+    */
+   private $donationDatabases;
+
 
    /**
     * @var TeamType
@@ -541,5 +546,39 @@ class Team
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Add donationDatabase
+     *
+     * @param \AppBundle\Entity\DonationDatabase $donationDatabase
+     *
+     * @return Team
+     */
+    public function addDonationDatabase(\AppBundle\Entity\DonationDatabase $donationDatabase)
+    {
+        $this->donationDatabases[] = $donationDatabase;
+
+        return $this;
+    }
+
+    /**
+     * Remove donationDatabase
+     *
+     * @param \AppBundle\Entity\DonationDatabase $donationDatabase
+     */
+    public function removeDonationDatabase(\AppBundle\Entity\DonationDatabase $donationDatabase)
+    {
+        $this->donationDatabases->removeElement($donationDatabase);
+    }
+
+    /**
+     * Get donationDatabases
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDonationDatabases()
+    {
+        return $this->donationDatabases;
     }
 }

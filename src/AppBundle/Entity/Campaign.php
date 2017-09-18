@@ -174,6 +174,11 @@ Class Campaign
   private $donations;
 
   /**
+   * @ORM\OneToMany(targetEntity="DonationDatabase", mappedBy="campaign", cascade={"remove"})
+   */
+  private $donationDatabases;
+
+  /**
    * @ORM\OneToMany(targetEntity="Campaignaward", mappedBy="campaign", cascade={"remove"})
    */
   private $campaignawards;

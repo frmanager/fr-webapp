@@ -15,5 +15,6 @@ php bin/console cache:clear --env=prod --no-debug
 
 php bin/console doctrine:schema:update --force
 
+php bin/console app:refresh-donation-db
 
 #FIN
