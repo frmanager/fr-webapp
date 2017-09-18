@@ -22,6 +22,7 @@ services:
     app.CampaignHelper:
         class: AppBundle\Utils\CampaignHelper
 
+
     app.CampaignSubscriber:
         class: AppBundle\EventSubscriber\CampaignSubscriber
         arguments: ['@service_container']

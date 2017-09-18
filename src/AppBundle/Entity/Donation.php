@@ -50,6 +50,13 @@ class Donation
      */
     private $classroom;
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="DonationDatabase", mappedBy="donation", cascade={"remove"})
+     */
+    private $donationDatabases;
+
+
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
@@ -1064,5 +1071,39 @@ class Donation
     public function getDonationStatus()
     {
         return $this->donationStatus;
+    }
+
+    /**
+     * Add donationDatabase
+     *
+     * @param \AppBundle\Entity\DonationDatabase $donationDatabase
+     *
+     * @return Donation
+     */
+    public function addDonationDatabase(\AppBundle\Entity\DonationDatabase $donationDatabase)
+    {
+        $this->donationDatabases[] = $donationDatabase;
+
+        return $this;
+    }
+
+    /**
+     * Remove donationDatabase
+     *
+     * @param \AppBundle\Entity\DonationDatabase $donationDatabase
+     */
+    public function removeDonationDatabase(\AppBundle\Entity\DonationDatabase $donationDatabase)
+    {
+        $this->donationDatabases->removeElement($donationDatabase);
+    }
+
+    /**
+     * Get donationDatabases
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDonationDatabases()
+    {
+        return $this->donationDatabases;
     }
 }

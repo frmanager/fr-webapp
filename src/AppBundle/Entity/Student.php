@@ -47,6 +47,11 @@ class Student
     private $donations;
 
     /**
+     * @ORM\OneToMany(targetEntity="DonationDatabase", mappedBy="student", cascade={"remove"})
+     */
+    private $donationDatabases;
+  
+    /**
      * @ORM\OneToMany(targetEntity="Causevoxfundraiser", mappedBy="student", cascade={"remove"})
      */
     private $causevoxfundraisers;
@@ -368,5 +373,39 @@ class Student
     public function getGrade()
     {
         return $this->grade;
+    }
+
+    /**
+     * Add donationDatabase
+     *
+     * @param \AppBundle\Entity\DonationDatabase $donationDatabase
+     *
+     * @return Student
+     */
+    public function addDonationDatabase(\AppBundle\Entity\DonationDatabase $donationDatabase)
+    {
+        $this->donationDatabases[] = $donationDatabase;
+
+        return $this;
+    }
+
+    /**
+     * Remove donationDatabase
+     *
+     * @param \AppBundle\Entity\DonationDatabase $donationDatabase
+     */
+    public function removeDonationDatabase(\AppBundle\Entity\DonationDatabase $donationDatabase)
+    {
+        $this->donationDatabases->removeElement($donationDatabase);
+    }
+
+    /**
+     * Get donationDatabases
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDonationDatabases()
+    {
+        return $this->donationDatabases;
     }
 }

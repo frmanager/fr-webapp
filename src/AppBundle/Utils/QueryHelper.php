@@ -81,9 +81,8 @@ class QueryHelper
                  FROM AppBundle:Team t
       LEFT OUTER JOIN AppBundle:TeamType tt
                  WITH tt.id = t.teamType
-      LEFT OUTER JOIN AppBundle:Donation d
+      LEFT OUTER JOIN AppBundle:DonationDatabase d
                  WITH t.id = d.team
-                  AND d.donationStatus = \'ACCEPTED\'
                    %s
                    %s
                 WHERE t.campaign = %s
@@ -125,9 +124,8 @@ class QueryHelper
                  FROM AppBundle:Student s
       LEFT OUTER JOIN AppBundle:Classroom t
                  WITH t.id = s.classroom
-      LEFT OUTER JOIN AppBundle:Donation d
+      LEFT OUTER JOIN AppBundle:DonationDatabase d
                  WITH s.id = d.student
-                  AND d.donationStatus = \'ACCEPTED\'
                    %s
       LEFT OUTER JOIN AppBundle:Grade g
                  WITH g.id = t.grade
@@ -155,7 +153,6 @@ class QueryHelper
                                        count(d.amount) as total_donations
                                   FROM AppBundle:Donation d
                                  WHERE d.campaign = %s
-                                   AND d.donationStatus = \'ACCEPTED\'
                                   %s', $campaign->getId(), $date);
 
         $this->logger->debug('Query : '.$queryString);
@@ -188,9 +185,8 @@ class QueryHelper
                                        sum(d.amount) as donation_amount,
                                        count(d.amount) as total_donations
                                   FROM AppBundle:Classroom t
-                       LEFT OUTER JOIN AppBundle:Donation d
+                       LEFT OUTER JOIN AppBundle:DonationDatabase d
                                   WITH t.id = d.classroom
-                                   AND d.donationStatus = \'ACCEPTED\'
                                    %s
                                   JOIN AppBundle:Grade g
                                   WITH g.id = t.grade
@@ -230,9 +226,8 @@ class QueryHelper
                         sum(d.amount) as donation_amount,
                         count(d.amount) as total_donations
                    FROM AppBundle:Classroom t
-                   JOIN AppBundle:Donation d
+                   JOIN AppBundle:DonationDatabase d
                    WITH t.id = d.classroom
-                    AND d.donationStatus = \'ACCEPTED\'
                       %s
                    JOIN AppBundle:Grade g
                    WITH g.id = t.grade
@@ -275,9 +270,8 @@ class QueryHelper
                  FROM AppBundle:Teams t
       LEFT OUTER JOIN AppBundle:TeamType tt
                  WITH tt.id = t.teamType
-      LEFT OUTER JOIN AppBundle:Donation d
+      LEFT OUTER JOIN AppBundle:DonationDatabase d
                  WITH t.id = d.team
-                  AND d.donationStatus = \'ACCEPTED\'
                    %s
                    %s
                 WHERE s.campaign = %s
