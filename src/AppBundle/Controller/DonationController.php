@@ -487,13 +487,13 @@ class DonationController extends Controller
           $failure = true;
         }
 
-        if(!$failure && $donation->getDonationStatus == "ACCEPTED"){
+        if(!$failure && $donation->getDonationStatus() == "ACCEPTED"){
           $this->get('session')->getFlashBag()->add('info', 'This donation was already processed');
           $logger->info("DONATION ISSUE: Donation was already accepted: ".$campaign->getId()." and transaction_id: ".$transactionId);
           $failure = true;
         }
 
-        if(!$failure && $donation->getDonationStatus == "FAILED"){
+        if(!$failure && $donation->getDonationStatus() == "FAILED"){
           $this->get('session')->getFlashBag()->add('info', 'This donation was already processed');
           $logger->info("DONATION ISSUE: Donation was already accepted: ".$campaign->getId()." and transaction_id: ".$transactionId);
           $failure = true;
