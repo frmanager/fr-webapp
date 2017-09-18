@@ -153,6 +153,7 @@ class QueryHelper
                                        count(d.amount) as total_donations
                                   FROM AppBundle:Donation d
                                  WHERE d.campaign = %s
+                                   AND d.donationStatus = \'ACCEPTED\'
                                   %s', $campaign->getId(), $date);
 
         $this->logger->debug('Query : '.$queryString);
