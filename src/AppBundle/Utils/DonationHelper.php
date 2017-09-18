@@ -77,14 +77,15 @@ class DonationHelper
                     //IF WE HAVE CONFIRMED THE STUDENT, USE THE PROPER NAME
                     if ($teamStudent->getConfirmedFlag()) {
                         $donationDatabase->setStudentName($teamStudent->getStudent()->getName());
+                        $donationDatabase->setClassroom($teamStudent->getStudent()->getClassroom());
                     } else {
                         $donationDatabase->setStudentName($teamStudent->getName());
+                        $donationDatabase->setClassroom($teamStudent->getClassroom());                        
                     }
                       $donationDatabase->setTeam($team);
                       $donationDatabase->setStudent($teamStudent->getStudent());
                       $donationDatabase->setCampaign($donation->getCampaign());
                       $donationDatabase->setDonatedAt($donation->getDonatedAt());
-                      $donationDatabase->setClassroom($teamStudent->getStudent()->getClassroom());
                       $donationDatabase->setDonation($donation);
                       $donationDatabase->setAmount(round($donation->getAmount()/$counter, 2)); //Evenly distributed
                       $donationDatabase->setType($donation->getType());
