@@ -469,6 +469,7 @@ class DonationController extends Controller
 
         $failure = false;
         if(null == $request->query->get('transactionId')){
+          $this->get('session')->getFlashBag()->add('info', 'Transaction ID was not provided');
           $logger->info("DONATION ISSUE: transactionId was not found. campaign_id: ".$campaign->getId()." and transaction_id: ".$transactionId);
           $failure = true;
         }else{
@@ -481,7 +482,20 @@ class DonationController extends Controller
         }
 
         if(!$failure && is_null($donation)){
+          $this->get('session')->getFlashBag()->add('warning', 'We could not find the donation assocated with this transaction');
           $logger->info("DONATION ISSUE: Unable to find donation linked to campaign_id: ".$campaign->getId()." and transaction_id: ".$transactionId);
+          $failure = true;
+        }
+
+        if(!$failure && $donation->getDonationStatus == "ACCEPTED"){
+          $this->get('session')->getFlashBag()->add('info', 'This donation was already processed');
+          $logger->info("DONATION ISSUE: Donation was already accepted: ".$campaign->getId()." and transaction_id: ".$transactionId);
+          $failure = true;
+        }
+
+        if(!$failure && $donation->getDonationStatus == "FAILED"){
+          $this->get('session')->getFlashBag()->add('info', 'This donation was already processed');
+          $logger->info("DONATION ISSUE: Donation was already accepted: ".$campaign->getId()." and transaction_id: ".$transactionId);
           $failure = true;
         }
 
@@ -494,11 +508,12 @@ class DonationController extends Controller
         }
 
         if(!$success){
+          $this->get('session')->getFlashBag()->add('info', 'This donation was cancelled.');
           $logger->info("Donation was cancelled on the paypal side.");
           $failure = true;
         }
 
-        //We assume a TransactionID and success is required for us to do anything
+
         if(!$failure){
 
           if(null == $request->query->get('PayerID')){
@@ -591,14 +606,9 @@ class DonationController extends Controller
               return $this->redirectToRoute('donation_index', array('campaignUrl'=>$campaign->getUrl()));
             }
         }
-      }else{
-         $referer = $request->headers->get('referer');
-         $logger->info("DONATION INFO: User ended up at donation_done without a TransactionID. Referrer was ".$referer);
       }
 
-      if(null !== $request->query->get('success') && !$request->query->get('success')){
-        $logger->info("DONATION INFO: Donation was cancelled by paypal....success flag set as false");
-
+      if($failure){
         return $this->render('donation/donation.cancelled.html.twig', array(
             'campaign' => $campaign,
         ));
