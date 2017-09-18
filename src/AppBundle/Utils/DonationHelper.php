@@ -27,7 +27,7 @@ class DonationHelper
         $this->truncateDonationDatabase($options);
 
         if (isset($options['campaign'])) {
-            $donations = $this->em->getRepository('AppBundle:Donation')->findByCampaign($campaign);
+            $donations = $this->em->getRepository('AppBundle:Donation')->findByCampaign($options['campaign']);
         } else {
             $donations = $this->em->getRepository('AppBundle:Donation')->findAll();
         }
@@ -42,7 +42,7 @@ class DonationHelper
             if (!$fail) {
 
               //If its not accepted, try the next one
-              if (in_array($donation->getType(), array("campaign", "classroom", "student"))) {
+              if (in_array($donation->getType(), array("campaign", "student"))) {
                   $donationDatabase = new DonationDatabase();
 
                 //IF WE HAVE CONFIRMED THE STUDENT, USE THE PROPER NAME
@@ -61,6 +61,30 @@ class DonationHelper
                   $donationDatabase->setType($donation->getType());
                   $donationDatabase->setPaymentMethod($donation->getPaymentMethod());
                   $this->em->persist($donationDatabase);
+              } elseif ($donation->getType() == "classroom") {
+
+                  //HERE WE ARE CREATING A DONATION FOR EACH CHILD IN THE CLASSROOM
+                  $classroom = $donation->getClassroom();
+                  //Need to figure out how many students are in the classroom
+                  $counter = 0;
+                  foreach ($classroom->getStudents() as $students) {
+                      $counter ++;
+                  }
+
+                  foreach ($classroom->getStudents() as $student) {
+                      $donationDatabase = new DonationDatabase();
+                      $donationDatabase->setStudentName($student->getName());
+                      $donationDatabase->setStudent($student);
+                      $donationDatabase->setDonatedAt($donation->getDonatedAt());
+                      $donationDatabase->setCampaign($donation->getCampaign());
+                      $donationDatabase->setClassroom($classroom);
+                      $donationDatabase->setDonation($donation);
+                      $donationDatabase->setAmount(round($donation->getAmount()/$counter, 2)); //Evenly distributed
+                      $donationDatabase->setType($donation->getType());
+                      $donationDatabase->setPaymentMethod($donation->getPaymentMethod());
+                      $this->em->persist($donationDatabase);
+                  }
+
               } elseif ($donation->getType() == "team") {
                   $team = $donation->getTeam();
                   if (in_array($team->getTeamType()->getValue(), array("student", "family"))) {
@@ -80,7 +104,7 @@ class DonationHelper
                         $donationDatabase->setClassroom($teamStudent->getStudent()->getClassroom());
                     } else {
                         $donationDatabase->setStudentName($teamStudent->getName());
-                        $donationDatabase->setClassroom($teamStudent->getClassroom());                        
+                        $donationDatabase->setClassroom($teamStudent->getClassroom());
                     }
                       $donationDatabase->setTeam($team);
                       $donationDatabase->setStudent($teamStudent->getStudent());

@@ -22,6 +22,8 @@ use PayPal\Api\RedirectUrls;
 use PayPal\Api\PaymentExecution;
 use AppBundle\Utils\CampaignHelper;
 use AppBundle\Entity\Donation;
+use AppBundle\Utils\DonationHelper;
+
 
 use \DateTime;
 use \DateTimeZone;
@@ -383,6 +385,7 @@ class DonationController extends Controller
               exit(1);
           }
 
+
           //IF A PAYPAL PAYMENT
           if($params['donation']['paymentMethod'] == "paypal"){
             $approvalUrl = $payment->getApprovalLink();
@@ -547,23 +550,19 @@ class DonationController extends Controller
 
                   try {
                       $result = $payment->execute($execution, $apiContext);
-                      try {
-                          $PaypalPaymentDetails = Payment::get($donation->getPaypalPaymentId(), $apiContext);
-                          $donation->setPaypalPaymentDetails(json_decode($PaypalPaymentDetails, true));
-                      } catch (PayPal\Exception\PayPalConnectionException $ex) {
-                          $logger->critical("Paypal Payment PayPalConnectionException Failure. code:".$ex->getCode()." data:".$ex->getData());
-                          exit($ex);
-                      } catch (Exception $ex) {
-                          $logger->critical("Paypal Payment getPaymentDetails Failure");
-                          exit(1);
-                      }
-                  } catch (PayPal\Exception\PayPalConnectionException $ex) {
+                      $PaypalPaymentDetails = Payment::get($donation->getPaypalPaymentId(), $apiContext);
+                      $donation->setPaypalPaymentDetails(json_decode($PaypalPaymentDetails, true));
+                  } catch (\PayPal\Exception\PayPalConnectionException $ex) {
                       $logger->critical("Paypal Payment PayPalConnectionException Failure. code:".$ex->getCode()." data:".$ex->getData());
-                      exit($ex);
+                      $donation->setDonationStatus("FAILED");
+                      $this->get('session')->getFlashBag()->add('danger', 'There was an issue processing the payment, it has been cancelled');
+                      $failure = true;
                   } catch (Exception $ex) {
                       $logger->critical("Paypal Payment Execution Failure");
-                      exit(1);
-                  }
+                      $donation->setDonationStatus("FAILED");
+                      $this->get('session')->getFlashBag()->add('danger', 'There was an issue processing the payment, it has been cancelled');
+                      $failure = true;
+                    }
               } else {
                   $donation->setDonationStatus("FAILED");
                   exit;
@@ -573,17 +572,24 @@ class DonationController extends Controller
             $em->persist($donation);
             $em->flush();
 
-            //Send Email
-            $message = (new \Swift_Message("Thank you for your Donation to ".$campaign->getName()))
-              ->setFrom($campaign->getEmail())
-              ->setTo($donation->getDonorEmail())
-              ->setContentType("text/html")
-              ->setBody(
-                  $this->renderView('email/donation.success.email.twig', array('donation' => $donation,'campaign' => $campaign))
-              );
+            if(!$failure){
+              //Send Email
+              $message = (new \Swift_Message("Thank you for your Donation to ".$campaign->getName()))
+                ->setFrom($campaign->getEmail())
+                ->setTo($donation->getDonorEmail())
+                ->setContentType("text/html")
+                ->setBody(
+                    $this->renderView('email/donation.success.email.twig', array('donation' => $donation,'campaign' => $campaign))
+                );
 
-            $this->get('mailer')->send($message);
-
+              $this->get('mailer')->send($message);
+              $logger->debug("Done mailer");
+              $logger->debug("Doing a Donation Database Refresh");
+              $donationHelper = new DonationHelper($em, $logger);
+              $donationHelper->reloadDonationDatabase(array('campaign'=>$campaign));
+            }else{
+              return $this->redirectToRoute('donation_index', array('campaignUrl'=>$campaign->getUrl()));
+            }
         }
       }else{
          $referer = $request->headers->get('referer');
