@@ -1,5 +1,6 @@
 {% extends 'template.html.twig' %}
-{% use 'bootstrap_3_layout.html.twig' %}
+
+{% block title %}Grades{% endblock %}
 
 {% block css %}
 <!-- Datatables styles -->
@@ -35,7 +36,7 @@
                             </td>
                             <td style="text-align:center;">
                                 TBD
-                            </td>                            
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
