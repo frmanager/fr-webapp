@@ -357,31 +357,7 @@ class Donation
         return $this->estimatedCcFee;
     }
 
-    /**
-     * Set causevoxFee
-     *
-     * @param float $causevoxFee
-     *
-     * @return Donation
-     */
-    public function setCausevoxFee($causevoxFee)
-    {
-        $this->causevoxFee = $causevoxFee;
-
-        return $this;
-    }
-
-    /**
-     * Get causevoxFee
-     *
-     * @return float
-     */
-    public function getCausevoxFee()
-    {
-        return $this->causevoxFee;
-    }
-
-
+  
     /**
      * Set type
      *

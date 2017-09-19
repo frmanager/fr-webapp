@@ -65,7 +65,7 @@ class Team
     /**
      * @var Campaign
      *
-     * @ORM\ManyToOne(targetEntity="Campaign", inversedBy="causevoxteams")
+     * @ORM\ManyToOne(targetEntity="Campaign", inversedBy="teams")
      * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
      * @Assert\NotNull()
      */
