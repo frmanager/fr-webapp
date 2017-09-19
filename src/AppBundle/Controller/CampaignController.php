@@ -161,6 +161,63 @@ class CampaignController extends Controller
     }
 
 
+    /**
+     * @Route("/email_support", name="email_support")
+     */
+    public function emailSupportAction(Request $request, $campaignUrl)
+    {
+      $logger = $this->get('logger');
+      $em = $this->getDoctrine()->getManager();
+      $queryHelper = new QueryHelper($em, $logger);
+      $campaign =  $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
+
+      if ($request->isMethod('POST')) {
+          $params = $request->request->all();
+          $failure = false;
+
+          if(!$failure && empty($params['emailSupport']['email'])){
+            $this->addFlash('warning','Email Address is required.');
+            $failure = true;
+          }
+
+
+          if(!$failure && empty($params['emailSupport']['subject'])){
+            $this->addFlash('warning','Subject is requried');
+            $failure = true;
+          }
+
+          if(!$failure && empty($params['emailSupport']['description'])){
+            $this->addFlash('warning','Body of email is required');
+            $failure = true;
+          }
+
+          if(!$failure){
+
+              $message = (new \Swift_Message("[FR Manager] Support Request Received"))
+                ->setFrom('funrun@lrespto.org')
+                ->setTo('funrun@lrespto.org')
+                ->setContentType("text/html")
+                ->setBody(
+                    $this->renderView('email/support.email.twig', array('emailSupport' => $params['emailSupport'], 'campaign' => $campaign))
+                );
+
+              $this->get('mailer')->send($message);
+
+              $logger->info("Support Email Sent");
+              $this->addFlash('success','Email Successfully sent!');
+              return $this->redirectToRoute('campaign_index', array('campaignUrl' => $campaign->getUrl()));
+            }
+      }
+
+
+
+      return $this->render('campaign/email_support.html.twig', array(
+        'campaign' => $campaign,
+      ));
+    }
+
+
+
 
     /**
      * @Route("/terms_of_service", name="campaign_terms_of_service")
