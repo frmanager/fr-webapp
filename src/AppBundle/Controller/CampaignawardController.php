@@ -103,7 +103,7 @@ class CampaignawardController extends Controller
 
       // replace this example code with whatever you need
       return $this->render('default/classroomAwards.html.twig', array(
-        'classrooms' => $queryHelper->getClassroomAwards(array('campaign' => $campaign, 'before_date' => $reportDate)),
+        'classrooms' => $queryHelper->getClassroomAwards(array('campaign' => $campaign)),
         'report_date' => $reportDate,
         'campaign' => $campaign
       ));
