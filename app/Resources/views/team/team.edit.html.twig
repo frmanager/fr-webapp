@@ -1,5 +1,7 @@
 {% extends 'template.html.twig' %}
 
+{% block title %}Edit Team{% endblock %}
+
 {% block body %}
   {% set campaignUrl = null %}
   {% set campaignUrl = app.request.attributes.get('_route_params')['campaignUrl'] %}

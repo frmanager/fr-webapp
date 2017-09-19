@@ -1,5 +1,4 @@
 {% extends 'template.html.twig' %}
-{% use 'bootstrap_3_layout.html.twig' %}
 
 {% block body %}
     <div class="row">
@@ -17,10 +16,10 @@
 </div>
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
-            {% set teacher_id = -1 %}
+            {% set classroom_id = -1 %}
             {% set start = true %}
-            {% for teacher in teachers %}
-                {% if teacher_id != teacher.id %}
+            {% for classroom in classrooms %}
+                {% if classroom_id != classroom.id %}
                     {% if start == false %}
                         </tbody></table></div>
                     {% else %}
@@ -28,10 +27,10 @@
                     {% endif %}
                     <div class="panel panel-info">
                         <div class="panel-heading">
-                            <a href="{{ path('teacher_show', {'campaignUrl':campaign.url, 'id': teacher.id }) }}">
-                                <span class="hidden-xs">{{ teacher.grade_name }}
+                            <a href="{{ path('classroom_show', {'campaignUrl':campaign.url, 'id': classroom.id }) }}">
+                                <span class="hidden-xs">{{ classroom.grade_name }}
                                     -</span>
-                                {{ teacher.teacher_name }}</a>
+                                {{ classroom.classroom_name }}</a>
                         </div>
                         <table class="table table-bordered table-condensed table-striped">
                             <thead>
@@ -42,14 +41,14 @@
                                 </tr>
                             </thead>
                             <tbody>
-                      {% endif %}{% set teacher_id = teacher.id %}
-                <tr {% if teacher.donated_at == report_date %} class="success" {% endif %}>
-                      <td>{{ teacher.donated_at|date("l, F d") }}</td>
-                      <td>${{ teacher.cumulative_donation_amount|number_format(2, '.', ',') }}
+                      {% endif %}{% set classroom_id = classroom.id %}
+                <tr {% if classroom.donated_at == report_date %} class="success" {% endif %}>
+                      <td>{{ classroom.donated_at|date("l, F d") }}</td>
+                      <td>${{ classroom.cumulative_donation_amount|number_format(2, '.', ',') }}
                     </td>
-                    <td>${{ teacher.campaignaward_amount }}
+                    <td>${{ classroom.campaignaward_amount }}
                         -
-                        {{ teacher.campaignaward_name }}</td>
+                        {{ classroom.campaignaward_name }}</td>
 
                 </tr>
             {% endfor %}

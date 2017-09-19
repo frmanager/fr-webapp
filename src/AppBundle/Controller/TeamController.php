@@ -226,10 +226,7 @@ class TeamController extends Controller
 
         if ($request->isMethod('POST')) {
             $params = $request->request->all();
-
-
             $fail = false;
-            $params = $request->request->all();
             //dump($request->request->get('data'));
             //$logger->debug('Team Name: '.print_r($params, true));
 

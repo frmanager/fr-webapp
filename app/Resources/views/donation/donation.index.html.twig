@@ -1,5 +1,7 @@
 {% extends 'template.html.twig' %}
 
+{% block title %}Donate to the {{ campaign.name}} Campaign{% endblock %}
+
 {% block body %}
   {% set campaignUrl = null %}
   {% set campaignUrl = app.request.attributes.get('_route_params')['campaignUrl'] %}

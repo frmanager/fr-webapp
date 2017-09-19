@@ -1,0 +1,19 @@
+{% extends 'template.email.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+        <div class="card">
+          <h4 class="card-header">
+            Suppport Request Received
+          </h4>
+          <h4>
+          <div class="card-block">
+            <p class="card-text">Contact Email: {{emailSupport.email}}</p>
+            <p class="card-text">Subject: {{emailSupport.subject}}</p>
+            <p class="card-text">Description: {{emailSupport.description}}</p>
+          </div>
+        </div><!-- ./card -->
+    </div><!-- ./column -->
+</div><!-- ./row -->
+{% endblock %}

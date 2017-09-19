@@ -1,0 +1,47 @@
+{% extends 'template.html.twig' %}
+
+{% block title %}Email FR Manage Support{% endblock %}
+
+{% block body %}
+<div class="row">
+  <div class="col-md-8 offset-md-2">
+    <div class="card">
+      <div class="card-block">
+      <h4 class="card-title">Email Support</h4>
+      <hr>
+      <form  name="emailSupport" action="{{ path("email_support", {'campaignUrl': campaign.url}) }}" method="post" class="form" role="form">
+
+        <div class="form-group">
+          <div class="col-sm-8">
+            <label for="username" class="control-label required">Your Email Address</label>
+            <div class="input-group">
+             <span class="input-group-addon" id="basic-addon1"><i class="fa fa-at" aria-hidden="true"></i></span>
+             <input class="form-control" type="text" id="emailSupport_email" placeholder="enter your email" name="emailSupport[email]" value="" required="required"/>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-8">
+            <label for="emailSupport_subject" class="control-label required">Subject</label>
+             <input class="form-control" type="text" id="emailSupport_subject" placeholder="Subject" name="emailSupport[subject]" value="" required="required"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-12">
+            <label for="emailSupport_description" class="control-label required">What Problem Are you Having?</label>
+             <textarea class="form-control" type="text" rows="6" id="emailSupport_description" placeholder="Please describe your email with as much detail as possible" name="emailSupport[description]" value="" required="required"/></textarea>
+          </div>
+        </div>
+        <hr>
+        <div class="form-group">
+          <div class="col-sm-12">
+          <a href="{{ path('campaign_index', {'campaignUrl': campaignUrl}) }}" class="btn btn-info">Cancel</a>
+          <input class="btn btn-primary" type="submit" id="_submit" name="_submit" value="Email Support"/>
+        </div>
+        </div>
+      </form>
+    </div><!-- ./card-block -->
+    </div><!-- ./card -->
+  </div><!-- ./col -->
+</div><!-- ./row -->
+{% endblock body %}
