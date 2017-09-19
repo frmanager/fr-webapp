@@ -130,6 +130,7 @@ class ClassroomController extends Controller
 
         return $this->render('/campaign/classroom.show.html.twig', array(
             'classroom' => $classroom,
+            'donations' => $queryHelper->getClassroomsData(array('campaign' => $campaign, 'id' => $classroom->getId(), 'limit' => 0)),            
             'classroom_rank' => $queryHelper->getClassroomRank($classroom->getId(),array('campaign' => $campaign, 'limit' => 0)),
             'campaign_awards' => $campaignAwards,
             'entity' => $entity,

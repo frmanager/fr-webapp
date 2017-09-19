@@ -3,15 +3,6 @@
 {% block title %}{{ classroom.name }}{% endblock %}
 
 {% block body %}
-  {% set number_of_donations = 0 %}
-  {% set donation_amount = 0 %}
-  {% for donation in classroom.donations %}
-    {% set number_of_donations = number_of_donations + 1 %}
-    {% if donation.donationStatus == "ACCEPTED"%}
-      {% set donation_amount = donation_amount + donation.amount %}
-    {% endif %}
-  {% endfor %}
-
   <div class="row" style="">
     <div class="col-md-8">
       <h1>{{ classroom.name }}</h1>
@@ -60,28 +51,9 @@
               <td>
                 {{ classroom.name }}
               </td>
-            </tr>
-            {% if is_granted('ROLE_USER') %}
-              <tr>
-                <th style="text-align:right;">Email</th>
-                <td>
-                  {{ classroom.email }}
-                </td>
-              </tr>
-              <tr>
-                <th style="text-align:right;">Students</th>
-                <td>
-                  {{ classroom.students|length }}
-                </td>
-              </tr>
-            {% endif %}
-            <tr>
-              <th style="text-align:right;">Donations</th>
-              <td>{{ number_of_donations }}</td>
-            </tr>
             <tr>
               <th style="text-align:right;">Amount</th>
-              <td>${{ donation_amount|number_format(2, '.', ',') }}</td>
+              <td>${{ donations.0.donation_amount|number_format(2, '.', ',') }}</td>
             </tr>
             <tr>
               <th style="text-align:right;">Rank</th>
@@ -96,7 +68,7 @@
     <div class="col-sm-7">
       <div class="card card-default">
         <div class="card-header">Class Awards Achieved</div>
-        {% if number_of_donations > 0 %}
+        {% if donations.0.donation_amount > 0 %}
           <table class="table table-hover table-outline mb-0">
             <thead>
               <tr>
@@ -109,11 +81,11 @@
               {% for campaign_award in campaign_awards %}
                 {% if campaign_award.campaignawardtype.value == "classroom" %}
                   {% if campaign_award.campaignawardstyle.value == "level" %}
-                    <tr {% if donation_amount >= campaign_award.amount %} class="success" {% endif %}>
+                    <tr {% if donations.0.donation_amount >= campaign_award.amount %} class="success" {% endif %}>
                       <td>{{ campaign_award.name }}</td>
                       <td class="col-xs-3" style="text-align:right;">${{ campaign_award.amount|number_format(2, '.', ',') }}</td>
                       <td class="col-xs-1" style="text-align:center;">
-                        {% if donation_amount >= campaign_award.amount %}
+                        {% if donations.0.donation_amount >= campaign_award.amount %}
                           <i class="fa fa-check-circle" style="color:green;" aria-hidden="true"></i>
                         {% endif %}
                       </td>
