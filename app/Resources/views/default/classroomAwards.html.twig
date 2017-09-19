@@ -1,63 +1,71 @@
 {% extends 'template.html.twig' %}
 
 {% block body %}
-    <div class="row">
-        <div class="col-md-4">
-            <h1>Awards by Teacher</h1>
-        </div>
-    </div>
-    <div class="clearfix"></div>
-    <hr/>
-    <div class="clearfix"></div>
-    <div class="panel panel-success">
-  <div class="panel-body">
-    NOTE: New awards are highlighted green.
-  </div>
-</div>
-    <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-            {% set classroom_id = -1 %}
-            {% set start = true %}
-            {% for classroom in classrooms %}
-                {% if classroom_id != classroom.id %}
-                    {% if start == false %}
-                        </tbody></table></div>
-                    {% else %}
-                        {% set start = false %}
-                    {% endif %}
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            <a href="{{ path('classroom_show', {'campaignUrl':campaign.url, 'id': classroom.id }) }}">
-                                <span class="hidden-xs">{{ classroom.grade_name }}
-                                    -</span>
-                                {{ classroom.classroom_name }}</a>
-                        </div>
-                        <table class="table table-bordered table-condensed table-striped">
-                            <thead>
-                                <tr>
-                                    <th class="col-xs-4">Date Earned</th>
-                                    <th class="col-xs-3">Total Donations</th>
-                                    <th class="col-xs-5">Award Level</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                      {% endif %}{% set classroom_id = classroom.id %}
-                <tr {% if classroom.donated_at == report_date %} class="success" {% endif %}>
-                      <td>{{ classroom.donated_at|date("l, F d") }}</td>
-                      <td>${{ classroom.cumulative_donation_amount|number_format(2, '.', ',') }}
-                    </td>
-                    <td>${{ classroom.campaignaward_amount }}
-                        -
-                        {{ classroom.campaignaward_name }}</td>
-
-                </tr>
-            {% endfor %}
-        </tbody>
+  <div class="row">
+    <div class="col-md-4">
+      <h1>Awards by Teacher</h1>
+    </div><!-- ./column -->
+  </div><!-- ./row -->
+  <hr/>
+  <div class="card card-outline-primary mb-3 text-center">
+    <div class="card-block">
+      NOTE: New awards are highlighted green.
+    </div><!-- ./card-block -->
+  </div><!-- ./card -->
+  <br>
+  <hr>
+  <br>
+  {% set classroom_id = -1 %}
+  {% set start = true %}
+  {% for classroom in classrooms %}
+    {% if classroom_id != classroom.id %}
+      {% if start == false %}
+      </tbody>
     </table>
-</div>
-</div>
-</div>
-{% endblock %}
-{% block javascripts %}
-<script></script>
+  </div><!-- ./card-block -->
+</div><!-- ./card -->
+</div><!-- ./col -->
+</div><!-- ./row -->
+<br>
+{% else %}
+  {% set start = false %}
+{% endif %}
+<div class="row">
+  <div class="col-md-10 offset-md-1">
+    <div class="card">
+      <div class="card-block">
+        <h4 class="card-title">
+          <a href="{{ path('classroom_show', {'campaignUrl':campaign.url, 'id': classroom.id }) }}">
+            <span class="hidden-xs">{{ classroom.grade_name }}
+              -</span>
+            {{ classroom.classroom_name }}</a>
+        </h4>
+
+        <table class="table table-bordered table-condensed table-striped">
+          <thead>
+            <tr>
+              <th class="col-xs-4">Date Earned</th>
+              <th class="col-xs-3">Total Donations</th>
+              <th class="col-xs-5">Award Level</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% endif %}{% set classroom_id = classroom.id %}
+          <tr {% if classroom.donated_at == report_date %} class="success" {% endif %}>
+            <td>{{ classroom.donated_at|date("l, F d") }}</td>
+            <td>${{ classroom.cumulative_donation_amount|number_format(2, '.', ',') }}
+            </td>
+            <td>${{ classroom.campaignaward_amount }}
+              -
+              {{ classroom.campaignaward_name }}</td>
+
+          </tr>
+        </tbody>
+      </table>
+      {% endfor %}
+    </div><!-- ./card-block -->
+  </div><!-- ./card -->
+</div><!-- ./col -->
+</div><!-- ./row -->
+<br>
 {% endblock %}
