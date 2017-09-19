@@ -123,6 +123,7 @@
     			<div class="dropdown-menu" aria-labelledby="drop3">
             <a class="dropdown-item" href="{{ path('profile_show', {'campaignUrl': campaignUrl}) }}"><i class="fa fa-user" aria-hidden="true"></i> View Profile</a>
             {% if hasTeamFlag and userTeam is defined %}
+            <a class="dropdown-item" href="{{ path('team_edit', {'campaignUrl': campaignUrl, 'teamUrl': userTeam.url}) }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Manage Team</a>
             <a class="dropdown-item" href="{{ path('team_show', {'campaignUrl': campaignUrl, 'teamUrl': userTeam.url}) }}"><i class="fa fa-users" aria-hidden="true"></i> View Team</a>
             {% else %}
             <a class="dropdown-item" href="{{ path('register_team_select', {'campaignUrl': campaignUrl}) }}">Register Team</a>
@@ -228,7 +229,9 @@ $(document).ready(function() {
         }, 800);
         return false;
     });
-    $('#back-to-top').tooltip('show');
+
+    //$('#back-to-top').tooltip('show');
+
     $(function() {
         FastClick.attach(document.body);
     });

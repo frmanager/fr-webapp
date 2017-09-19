@@ -13,7 +13,9 @@
     <hr/>
     <div class="">
       {% if error %}
-        <p class="well-sm bg-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+      <div class="alert alert-danger" role="alert">
+        {{ error.messageKey|trans(error.messageData, 'security') }}
+      </div>
       {% endif %}
       <form action="{{ path("login", {'campaignUrl': campaign.url}) }}" method="post" class="form" role="form">
 

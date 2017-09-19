@@ -61,9 +61,6 @@ class CampaignController extends Controller
 
      $queryHelper = new QueryHelper($em, $logger);
 
-     $causevoxteams = $em->getRepository('AppBundle:Causevoxteam')->findAll();
-     $causevoxfundraisers = $em->getRepository('AppBundle:Causevoxfundraiser')->findAll();
-
      $reportDate = $queryHelper->convertToDay(new DateTime());
      $reportDate->modify('-1 day');
 
@@ -73,8 +70,6 @@ class CampaignController extends Controller
        'classroom_rankings' => $queryHelper->getClassroomRanks(array('campaign' => $campaign,'limit'=> $limit, )),
        'report_date' => $reportDate,
        'ranking_limit' => $limit,
-       'causevoxteams' => $causevoxteams,
-       'causevoxfundraisers' => $causevoxfundraisers,
        'student_rankings' => $queryHelper->getStudentRanks(array('campaign' => $campaign,'limit'=> $limit, )),
        'totals' => $queryHelper->getTotalDonations(array('campaign' => $campaign,)),
        'campaign' => $campaign

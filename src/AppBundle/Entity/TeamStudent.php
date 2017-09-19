@@ -97,7 +97,7 @@ class TeamStudent
  /**
   * @var Grade
   *
-  * @ORM\ManyToOne(targetEntity="Grade", inversedBy="classrooms", cascade={"remove"})
+  * @ORM\ManyToOne(targetEntity="Grade", inversedBy="classrooms")
   * @ORM\JoinColumn(name="grade_id", referencedColumnName="id")
   * @Assert\NotNull()
   */

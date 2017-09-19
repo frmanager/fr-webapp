@@ -63,6 +63,12 @@ Class Campaign
    */
   private $grades;
 
+
+  /**
+   * @ORM\OneToMany(targetEntity="Team", mappedBy="campaign", cascade={"remove"})
+   */
+  private $teams;
+
   /**
    * @var User
    *
@@ -184,16 +190,6 @@ Class Campaign
   private $campaignawards;
 
   /**
-   * @ORM\OneToMany(targetEntity="Causevoxfundraiser", mappedBy="campaign", cascade={"remove"})
-   */
-  private $causevoxfundraisers;
-
-  /**
-   * @ORM\OneToMany(targetEntity="Causevoxteam", mappedBy="campaign", cascade={"remove"})
-   */
-  private $causevoxteams;
-
-  /**
    * @ORM\OneToMany(targetEntity="Student", mappedBy="campaign", cascade={"remove"})
    */
   private $students;
@@ -207,8 +203,6 @@ Class Campaign
         $this->classrooms = new \Doctrine\Common\Collections\ArrayCollection();
         $this->donations = new \Doctrine\Common\Collections\ArrayCollection();
         $this->campaignawards = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->causevoxfundraisers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->causevoxteams = new \Doctrine\Common\Collections\ArrayCollection();
         $this->students = new \Doctrine\Common\Collections\ArrayCollection();
         $this->teams = new \Doctrine\Common\Collections\ArrayCollection();
         $this->createdAt= new \DateTime();
@@ -538,74 +532,6 @@ Class Campaign
     public function getCampaignawards()
     {
         return $this->campaignawards;
-    }
-
-    /**
-     * Add causevoxfundraiser
-     *
-     * @param \AppBundle\Entity\Causevoxfundraiser $causevoxfundraiser
-     *
-     * @return Campaign
-     */
-    public function addCausevoxfundraiser(\AppBundle\Entity\Causevoxfundraiser $causevoxfundraiser)
-    {
-        $this->causevoxfundraisers[] = $causevoxfundraiser;
-
-        return $this;
-    }
-
-    /**
-     * Remove causevoxfundraiser
-     *
-     * @param \AppBundle\Entity\Causevoxfundraiser $causevoxfundraiser
-     */
-    public function removeCausevoxfundraiser(\AppBundle\Entity\Causevoxfundraiser $causevoxfundraiser)
-    {
-        $this->causevoxfundraisers->removeElement($causevoxfundraiser);
-    }
-
-    /**
-     * Get causevoxfundraisers
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCausevoxfundraisers()
-    {
-        return $this->causevoxfundraisers;
-    }
-
-    /**
-     * Add causevoxteam
-     *
-     * @param \AppBundle\Entity\Causevoxteam $causevoxteam
-     *
-     * @return Campaign
-     */
-    public function addCausevoxteam(\AppBundle\Entity\Causevoxteam $causevoxteam)
-    {
-        $this->causevoxteams[] = $causevoxteam;
-
-        return $this;
-    }
-
-    /**
-     * Remove causevoxteam
-     *
-     * @param \AppBundle\Entity\Causevoxteam $causevoxteam
-     */
-    public function removeCausevoxteam(\AppBundle\Entity\Causevoxteam $causevoxteam)
-    {
-        $this->causevoxteams->removeElement($causevoxteam);
-    }
-
-    /**
-     * Get causevoxteams
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCausevoxteams()
-    {
-        return $this->causevoxteams;
     }
 
     /**

@@ -27,16 +27,6 @@ class Classroom
     private $teams;
 
     /**
-     * @ORM\OneToMany(targetEntity="Causevoxteam", mappedBy="classroom", cascade={"remove"})
-     */
-    private $causevoxteams;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Causevoxfundraiser", mappedBy="classroom", cascade={"remove"})
-     */
-    private $causevoxfundraisers;
-
-    /**
      * @ORM\OneToMany(targetEntity="Donation", mappedBy="classroom", cascade={"remove"})
      */
     private $donations;
@@ -179,7 +169,6 @@ class Classroom
     public function __construct()
     {
         $this->students = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->causevoxteams = new \Doctrine\Common\Collections\ArrayCollection();
         $this->createdAt= new \DateTime();
         $this->updatedAt= new \DateTime();
     }
@@ -226,39 +215,6 @@ class Classroom
         return $this->students;
     }
 
-    /**
-     * Add causevoxteam.
-     *
-     * @param \AppBundle\Entity\Causevoxteam $causevoxteams
-     *
-     * @return Classroom
-     */
-    public function addCausevoxteam(\AppBundle\Entity\Causevoxteam $causevoxteams)
-    {
-        $this->causevoxteams[] = $causevoxteams;
-
-        return $this;
-    }
-
-    /**
-     * Remove causevoxteams.
-     *
-     * @param \AppBundle\Entity\Causevoxteam $causevoxteams
-     */
-    public function removeCausevoxteam(\AppBundle\Entity\Causevoxteam $causevoxteams)
-    {
-        $this->causevoxteams->removeElement($causevoxteams);
-    }
-
-    /**
-     * Get causevoxteams.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCausevoxteams()
-    {
-        return $this->causevoxteams;
-    }
 
     public function getClassroomAndGrade()
     {
@@ -287,40 +243,6 @@ class Classroom
     public function getEmail()
     {
         return $this->email;
-    }
-
-    /**
-     * Add causevoxfundraiser
-     *
-     * @param \AppBundle\Entity\Causevoxfundraiser $causevoxfundraiser
-     *
-     * @return Classroom
-     */
-    public function addCausevoxfundraiser(\AppBundle\Entity\Causevoxfundraiser $causevoxfundraiser)
-    {
-        $this->causevoxfundraisers[] = $causevoxfundraiser;
-
-        return $this;
-    }
-
-    /**
-     * Remove causevoxfundraiser
-     *
-     * @param \AppBundle\Entity\Causevoxfundraiser $causevoxfundraiser
-     */
-    public function removeCausevoxfundraiser(\AppBundle\Entity\Causevoxfundraiser $causevoxfundraiser)
-    {
-        $this->causevoxfundraisers->removeElement($causevoxfundraiser);
-    }
-
-    /**
-     * Get causevoxfundraisers
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCausevoxfundraisers()
-    {
-        return $this->causevoxfundraisers;
     }
 
     /**

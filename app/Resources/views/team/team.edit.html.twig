@@ -1,21 +1,164 @@
 {% extends 'template.html.twig' %}
-{% use 'bootstrap_3_horizontal_layout.html.twig' %}
 
 {% block body %}
-    <div class="row">
-        <div class="col-md-12">
-            <h1>{{ team.name }}</h1>
-            <hr/>
-        </div>
+  {% set campaignUrl = null %}
+  {% set campaignUrl = app.request.attributes.get('_route_params')['campaignUrl'] %}
+
+  <div class="row">
+    <div class="col-sm-12">
+      <h2>{{ team.name }}</h2>
+      <br/>
     </div>
+    <!-- ./col -->
+  </div>
+  <!-- ./row -->
+  <form name="team" method="post" class="form-horizontal">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <dl class="dl-horizontal">
-                <dt>ID</dt>
-                <dd>{{ team.id }}</dd>
-                <dt>Name</dt>
-                <dd>{{ team.name }}</dd>
-            </dl>
+      <div class="col-sm-4">
+        <img src="/assets/img/team-{{ team.teamType.name }}-image-2.png" class="img-fluid rounded" alt="Responsive image">
+      </div>
+      <!-- ./col -->
+      <div class="col-sm-8">
+        <div class="form-group">
+          <div class="col-sm-6">
+            <label class="required" for="team_name">Team Name</label>
+            <input type="text" placeholder="The Smith Family" value="{% if team is not null and team.name is not null %}{{ team.name }}{% endif %}" id="team_name" required="required" name="team[name]" class="form-control">
+          </div>
         </div>
+        <!-- ./form-group -->
+        <div class="form-group">
+          <div class="col-sm-12">
+            <label class="required" for="team_description">Call for Action</label>
+            <textarea
+              placeholder="Help {{ team.name }} get to the top of the charts!..."
+              value="{% if team is not null and team.description is not null %}{{ team.description }}{% endif %}"
+              id="team_description"
+              name="team[description]"
+              rows="3"
+              class="form-control">{{team.description}}</textarea>
+          </div>
+        </div>
+        <!-- ./form-group -->
+        <div class="form-group">
+          <div class="col-sm-4">
+            <label class="required" for="team_name">Campaign Goal</label>
+            <div class="input-group">
+              <span class="input-group-addon" id="basic-addon1">$</span>
+              <input type="number" min=0 id="team_fundingGoal" value="{% if team is null or team.fundingGoal is empty %}500{% else %}{{ team.fundingGoal }}{% endif %}" name="team[fundingGoal]" class="form-control text-right">
+            </div>
+          </div>
+        </div>
+        <!-- ./form-group -->
+      </div>
+      <!-- ./col -->
     </div>
-{% endblock %}
+    <!-- ./row -->
+    <hr>
+    {% if team.teamType.value == 'family' %}
+      <div class="row">
+        <div class="col-sm-12">
+          <h4>Children</h4>
+          {% for teamStudent in team.teamStudents %}
+            <div class="form-group row">
+              <label class="col-sm-2 col-form-label" for="team_students_{{loop.index}}_classroomId">Child
+                {{ loop.index }}</label>
+              <div class="col">
+                <select id="team_students_{{loop.index}}_classroomId" name="team[students][{{loop.index}}][classroomId]" class="form-control">
+                  <option selected="selected">Select Classroom</option>
+                  {% for classroom in classrooms %}
+                    <option value="{{classroom.id}}" {% if teamStudent.classroom.id == classroom.id %} selected{% endif %}>{{classroom.grade.name}}
+                      -
+                      {{classroom.name}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col">
+                <input type="text" id="team_students_{{loop.index}}_name" value="{% if teamStudent.name is defined %}{{ teamStudent.name }}{% endif %}" placeholder="David S." name="team[students][{{loop.index}}][name]" class="form-control">
+              </div>
+              <div class="col">
+                <a href="{{ path('team_edit', {'campaignUrl': campaignUrl, 'teamUrl': team.url, 'action':'delete_team_student', 'teamStudentID' : teamStudent.id}) }}" class="btn btn-danger delete_record" id="{{teamStudent.id}}">
+                  <i class="fa fa-trash" aria-hidden="true"></i>
+                </a>
+              </div>
+            </div>
+            <!-- ./form-group -->
+            <input type="hidden" id="team_students_{{loop.index}}_id" name="team[students][{{loop.index}}][id]" value="{{teamStudent.id}}">
+          {% endfor %}
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="team_newStudent_classroomId">New Student</label>
+            <div class="col">
+              <select id="team_newStudent_classroomId" name="team[newStudent][classroomId]" class="form-control">
+                <option selected="selected">Select Classroom</option>
+                {% for classroom in classrooms %}
+                  <option value="{{classroom.id}}">{{classroom.grade.name}} - {{classroom.name}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col">
+              <input type="text" id="team_newStudent_name" placeholder="David S." name="team[newStudent][name]" class="form-control">
+            </div>
+            <div class="col"></div>
+          </div>
+          <!-- ./form-group -->
+        {% elseif team.teamType.value == 'teacher' %}
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <div class="col-sm-6">
+                  <label class="required" for="team_classroom_classroomId">Classroom</label>
+                  <select id="team_classroom_classroomId" name="team[classroom][classroomId]" class="form-control">
+                    <option value="" selected="selected">Select Classroom</option>
+                    {% for classroom in classrooms %}
+                      <option value="{{classroom.id}}" {% if team.classroom.id == classroom.id %} selected{% endif %}>{{classroom.grade.name}} - {{classroom.name}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <!-- ./form-group -->
+            {% elseif team.teamType.value == 'student' %}
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label" for="team_student_classroomId">Student Info</label>
+                    <div class="col-sm-6">
+                      <select id="team_student_classroomId" name="team[student][classroomId]" class="form-control">
+                        <option selected="selected">Select Classroom</option>
+                        {% for classroom in classrooms %}
+                          <option value="{{classroom.id}}" {% if team.teamStudents.0 is defined and team.teamStudents.0.classroom.id == classroom.id %} selected{% endif %}>{{classroom.grade.name}} - {{classroom.name}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <div class="col-sm-3">
+                      <input type="text" id="team_students_name" value="{{ team.teamStudents.0.name }}" placeholder="David S." name="team[student][name]" class="form-control">
+                    </div>
+                  </div>
+                  <!-- ./form-group -->
+                {% endif %}
+                <hr>
+                <div class="form-group">
+                  <div class="col-sm-12">
+                    <button type="submit" id="submit" class="btn btn-primary pull-right">Update Team</button>
+                  </div>
+                </div>
+                <!-- ./form-group -->
+                <input type="hidden" id="team_campaignId" name="team[campaignId]">
+              </div>
+              <!-- ./col -->
+            </div>
+            <!-- ./row -->
+          </form>
+        {% endblock body %}
+
+        {% block javascripts %}
+          <script type="text/javascript">
+            $(document).ready(function() {
+              $('.delete_record').click(function() {
+                event.preventDefault();
+                var r = confirm("Are you sure you want to delete?");
+                if (r == true) {
+                  window.location = $(this).attr('href');
+                }
+              });
+            });
+          </script>
+        {% endblock %}

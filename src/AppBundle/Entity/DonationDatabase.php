@@ -28,7 +28,7 @@ class DonationDatabase
      * @var Student
      *
      * @ORM\ManyToOne(targetEntity="Student", inversedBy="donationDatabases")
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE", nullable=true)
+     * @ORM\JoinColumn(referencedColumnName="id", nullable=true)
      */
     private $student;
 
@@ -36,7 +36,7 @@ class DonationDatabase
      * @var Student
      *
      * @ORM\ManyToOne(targetEntity="Team", inversedBy="donationDatabases")
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE", nullable=true)
+     * @ORM\JoinColumn(referencedColumnName="id", nullable=true)
      */
      private $team;
 
@@ -44,7 +44,7 @@ class DonationDatabase
      * @var Classroom
      *
      * @ORM\ManyToOne(targetEntity="Classroom", inversedBy="donationDatabases")
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE", nullable=true)
+     * @ORM\JoinColumn(referencedColumnName="id", nullable=true)
      * @Assert\NotNull()
      */
     private $classroom;
@@ -53,7 +53,7 @@ class DonationDatabase
      * @var Donation
      *
      * @ORM\ManyToOne(targetEntity="Donation", inversedBy="donationDatabases")
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE", nullable=true)
+     * @ORM\JoinColumn(referencedColumnName="id",  nullable=true)
      * @Assert\NotNull()
      */
     private $donation;
@@ -62,7 +62,7 @@ class DonationDatabase
      * @var Campaign
      *
      * @ORM\ManyToOne(targetEntity="Campaign", inversedBy="donationDatabases")
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(referencedColumnName="id")
      * @Assert\NotNull()
      */
     private $campaign;
@@ -110,7 +110,7 @@ class DonationDatabase
      */
     private $donatedAt;
 
-    
+
    /**
     * Constructor
     */
