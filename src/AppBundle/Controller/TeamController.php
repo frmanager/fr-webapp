@@ -253,7 +253,7 @@ class TeamController extends Controller
 
             //If it is a student team, a class and student name is required
             if($team->getTeamType()->getValue() == "student"){
-              if(empty($params['team']['student']['classroomId']) or empty($params['team']['student']['name']) or $params['team']['student']['classroomId'] == '' or $params['team']['student']['name'] == ''){
+              if(empty($params['team']['student']['classroomID']) or empty($params['team']['student']['name']) or $params['team']['student']['classroomID'] == '' or $params['team']['student']['name'] == ''){
                 $this->addFlash('warning','Student classrom and name is required');
                 $fail = true;
               }
@@ -261,7 +261,7 @@ class TeamController extends Controller
 
             //If it is a teacher team a class is required
             if($team->getTeamType()->getValue() == "teacher"){
-              if(empty($params['team']['classroom']['classroomId']) or $params['team']['classroom']['classroomId'] == ''){
+              if(empty($params['team']['classroom']['classroomID']) or $params['team']['classroom']['classroomID'] == ''){
                 $this->addFlash('warning','Please select a classroom');
                 $fail = true;
               }
@@ -280,7 +280,7 @@ class TeamController extends Controller
 
               //If it is a "Teacher" team, set the classroom
               if($team->getTeamType()->getValue() == "teacher"){
-                  $team->setClassroom($em->getRepository('AppBundle:Classroom')->find($params['team']['classroom']['classroomId']));
+                  $team->setClassroom($em->getRepository('AppBundle:Classroom')->find($params['team']['classroom']['classroomID']));
               }
 
               $team->setUser($this->get('security.token_storage')->getToken()->getUser());
@@ -298,8 +298,8 @@ class TeamController extends Controller
                   foreach ($params['team']['students'] as $key => $student) {
                     $teamStudent = $em->getRepository('AppBundle:TeamStudent')->find($student['id']);
                     if(!empty($teamStudent)){
-                      if($teamStudent->getClassroom()->getId() !== $student['classroomId'] || $teamStudent->getName() !== $student['name']){
-                        $teamStudent->setClassroom($em->getRepository('AppBundle:Classroom')->find($student['classroomId']));
+                      if($teamStudent->getClassroom()->getId() !== $student['classroomID'] || $teamStudent->getName() !== $student['name']){
+                        $teamStudent->setClassroom($em->getRepository('AppBundle:Classroom')->find($student['classroomID']));
                         $teamStudent->setGrade($em->getRepository('AppBundle:Grade')->find($teamStudent->getClassroom()->getGrade()));
                         $teamStudent->setName($student['name']);
                         $em->persist($teamStudent);
@@ -311,11 +311,11 @@ class TeamController extends Controller
 
                   if(!empty($params['team']['newStudent'])){
                     $student = $params['team']['newStudent'];
-                    if(!empty($student['classroomId']) && !empty($student['name'])){
+                    if(!empty($student['classroomID']) && !empty($student['name'])){
                       $logger->debug("Adding TeamStudents to Team ".$team->getId());
                       $teamStudent = new TeamStudent();
                       $teamStudent->setTeam($team);
-                      $teamStudent->setClassroom($em->getRepository('AppBundle:Classroom')->find($student['classroomId']));
+                      $teamStudent->setClassroom($em->getRepository('AppBundle:Classroom')->find($student['classroomID']));
                       $teamStudent->setGrade($em->getRepository('AppBundle:Grade')->find($teamStudent->getClassroom()->getGrade()));
                       $teamStudent->setName($student['name']);
                       $teamStudent->setCreatedBy($this->get('security.token_storage')->getToken()->getUser());
@@ -328,7 +328,7 @@ class TeamController extends Controller
                   $logger->debug("Adding TeamStudents".$team->getId());
                   $teamStudent = $em->getRepository('AppBundle:TeamStudent')->findOneBy(array('team'=>$team));
                   $teamStudent->setTeam($team);
-                  $teamStudent->setClassroom($em->getRepository('AppBundle:Classroom')->find($student['classroomId']));
+                  $teamStudent->setClassroom($em->getRepository('AppBundle:Classroom')->find($student['classroomID']));
                   $teamStudent->setGrade($em->getRepository('AppBundle:Grade')->find($teamStudent->getClassroom()->getGrade()));
                   $teamStudent->setName($student['name']);
                   $teamStudent->setCreatedBy($this->get('security.token_storage')->getToken()->getUser());
@@ -350,8 +350,8 @@ class TeamController extends Controller
              ->from('AppBundle:Classroom', 'u')
              ->join('AppBundle:Grade', 'g')
              ->where('u.grade = g.id')
-             ->andWhere('u.campaign = :campaignId')
-             ->setParameter('campaignId', $campaign->getId())
+             ->andWhere('u.campaign = :campaignID')
+             ->setParameter('campaignID', $campaign->getId())
              ->orderBy('g.name', 'ASC');
 
         $classrooms =  $qb->getQuery()->getResult();

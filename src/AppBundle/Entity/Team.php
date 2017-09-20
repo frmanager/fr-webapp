@@ -66,7 +66,7 @@ class Team
      * @var Campaign
      *
      * @ORM\ManyToOne(targetEntity="Campaign", inversedBy="teams")
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(referencedColumnName="id")
      * @Assert\NotNull()
      */
     private $campaign;
@@ -95,12 +95,12 @@ class Team
 
 
    /**
-    * @ORM\OneToMany(targetEntity="Donation", mappedBy="team", cascade={"remove"})
+    * @ORM\OneToMany(targetEntity="Donation", mappedBy="team")
     */
    private $donations;
 
    /**
-    * @ORM\OneToMany(targetEntity="DonationDatabase", mappedBy="team", cascade={"remove"})
+    * @ORM\OneToMany(targetEntity="DonationDatabase", mappedBy="team")
     */
    private $donationDatabases;
 
@@ -118,7 +118,7 @@ class Team
     * @var Classroom
     *
     * @ORM\ManyToOne(targetEntity="Classroom", inversedBy="teams")
-    * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE", nullable=true)
+    * @ORM\JoinColumn(referencedColumnName="id", nullable=true)
     */
    private $classroom;
 
@@ -132,7 +132,7 @@ class Team
     * @var User
     *
     * @ORM\ManyToOne(targetEntity="User", inversedBy="teams")
-    * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+    * @ORM\JoinColumn(referencedColumnName="id")
     * @Assert\NotNull()
     */
    private $user;

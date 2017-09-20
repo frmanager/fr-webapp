@@ -27,14 +27,14 @@ class Campaignaward
 
     /**
      * @ORM\ManyToOne(targetEntity="Campaignawardtype", inversedBy="campaignawards")
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(referencedColumnName="id")
      * @Assert\NotNull()
      */
     private $campaignawardtype;
 
     /**
      * @ORM\ManyToOne(targetEntity="Campaignawardstyle", inversedBy="campaignawards")
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(referencedColumnName="id")
      * @Assert\NotNull()
      */
     private $campaignawardstyle;
@@ -65,7 +65,7 @@ class Campaignaward
      * @var Campaign
      *
      * @ORM\ManyToOne(targetEntity="Campaign", inversedBy="campaignawards")
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(referencedColumnName="id")
      * @Assert\NotNull()
      */
     private $campaign;

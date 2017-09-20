@@ -54,12 +54,12 @@
           {% set k = 3 %}
           {% for i in range(1, k) %}
           <div class="form-group row">
-            <label class="col-sm-2 col-form-label" for="team_students_{{i}}_classroomId">Child {{i}}</label>
+            <label class="col-sm-2 col-form-label" for="team_students_{{i}}_classroomID">Child {{i}}</label>
             <div class="col-sm-6">
-              <select id="team_students_{{i}}_classroomId" name="team[students][{{i}}][classroomId]" class="form-control">
+              <select id="team_students_{{i}}_classroomID" name="team[students][{{i}}][classroomID]" class="form-control">
                 <option selected="selected">Select Classroom</option>
                 {% for classroom in classrooms %}
-                  <option value="{{classroom.id}}" {% if team is not null and team['students'][i]['classroomId'] is not empty and team['students'][i]['classroomId'] == classroom.id %}selected{% endif %}>{{classroom.grade.name}} - {{classroom.name}}</option>
+                  <option value="{{classroom.id}}" {% if team is not null and team['students'][i]['classroomID'] is not empty and team['students'][i]['classroomID'] == classroom.id %}selected{% endif %}>{{classroom.grade.name}} - {{classroom.name}}</option>
                 {% endfor %}
               </select>
             </div>
@@ -93,11 +93,11 @@
           <hr>
           <div class="form-group">
             <div class="col-sm-6">
-                <label class="required" for="team_classroom_classroomId">Classroom</label>
-                <select id="team_classroom_classroomId" name="team[classroom][classroomId]" class="form-control">
+                <label class="required" for="team_classroom_classroomID">Classroom</label>
+                <select id="team_classroom_classroomID" name="team[classroom][classroomID]" class="form-control">
                   <option value="" selected="selected">Select Classroom</option>
                   {% for classroom in classrooms %}
-                    <option value="{{classroom.id}}" {% if team is not null and team['classroom']['classroomId'] is not empty and team['classroom']['classroomId'] == classroom.id %}selected{% endif %}>{{classroom.grade.name}} - {{classroom.name}}</option>
+                    <option value="{{classroom.id}}" {% if team is not null and team['classroom']['classroomID'] is not empty and team['classroom']['classroomID'] == classroom.id %}selected{% endif %}>{{classroom.grade.name}} - {{classroom.name}}</option>
                   {% endfor %}
                 </select>
             </div>
@@ -126,12 +126,12 @@
           </div>
           <hr>
           <div class="form-group row">
-            <label class="col-sm-3 col-form-label" for="team_students_1_classroomId">Student Info</label>
+            <label class="col-sm-3 col-form-label" for="team_students_1_classroomID">Student Info</label>
             <div class="col-sm-6">
-              <select id="team_students_1_classroomId" name="team[students][1][classroomId]" class="form-control">
+              <select id="team_students_1_classroomID" name="team[students][1][classroomID]" class="form-control">
                 <option selected="selected">Select Classroom</option>
                 {% for classroom in classrooms %}
-                  <option value="{{classroom.id}}" {% if team is not null and team['students'][1]['classroomId'] is not empty and team['students'][1]['classroomId'] == classroom.id %}selected{% endif %}>{{classroom.grade.name}} - {{classroom.name}}</option>
+                  <option value="{{classroom.id}}" {% if team is not null and team['students'][1]['classroomID'] is not empty and team['students'][1]['classroomID'] == classroom.id %}selected{% endif %}>{{classroom.grade.name}} - {{classroom.name}}</option>
                 {% endfor %}
               </select>
             </div>
@@ -146,7 +146,7 @@
             <a class="btn btn-warning" href="{{ path('register_team_select', {'campaignUrl': campaign.url }) }}"><i class="fa fa-arrow-left" aria-hidden="true"></i>&nbsp;Select a different page type</a><button type="submit" id="submit" class="btn btn-primary pull-right">Create your Page!</button>
           </div>
         </div>
-        <input type="hidden" id="team_campaignId" name="team[campaignId]"><input type="hidden" id="user__token" name="team[_token]" value="oPf8W_BVWF3f9zvbETkokwPUnKXWK_I9HYOGSyt5Thk">
+        <input type="hidden" id="team_campaignID" name="team[campaignID]"><input type="hidden" id="user__token" name="team[_token]" value="oPf8W_BVWF3f9zvbETkokwPUnKXWK_I9HYOGSyt5Thk">
         <input type="hidden" id="team_teamType" name="team[teamType]" value="{{ teamType.name }}">
       </form>
       </div>

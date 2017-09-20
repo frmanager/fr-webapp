@@ -15,7 +15,7 @@
         <form name="teamStudent" method="post" class="form-horizontal">
           <div class="form-group">
             <div class="col-sm-6">
-                <select id="teamStudent_classroomId" name="teamStudent[classroomId]" class="form-control">
+                <select id="teamStudent_classroomID" name="teamStudent[classroomID]" class="form-control">
                   <option value="" selected="selected">Select Classroom</option>
                   {% for classroom in classrooms %}
                     <option value="{{classroom.id}}" {% if teamStudent.classroom.id == classroom.id %}selected{% endif %}>{{classroom.grade.name}} - {{classroom.name}}</option>
@@ -32,7 +32,7 @@
             <button type="submit" id="submit" class="btn btn-primary pull-right">Update</button>
           </div>
         </div>
-        <input type="hidden" id="teamStudent_campaignId" name="teamStudent[campaignId]" value="{{ teamStudent.team.campaign.id }}">
+        <input type="hidden" id="teamStudent_campaignID" name="teamStudent[campaignID]" value="{{ teamStudent.team.campaign.id }}">
         <input type="hidden" id="teamStudent_teamId" name="teamStudent[teamId]" value="{{ teamStudent.team.id }}">
         </form>
         </div>

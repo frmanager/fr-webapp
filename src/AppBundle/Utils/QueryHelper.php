@@ -422,8 +422,8 @@ class QueryHelper
              ->from('AppBundle:Campaignaward', 'u')
              ->andWhere('u.campaignawardtype = :awardType')
              ->andWhere('u.campaignawardstyle = :awardStyle')
-             ->andWhere('u.campaign = :campaignId')
-             ->setParameter('campaignId', $campaign->getId())
+             ->andWhere('u.campaign = :campaignID')
+             ->setParameter('campaignID', $campaign->getId())
              ->setParameter('awardStyle', $campaignawardstyle->getId())
              ->setParameter('awardType', $campaignawardtype->getId())
              ->orderBy('u.amount', 'ASC');

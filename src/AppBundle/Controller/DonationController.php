@@ -152,25 +152,25 @@ class DonationController extends Controller
             }
           }
         }else if (!$fail && $donationType == 'classroom'){
-          if(empty($params['donation']['classroomId']) || $params['donation']['classroomId'] == ""){
+          if(empty($params['donation']['classroomID']) || $params['donation']['classroomID'] == ""){
             $this->addFlash('warning','No Classroom was selected');
             $fail = true;
           }
           if(!$fail){
-            $classroomCheck = $em->getRepository('AppBundle:Classroom')->findOneBy(array('id'=>$params['donation']['classroomId'], 'campaign' => $campaign));
+            $classroomCheck = $em->getRepository('AppBundle:Classroom')->findOneBy(array('id'=>$params['donation']['classroomID'], 'campaign' => $campaign));
             if(is_null($classroomCheck)){
               $this->addFlash('warning','No Valid Classroom was selected');
               $fail = true;
             }
           }
         }else if (!$fail && $donationType == 'student'){
-          if(empty($params['donation']['classroomId']) || $params['donation']['classroomId'] == ""){
+          if(empty($params['donation']['classroomID']) || $params['donation']['classroomID'] == ""){
             $this->addFlash('warning','No Classroom was selected');
             $fail = true;
           }
 
           if(!$fail){
-            $classroomCheck = $em->getRepository('AppBundle:Classroom')->findOneBy(array('id'=>$params['donation']['classroomId'], 'campaign' => $campaign));
+            $classroomCheck = $em->getRepository('AppBundle:Classroom')->findOneBy(array('id'=>$params['donation']['classroomID'], 'campaign' => $campaign));
             if(is_null($classroomCheck)){
               $this->addFlash('warning','No Valid Classroom was selected');
               $fail = true;

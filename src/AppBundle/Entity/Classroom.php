@@ -40,7 +40,7 @@ class Classroom
      * @var Campaign
      *
      * @ORM\ManyToOne(targetEntity="Campaign", inversedBy="classrooms")
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(referencedColumnName="id")
      * @Assert\NotNull()
      */
     private $campaign;

@@ -65,7 +65,7 @@ class User implements UserInterface
     private $campaignUsers;
 
     /**
-     * @ORM\OneToMany(targetEntity="Team", mappedBy="user", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Team", mappedBy="user")
      */
     private $teams;
 
@@ -141,7 +141,7 @@ class User implements UserInterface
         $this->updatedAt= new \DateTime();
     }
 
-    
+
     public function getUsername()
     {
         return $this->email;
