@@ -28,16 +28,16 @@
             </div>
             <hr>
             <div class="form-group">
-              <label class="control-label" for="donation_classroomId">Student Info</label>
-                  <select id="donation_classroomId" name="donationclassroomId]" class="form-control">
+              <label class="control-label" for="donation_classroomID">Student Info</label>
+                  <select id="donation_classroomID" name="donationclassroomID]" class="form-control">
                     <option value="" selected="selected">Select Classroom</option>
                     {% for classroom in classrooms %}
-                      <option value="{{classroom.id}}" {% if donation is not null and donation['classroomId'] is not empty and donation['classroomId'] == classroom.id %}selected{% endif %}>{{classroom.grade.name}} - {{classroom.name}}</option>
+                      <option value="{{classroom.id}}" {% if donation is not null and donation['classroomID'] is not empty and donation['classroomID'] == classroom.id %}selected{% endif %}>{{classroom.grade.name}} - {{classroom.name}}</option>
                     {% endfor %}
                   </select>
             </div>
           <hr>
-          <input type="hidden" id="donation_campaignId" name="donation[campaignId]">
+          <input type="hidden" id="donation_campaignID" name="donation[campaignID]">
         </div>
     </div>
 {% endblock %}

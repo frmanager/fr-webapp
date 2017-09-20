@@ -120,8 +120,8 @@ class ClassroomController extends Controller
 
         $qb = $em->createQueryBuilder()->select('u')
                ->from('AppBundle:Campaignaward', 'u')
-               ->andWhere('u.campaign = :campaignId')
-               ->setParameter('campaignId', $campaign->getId())
+               ->andWhere('u.campaign = :campaignID')
+               ->setParameter('campaignID', $campaign->getId())
                ->orderBy('u.amount', 'DESC');
 
         $campaignAwards = $qb->getQuery()->getResult();

@@ -23,7 +23,6 @@
                         <th>Name</th>
                         <th>Donations</th>
                         <th>Rank</th>
-                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -36,13 +35,6 @@
                             <td style="text-align:right;">{% if not team.donation_amount == 0 %}${{ team.donation_amount|number_format(2, '.', ',')}}</span>{% endif %}</td>
                             <td style="text-align:center;vertical-align: middle;">
                               <span class="badge badge-{% if team.rank == 1 %}success{% elseif team.rank == 2 %}warning{% elseif team.rank == 3 %}primary{% else %}default{% endif %}">{{ team.rank }}</span>
-                            </td>
-                            <td style="text-align:center;">
-                                <a href="{{ path('team_show', {'campaignUrl':campaign.url, 'teamUrl': team.team_url }) }}" class="btn btn-sm btn-info">
-                                    <i class="glyphicon glyphicon-eye-open"></i>
-                                    <span class="hidden-xs hidden-sm">
-                                        View</span>
-                                </a>
                             </td>
                         </tr>
                     {% endfor %}

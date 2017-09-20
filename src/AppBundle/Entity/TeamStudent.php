@@ -34,7 +34,7 @@ class TeamStudent
    * @var student
    *
    * @ORM\ManyToOne(targetEntity="Student", inversedBy="teamStudents")
-   * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE", nullable=true)
+   * @ORM\JoinColumn(referencedColumnName="id", nullable=true)
    *
    */
   private $student;
@@ -44,7 +44,7 @@ class TeamStudent
    * @var Team
    *
    * @ORM\ManyToOne(targetEntity="Team", inversedBy="teamStudents")
-   * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+   * @ORM\JoinColumn(referencedColumnName="id")
    * @Assert\NotNull()
    */
   private $team;
@@ -88,7 +88,7 @@ class TeamStudent
   * @var Classroom
   *
   * @ORM\ManyToOne(targetEntity="Classroom", inversedBy="teamStudents")
-  * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+  * @ORM\JoinColumn(referencedColumnName="id")
   * @Assert\NotNull()
   */
  private $classroom;

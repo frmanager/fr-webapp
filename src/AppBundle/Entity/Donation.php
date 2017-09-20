@@ -28,7 +28,7 @@ class Donation
      * @var Student
      *
      * @ORM\ManyToOne(targetEntity="Student", inversedBy="donations")
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE", nullable=true)
+     * @ORM\JoinColumn(referencedColumnName="id", nullable=true)
      */
     private $student;
 
@@ -36,7 +36,7 @@ class Donation
      * @var Student
      *
      * @ORM\ManyToOne(targetEntity="Team", inversedBy="donations")
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE", nullable=true)
+     * @ORM\JoinColumn(referencedColumnName="id", nullable=true)
      */
      private $team;
 
@@ -45,7 +45,7 @@ class Donation
      * @var Classroom
      *
      * @ORM\ManyToOne(targetEntity="Classroom", inversedBy="donations")
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE", nullable=true)
+     * @ORM\JoinColumn(referencedColumnName="id", nullable=true)
      * @Assert\NotNull()
      */
     private $classroom;
@@ -66,7 +66,7 @@ class Donation
      * @var Campaign
      *
      * @ORM\ManyToOne(targetEntity="Campaign", inversedBy="donations")
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(referencedColumnName="id")
      * @Assert\NotNull()
      */
     private $campaign;
@@ -357,7 +357,7 @@ class Donation
         return $this->estimatedCcFee;
     }
 
-  
+
     /**
      * Set type
      *

@@ -149,9 +149,9 @@ class TeamStudentController extends Controller
             $params = $request->request->all();
 
             //If is a "family" page, we need to add students
-              if(!empty($params['teamStudent']['classroomId']) && !empty($params['teamStudent']['name']) && !$params['teamStudent']['classroomId'] !== '' && $params['teamStudent']['name'] !== ''){
+              if(!empty($params['teamStudent']['classroomID']) && !empty($params['teamStudent']['name']) && !$params['teamStudent']['classroomID'] !== '' && $params['teamStudent']['name'] !== ''){
                 $logger->debug("Updating TeamStudent ".$teamStudent->getId()." in Team ".$team->getId());
-                $teamStudent->setClassroom($em->getRepository('AppBundle:Classroom')->find($params['teamStudent']['classroomId']));
+                $teamStudent->setClassroom($em->getRepository('AppBundle:Classroom')->find($params['teamStudent']['classroomID']));
                 $teamStudent->setGrade($em->getRepository('AppBundle:Grade')->find($teamStudent->getClassroom()->getGrade()));
                 $teamStudent->setName($params['teamStudent']['name']);
                 $teamStudent->setConfirmedFlag(false);
@@ -169,8 +169,8 @@ class TeamStudentController extends Controller
              ->from('AppBundle:Classroom', 'u')
              ->join('AppBundle:Grade', 'g')
              ->where('u.grade = g.id')
-             ->andWhere('u.campaign = :campaignId')
-             ->setParameter('campaignId', $campaign->getId())
+             ->andWhere('u.campaign = :campaignID')
+             ->setParameter('campaignID', $campaign->getId())
              ->orderBy('g.name', 'ASC');
 
         $classrooms =  $qb->getQuery()->getResult();

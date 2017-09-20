@@ -34,7 +34,7 @@ class CampaignUser
    * @var User
    *
    * @ORM\ManyToOne(targetEntity="User", inversedBy="campaignUsers")
-   * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+   * @ORM\JoinColumn(referencedColumnName="id")
    * @Assert\NotNull()
    */
   private $user;
@@ -44,7 +44,7 @@ class CampaignUser
    * @var Campaign
    *
    * @ORM\ManyToOne(targetEntity="Campaign", inversedBy="campaignUsers")
-   * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+   * @ORM\JoinColumn(referencedColumnName="id")
    * @Assert\NotNull()
    */
   private $campaign;

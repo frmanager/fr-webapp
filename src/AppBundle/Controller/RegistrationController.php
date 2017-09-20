@@ -382,7 +382,7 @@ class RegistrationController extends Controller
 
           //If it is a student team, a class and student name is required
           if($teamType->getValue() == "student"){
-            if(empty($params['team']['students'][1]['classroomId']) or empty($params['team']['students'][1]['name']) or $params['team']['students'][1]['classroomId'] == '' or $params['team']['students'][1]['name'] == ''){
+            if(empty($params['team']['students'][1]['classroomID']) or empty($params['team']['students'][1]['name']) or $params['team']['students'][1]['classroomID'] == '' or $params['team']['students'][1]['name'] == ''){
               $this->addFlash('warning','Student classrom and name is required');
               $fail = true;
             }
@@ -390,7 +390,7 @@ class RegistrationController extends Controller
 
           //If it is a teacher team a class is required
           if($teamType->getValue() == "teacher"){
-            if(empty($params['team']['classroom']['classroomId']) or $params['team']['classroom']['classroomId'] == ''){
+            if(empty($params['team']['classroom']['classroomID']) or $params['team']['classroom']['classroomID'] == ''){
               $this->addFlash('warning','Please select a classroom');
               $fail = true;
             }
@@ -409,7 +409,7 @@ class RegistrationController extends Controller
 
             //If it is a "Teacher" team, set the classroom
             if($teamType->getValue() == "teacher"){
-                $team->setClassroom($em->getRepository('AppBundle:Classroom')->find($params['team']['classroom']['classroomId']));
+                $team->setClassroom($em->getRepository('AppBundle:Classroom')->find($params['team']['classroom']['classroomID']));
             }
 
             $team->setUser($this->get('security.token_storage')->getToken()->getUser());
@@ -426,10 +426,10 @@ class RegistrationController extends Controller
             if($teamType->getValue() == "family" or $teamType->getValue() == "student"){
               $logger->debug("Adding TeamStudents to Team ".$team->getId());
               foreach ($params['team']['students'] as $key => $student) {
-                if(!empty($student['classroomId']) && !empty($student['name']) && !$student['classroomId'] !== '' && $student['name'] !== ''){
+                if(!empty($student['classroomID']) && !empty($student['name']) && !$student['classroomID'] !== '' && $student['name'] !== ''){
                   $teamStudent = new TeamStudent();
                   $teamStudent->setTeam($team);
-                  $teamStudent->setClassroom($em->getRepository('AppBundle:Classroom')->find($student['classroomId']));
+                  $teamStudent->setClassroom($em->getRepository('AppBundle:Classroom')->find($student['classroomID']));
                   $teamStudent->setGrade($em->getRepository('AppBundle:Grade')->find($teamStudent->getClassroom()->getGrade()));
                   $teamStudent->setName($student['name']);
                   $teamStudent->setCreatedBy($this->get('security.token_storage')->getToken()->getUser());
@@ -448,8 +448,8 @@ class RegistrationController extends Controller
            ->from('AppBundle:Classroom', 'u')
            ->join('AppBundle:Grade', 'g')
            ->where('u.grade = g.id')
-           ->andWhere('u.campaign = :campaignId')
-           ->setParameter('campaignId', $campaign->getId())
+           ->andWhere('u.campaign = :campaignID')
+           ->setParameter('campaignID', $campaign->getId())
            ->orderBy('g.name', 'ASC');
 
       $classrooms =  $qb->getQuery()->getResult();

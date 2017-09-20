@@ -36,25 +36,25 @@ class Student
      * @var Classroom
      *
      * @ORM\ManyToOne(targetEntity="Classroom", inversedBy="students")
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(referencedColumnName="id")
      * @Assert\NotNull()
      */
     private $classroom;
 
     /**
-     * @ORM\OneToMany(targetEntity="Donation", mappedBy="student", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Donation", mappedBy="student")
      */
     private $donations;
 
     /**
-     * @ORM\OneToMany(targetEntity="DonationDatabase", mappedBy="student", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="DonationDatabase", mappedBy="student")
      */
     private $donationDatabases;
 
     /**
      * @var Grade
      *
-     * @ORM\ManyToOne(targetEntity="Grade", inversedBy="students", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="Grade", inversedBy="students")
      * @ORM\JoinColumn(name="grade_id", referencedColumnName="id")
      * @Assert\NotNull()
      */
@@ -64,13 +64,13 @@ class Student
      * @var Campaign
      *
      * @ORM\ManyToOne(targetEntity="Campaign", inversedBy="students")
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(referencedColumnName="id")
      * @Assert\NotNull()
      */
     private $campaign;
 
     /**
-     * @ORM\OneToMany(targetEntity="TeamStudent", mappedBy="student", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="TeamStudent", mappedBy="student")
      */
     private $teamStudents;
 

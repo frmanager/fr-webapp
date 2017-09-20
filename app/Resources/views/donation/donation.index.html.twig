@@ -50,9 +50,9 @@
               <div class="row">
                 <div class="col-md-8">
                   <div class="form-group">
-                    <label class="control-label required" for="donation_classroomId">Select Classroom</label>
+                    <label class="control-label required" for="donation_classroomID">Select Classroom</label>
                     <div class="input-group col-md-12">
-                      <select id="donation_classroomId" name="donation[classroomId]" class="form-control form-control-lg">
+                      <select id="donation_classroomID" name="donation[classroomID]" class="form-control form-control-lg">
                         <option value="" selected="selected">Select Classroom</option>
                         {% for thisClassroom in classrooms %}
                           <option value="{{thisClassroom.id}}" {% if formData is defined and classroom.id is defined and classroom.id == thisClassroom.id %} selected{% endif %}>{{thisClassroom.grade.name}} - {{thisClassroom.name}}</option>
@@ -79,8 +79,8 @@
               <!-- ./row -->
             {% elseif donationType == "classroom" %}
               <div class="form-group">
-                <label class="control-label required" for="donation_classroomId">Classroom</label>
-                <select id="donation_classroomId" name="donation[classroomId]" class="form-control form-control-lg">
+                <label class="control-label required" for="donation_classroomID">Classroom</label>
+                <select id="donation_classroomID" name="donation[classroomID]" class="form-control form-control-lg">
                   <option value="" selected="selected">Select Classroom</option>
                   {% for thisClassroom in classrooms %}
                     <option value="{{thisClassroom.id}}" {% if formData is defined and classroom.id is defined and classroom.id == thisClassroom.id %} selected{% endif %}>{{thisClassroom.grade.name}} - {{thisClassroom.name}}</option>
@@ -538,7 +538,7 @@
       <hr>
       <div class="row">
         <div class="col-md-12">
-          <input type="hidden" id="donation_campaignId" name="donation[campaignId]" value="{{campaign.id}}">
+          <input type="hidden" id="donation_campaignID" name="donation[campaignID]" value="{{campaign.id}}">
           <input type="hidden" id="donation_donationType" name="donation[donationType]" value="{{donationType}}">
           <button type="submit" id="submit" class="btn btn-primary btn-lg btn-block">DONATE</button>
         </div>
