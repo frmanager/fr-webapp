@@ -70,7 +70,7 @@ class Student
     private $campaign;
 
     /**
-     * @ORM\OneToMany(targetEntity="TeamStudent", mappedBy="student")
+     * @ORM\OneToMany(targetEntity="TeamStudent", mappedBy="student", cascade={"remove"})
      */
     private $teamStudents;
 
