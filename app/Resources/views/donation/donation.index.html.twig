@@ -549,10 +549,16 @@
     <!-- /column -->
     <div class="col-md-4">
       {% if donationType == "team" %}
+      {% if team.imageName is null %}
+      {% set profileImageUrl = '/assets/img/team-' ~ team.teamType.value ~ '-image-2.png' %}
+      {% else %}
+      {% set profileImageUrl = '/uploads/team_profile_photos/' ~team.imageName %}
+      {% endif %}
+
         <div class="row">
           <div class="col">
             <div class="card">
-              <img src="/assets/img/{{ team.teamType.value }}-image-default.png" alt="Family Image" class="card-img-top img-fluid">
+              <img src="{{ profileImageUrl }}" alt="Family Image" class="card-img-top img-fluid">
               <div class="card-block">
                 <h4 class="card-title">{{ team.name }}</h4>
                 <p class="card-text">{{ team.description[:100] }}...</p>

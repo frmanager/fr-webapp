@@ -17,6 +17,7 @@
 /web/bundles/
 .DS_Store
 /web/assets/vendor/
+/web/uploads/*
 build.properties
 /.vagrant/
 /nbproject/private/

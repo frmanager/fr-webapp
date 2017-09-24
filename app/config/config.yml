@@ -7,6 +7,8 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
+    team_profile_photos_directory: '%kernel.project_dir%/web/uploads/team_profile_photos'
+    temp_upload_directory: '%kernel.project_dir%/web/uploads/temp'
 
 framework:
     #esi:             ~

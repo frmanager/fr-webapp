@@ -81,7 +81,7 @@ class TeamController extends Controller
      * Finds and displays a Team entity.
      *
      * @Route("/{teamUrl}", name="team_show")
-     * @Method("GET")
+     *
      */
     public function showAction($campaignUrl, $teamUrl)
     {
@@ -226,6 +226,7 @@ class TeamController extends Controller
 
         if ($request->isMethod('POST')) {
             $params = $request->request->all();
+            $logger->debug('Request Params: '.print_r($params, true));
             $fail = false;
             //dump($request->request->get('data'));
             //$logger->debug('Team Name: '.print_r($params, true));
@@ -270,6 +271,57 @@ class TeamController extends Controller
 
             if(!$fail){
               $logger->debug("Updating team: ".$team->getName());
+
+              if(!empty($request->files->get('team')) && !is_null($request->files->get('team')['image'])){
+                  $logger->debug("Updating team photo");
+                  $file = $request->files->get('team');
+
+                  // Generate a unique name for the file before saving it
+                  $fileName = md5(uniqid());
+                  $fileNameWithExtension = $fileName.'.'.$file['image']->guessExtension();
+
+                  // Move the file to the directory where brochures are stored
+                  $file['image']->move(
+                      $this->getParameter('temp_upload_directory'),
+                      $fileNameWithExtension
+                  );
+
+                  $image_array = getimagesize($this->getParameter('temp_upload_directory').'/'.$fileNameWithExtension);
+                  $mime_type = $image_array['mime'];
+                  $logger->debug("Image mime_type is: ".$mime_type);
+                  list($widthOriginal, $heightOriginal) = getimagesize($this->getParameter('temp_upload_directory').'/'.$fileNameWithExtension);
+                  $maxWidth = 800;
+                  $maxHeight = 600;
+                  $resizeRatio = 1;
+                  //setting resizing Ratio
+                  //first we figure out of this is profile or portrait
+                  if($widthOriginal > $heightOriginal){
+                    $resizeRatio = round($maxWidth/$widthOriginal, 2);
+                  }elseif($heightOriginal > $widthOriginal){
+                    $resizeRatio = round($maxHeight/$heightOriginal, 2);
+                  }
+
+                  if($mime_type == 'image/jpeg'){
+                    $imageObject = imagecreatefromjpeg($this->getParameter('temp_upload_directory').'/'.$fileNameWithExtension);
+                  }elseif($mime_type == 'image/png'){
+                    $imageObject = imagecreatefrompng($this->getParameter('temp_upload_directory').'/'.$fileNameWithExtension);
+                  }elseif($mime_type == 'image/gif'){
+                    $imageObject = imagecreatefromgif($this->getParameter('temp_upload_directory').'/'.$fileNameWithExtension);
+                  }
+
+                  $desginationImageObject = imagecreatetruecolor(($widthOriginal*$resizeRatio), ($heightOriginal*$resizeRatio));
+                  imagecopyresampled($desginationImageObject, $imageObject, 0, 0, 0, 0, ($widthOriginal*$resizeRatio), ($heightOriginal*$resizeRatio), $widthOriginal, $heightOriginal);
+                  imagepng($desginationImageObject, $this->getParameter('team_profile_photos_directory').'/'.$fileName.'.png');
+                  imagedestroy($imageObject);
+                  imagedestroy($desginationImageObject);
+
+                  //Delete Temp Photo
+                  unlink($this->getParameter('temp_upload_directory').'/'.$fileNameWithExtension);
+                  //Delete Old Photo
+                  unlink($this->getParameter('team_profile_photos_directory').'/'.$team->getImageName());
+                  $team->setImageName($fileName.'.png');
+              }
+
               if($team->getName() !== $params['team']['name']){
                 $team->setName($params['team']['name']);
                 $team->setUrl($this->createTeamUrl($campaign, $params['team']['name']));
@@ -440,5 +492,157 @@ class TeamController extends Controller
             return $randomString;
         }
 
+
+
+        private function resizeImag($file){
+          // $dir specifies the directory where you upload your image files
+
+          // get the file by it's temporary name
+          $tmp_file_name = $_FILES['image']['tmp_name'];
+
+          // get the file extension
+          $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+
+          // specify the whole path here
+          $actual_file_name = $dir . basename($_FILES['image']['name'], "." . $ext) . ".png";
+
+          // check whether a valid image is uploaded or not
+          if(getimagesize($tmp_file_name)){
+
+              // get the mime type of the uploaded image
+              $image_array = getimagesize($tmp_file_name);
+              $mime_type = $image_array['mime'];
+
+              // get the height and width of the uploaded image
+              list($width_orig, $height_orig) = getimagesize($tmp_file_name);
+              $width = $width_orig;
+              $height = $height_orig;
+
+              if($mime_type == "image/gif"){
+                  // create a new true color image
+                  if($image_p = imagecreatetruecolor($width, $height)){
+
+                      // create a new image from file
+                      if($image = imagecreatefromgif($tmp_file_name)){
+
+                          // copy and resize part of an image with resampling
+                          if(imagecopyresampled($image_p, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig)){
+
+                              if(imagepng($image_p, $actual_file_name, 0)){
+                                  // image is successfully uploaded
+                                  // free resources
+                                  imagedestroy($image_p);
+                                  imagedestroy($image);
+
+                                  // perform the insert operation and get the last inserted id
+                                  // $lastinsertID = XXXX
+
+                                  // new file name
+                                  $filename = $dir . $lastinsertID . basename($_FILES['image']['name'], "." . $ext) . ".png";
+
+                                  //move the file to your desired location
+                                  if(rename($actual_file_name, $filename)){
+                                      echo "success";
+                                  }else{
+                                      echo "error";
+                                  }
+
+                              }else{
+                                  //Destroy both image resource handler
+                                  imagedestroy($image);
+                                  imagedestroy($image_p);
+                                  echo "Error";
+                              }
+                          }else{
+                              //Destroy both image resource handlers
+                              imagedestroy($image);
+                              imagedestroy($image_p);
+                              echo "Error";
+                          }
+                      }else{
+                          //destroy $image_p image resource handler
+                          imagedestroy($image_p);
+                          echo "Error";
+                      }
+                  }else{
+                      echo "Error";
+                  }
+              }elseif($mime_type == "image/png"){
+                  // the uploaded image is already in .png format
+                  if(move_uploaded_file($tmp_file_name, $actual_file_name)){
+
+                      // perform the insert operation and get the last inserted id
+                      // $lastinsertID = XXXX
+
+                      // new file name
+                      $filename = $dir . $lastinsertID . $_FILES['image']['name'];
+
+                      //move the file to your desired location
+                      if(rename($actual_file_name, $filename)){
+                          echo "success";
+                      }else{
+                          echo "error";
+                      }
+
+                  }else{
+                      echo "error";
+                  }
+              }elseif($mime_type == "image/jpeg"){
+                  // create a new true color image
+                  if($image_p = imagecreatetruecolor($width, $height)){
+
+                      // create a new image from file
+                      if($image = imagecreatefromjpeg($tmp_file_name)){
+
+                          // copy and resize part of an image with resampling
+                          if(imagecopyresampled($image_p, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig)){
+
+                              if(imagepng($image_p, $actual_file_name, 0)){
+                                  // image is successfully uploaded
+                                  // free resources
+                                  imagedestroy($image_p);
+                                  imagedestroy($image);
+
+                                  // perform the insert operation and get the last inserted id
+                                  // $lastinsertID = XXXX
+
+                                  // new file name
+                                  $filename = $dir . $lastinsertID . basename($_FILES['image']['name'], "." . $ext) . ".png";
+
+                                  //move the file to your desired location
+                                  if(rename($actual_file_name, $filename)){
+                                      echo "success";
+                                  }else{
+                                      echo "error";
+                                  }
+
+                              }else{
+                                  //Destroy both image resource handler
+                                  imagedestroy($image);
+                                  imagedestroy($image_p);
+                                  echo "Error";
+                              }
+                          }else{
+                              //Destroy both image resource handlers
+                              imagedestroy($image);
+                              imagedestroy($image_p);
+                              echo "Error";
+                          }
+                      }else{
+                          //destroy $image_p image resource handler
+                          imagedestroy($image_p);
+                          echo "Error";
+                      }
+                  }else{
+                      echo "error_An unexpected error has been occured. Please try again later.";
+                  }
+              }else{
+                  echo "Only JPEG, PNG and GIF images are allowed.";
+              }
+
+          }else{
+              echo "Bad image format";
+          }
+        }
 
 }

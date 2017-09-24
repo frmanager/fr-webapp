@@ -43,6 +43,13 @@ class Team
      */
     private $url;
 
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $imageName;
+
+
     /**
      * @ORM\Column(type="float", length=5, nullable=true)
      */
@@ -580,5 +587,29 @@ class Team
     public function getDonationDatabases()
     {
         return $this->donationDatabases;
+    }
+
+    /**
+     * Set imageName
+     *
+     * @param string $imageName
+     *
+     * @return Team
+     */
+    public function setImageName($imageName)
+    {
+        $this->imageName = $imageName;
+
+        return $this;
+    }
+
+    /**
+     * Get imageName
+     *
+     * @return string
+     */
+    public function getImageName()
+    {
+        return $this->imageName;
     }
 }
