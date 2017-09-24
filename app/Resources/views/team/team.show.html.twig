@@ -12,8 +12,8 @@
 {% set number_of_donations = 0 %}
 {% set donation_amount = 0 %}
 {% for donation in team.donations %}
-  {% set number_of_donations = number_of_donations + 1 %}
   {% if donation.donationStatus == "ACCEPTED" %}
+    {% set number_of_donations = number_of_donations + 1 %}
     {% set donation_amount = donation_amount + donation.amount %}
   {% endif %}
 {% endfor %}
