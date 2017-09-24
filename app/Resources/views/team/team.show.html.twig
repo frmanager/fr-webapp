@@ -17,6 +17,12 @@
     {% set donation_amount = donation_amount + donation.amount %}
   {% endif %}
 {% endfor %}
+{% if team.imageName is null %}
+{% set profileImageUrl = '/assets/img/team-' ~ team.teamType.value ~ '-image-2.png' %}
+{% else %}
+{% set profileImageUrl = '/uploads/team_profile_photos/' ~team.imageName %}
+{% endif %}
+
 
 {% set nonConfirmed = false %}
 <div class="row">
@@ -33,7 +39,7 @@
 <hr/>
 <div class="row">
     <div class="col-sm-6 offset-sm-1">
-        <img src="/assets/img/{{ team.teamType.value }}-image-default.png"  alt="..." width="100%" class="img-fuild rounded">
+        <img src="{{ profileImageUrl }}"  alt="..." width="100%" class="img-fuild rounded">
     </div>
     <div class="col-sm-4 offset-sm-1">
       <div class="row">

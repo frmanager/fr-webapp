@@ -1,11 +1,16 @@
 {% extends 'template.html.twig' %}
 
+{% set campaignUrl = null %}
+{% set campaignUrl = app.request.attributes.get('_route_params')['campaignUrl'] %}
+{% if team.imageName is null %}
+{% set profileImageUrl = '/assets/img/team-' ~ team.teamType.value ~ '-image-2.png' %}
+{% else %}
+{% set profileImageUrl = '/uploads/team_profile_photos/' ~team.imageName %}
+{% endif %}
+
 {% block title %}Edit Team{% endblock %}
 
 {% block body %}
-  {% set campaignUrl = null %}
-  {% set campaignUrl = app.request.attributes.get('_route_params')['campaignUrl'] %}
-
   <div class="row">
     <div class="col-sm-12">
       <h2>{{ team.name }}</h2>
@@ -14,10 +19,12 @@
     <!-- ./col -->
   </div>
   <!-- ./row -->
-  <form name="team" method="post" class="form-horizontal">
+  <form name="team" method="post" enctype="multipart/form-data" class="form-horizontal">
     <div class="row">
       <div class="col-sm-4">
-        <img src="/assets/img/team-{{ team.teamType.value }}-image-2.png" class="img-fluid rounded" alt="Responsive image">
+        <div class="card card-inverse">
+          <img id="profile-image" src="{{ profileImageUrl }}" class="img-fluid rounded" alt="Responsive image">
+        </div>
       </div>
       <!-- ./col -->
       <div class="col-sm-8">
@@ -25,6 +32,16 @@
           <div class="col-sm-6">
             <label class="required" for="team_name">Team Name</label>
             <input type="text" placeholder="The Smith Family" value="{% if team is not null and team.name is not null %}{{ team.name }}{% endif %}" id="team_name" required="required" name="team[name]" class="form-control">
+          </div>
+        </div>
+        <!-- ./form-group -->
+        <div class="form-group">
+          <div class="col-sm-8">
+            <label class="" for="team_image">Change Profie Image</label>
+            <div class="input-group">
+            <input type="file" id="team_image" name="team[image]" class="form-control" accept="image/*" multiple>&nbsp;&nbsp;
+            <button type="reset" id="cancel-image-button" class="btn btn-warning">Reset</button>
+          </div>
           </div>
         </div>
         <!-- ./form-group -->
@@ -152,7 +169,9 @@
         {% endblock body %}
 
         {% block javascripts %}
+
           <script type="text/javascript">
+
             $(document).ready(function() {
               $('.delete_record').click(function() {
                 event.preventDefault();
@@ -161,6 +180,36 @@
                   window.location = $(this).attr('href');
                 }
               });
+
+
+              $('#cancel-image-button').click(function() {
+                $('.card-img-overlay').remove();
+                $('#profile-image').attr('src', '{{ profileImageUrl }}');
+              });
+
+              $("#team_image").change(function(){
+                  readURL(this);
+                  $('.card-img-overlay').remove();
+                  $('<div class="card-img-overlay">' +
+                       '<h4 class="card-title text-center">This is a Preview</h4>' +
+                       '<p class="card-text text-center">Click "Update" to Save.</p>' +
+                    '</div>').insertAfter( "#profile-image" );
+              });
+
             });
+
+
+            function readURL(input) {
+
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#profile-image').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+
           </script>
         {% endblock %}
