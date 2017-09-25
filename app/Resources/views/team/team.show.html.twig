@@ -1,19 +1,23 @@
+{% extends 'template.html.twig' %}
+
 {% if team.imageName is null %}
 {% set profileImageUrl = '/assets/img/team-' ~ team.teamType.value ~ '-image-2.png' %}
 {% else %}
 {% set profileImageUrl = '/uploads/team_profile_photos/' ~team.imageName %}
 {% endif %}
 
-{% extends 'template.html.twig' %}
+
 {% block meta %}
   <meta property="og:image" content="{{ main_app_url }}{{ profileImageUrl }}"/>
   <meta property="og:description" content="{{ team.description }}" />
   <meta property="og:title" content="Help the {{ team.name }}" />
   <meta property="og:url" content="{{ main_app_url }}/{{ path('team_show', {'campaignUrl': campaignUrl, "teamUrl": team.url}) }}" />
 {% endblock %}
+
 {% block title %}
   Help the {{ team.name }}
 {% endblock %}
+
 {% block body %}
 {% set number_of_donations = 0 %}
 {% set donation_amount = 0 %}
