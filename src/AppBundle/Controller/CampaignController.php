@@ -67,10 +67,10 @@ class CampaignController extends Controller
      // replace this example code with whatever you need
      return $this->render('campaign/dashboard.html.twig', array(
        'new_classroom_awards' => $queryHelper->getClassroomAwards(array('campaign' => $campaign, 'limit' => 5, 'order_by' => array('field' => 'donated_at',  'order' => 'asc'))),
-       'classroom_rankings' => $queryHelper->getClassroomRanks(array('campaign' => $campaign,'limit'=> $limit, )),
+       'classroom_rankings' => $queryHelper->getClassroomRanks(array('campaign' => $campaign,'limit'=> $limit)),
        'report_date' => $reportDate,
        'ranking_limit' => $limit,
-       'student_rankings' => $queryHelper->getStudentRanks(array('campaign' => $campaign,'limit'=> $limit, )),
+       'team_rankings' => $queryHelper->getTeamRanks(array('campaign' => $campaign,'limit'=> $limit)),
        'totals' => $queryHelper->getTotalDonations(array('campaign' => $campaign,)),
        'campaign' => $campaign
      ));

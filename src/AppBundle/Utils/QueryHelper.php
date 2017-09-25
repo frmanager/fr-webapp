@@ -34,6 +34,11 @@ class QueryHelper
         return $this->getData($this->getTeamsDataQuery($options));
     }
 
+    public function getGradesData(array $options)
+    {
+        return $this->getData($this->getGradesDataQuery($options));
+    }
+
     public function getData($queryString)
     {
         //$em = $this->em->getManager();
@@ -52,6 +57,42 @@ class QueryHelper
         return $data[0];
     }
 
+
+    public function getGradesDataQuery(array $options)
+    {
+        $campaign = $options['campaign'];
+
+        if (isset($options['before_date'])) {
+            $date = "AND d.donatedAt <= '".$this->convertToDay($options['before_date'])->format('Y-m-d H:i:s')."' ";
+        } else {
+            $date = '';
+        }
+
+        if (isset($options['id'])) {
+            $whereId = 'WHERE t.id = '.$options['id'];
+        } else {
+            $whereId = '';
+        }
+
+        $queryString = sprintf('SELECT g.id as id,
+                      g.name as grade_name,
+                      sum(d.amount) as donation_amount,
+                      count(d.amount) as total_donations
+                 FROM AppBundle:Grade g
+      LEFT OUTER JOIN AppBundle:Classroom c
+                 WITH g.id = c.grade
+      LEFT OUTER JOIN AppBundle:DonationDatabase d
+                 WITH c.id = d.classroom
+                   %s
+                   %s
+                WHERE g.campaign = %s
+             GROUP BY g.id
+             ORDER BY donation_amount DESC', $date, $whereId, $campaign->getId());
+
+        $this->logger->debug('getGradesDataQuery Query : '.$queryString);
+
+        return $queryString;
+    }
 
     public function getTeamsDataQuery(array $options)
     {
@@ -89,11 +130,10 @@ class QueryHelper
              GROUP BY t.id
              ORDER BY donation_amount DESC', $date, $whereId, $campaign->getId());
 
-        $this->logger->debug('Query : '.$queryString);
+        $this->logger->debug('getTeamsDataQuery Query : '.$queryString);
 
         return $queryString;
     }
-
 
     public function getStudentsDataQuery(array $options)
     {
@@ -113,28 +153,28 @@ class QueryHelper
 
         $queryString = sprintf('SELECT s.id as id,
                       s.name as student_name,
-                      t.id as classroom_id,
-                      t.email as classroom_email,
-                      t.teacherName as teacher_name,
-                      t.name as classroom_name,
+                      c.id as classroom_id,
+                      c.email as classroom_email,
+                      c.teacherName as teacher_name,
+                      c.name as classroom_name,
                       g.id as grade_id,
                       g.name as grade_name,
                       sum(d.amount) as donation_amount,
                       count(d.amount) as total_donations
                  FROM AppBundle:Student s
-      LEFT OUTER JOIN AppBundle:Classroom t
-                 WITH t.id = s.classroom
+      LEFT OUTER JOIN AppBundle:Classroom c
+                 WITH c.id = s.classroom
       LEFT OUTER JOIN AppBundle:DonationDatabase d
                  WITH s.id = d.student
                    %s
       LEFT OUTER JOIN AppBundle:Grade g
-                 WITH g.id = t.grade
+                 WITH g.id = c.grade
                    %s
                 WHERE s.campaign = %s
              GROUP BY s.id
              ORDER BY donation_amount DESC', $date, $whereId, $campaign->getId());
 
-        $this->logger->debug('Query : '.$queryString);
+        $this->logger->debug('getStudentsDataQuery Query : '.$queryString);
 
         return $queryString;
     }
@@ -156,7 +196,7 @@ class QueryHelper
                                    AND d.donationStatus = \'ACCEPTED\'
                                   %s', $campaign->getId(), $date);
 
-        $this->logger->debug('Query : '.$queryString);
+        $this->logger->debug('getTotalDonationsQuery Query : '.$queryString);
 
         return $queryString;
     }
@@ -196,7 +236,7 @@ class QueryHelper
                               GROUP BY t.id
                               ORDER BY donation_amount DESC', $date, $whereId, $campaign->getId());
 
-        $this->logger->debug('Query : '.$queryString);
+        $this->logger->debug('getClassroomsDataQuery Query : '.$queryString);
 
         return $queryString;
     }
@@ -237,7 +277,7 @@ class QueryHelper
                GROUP BY d.donatedAt, t.id
                ORDER BY t.id ASC, d.donatedAt ASC', $date, $whereId, $campaign->getId());
 
-        $this->logger->debug('Query : '.$queryString);
+        $this->logger->debug('getClassroomDonationsByDayQuery Query : '.$queryString);
 
         return $queryString;
     }
@@ -279,7 +319,7 @@ class QueryHelper
              GROUP BY d.donatedAt, t.id
              ORDER BY donation_amount DESC', $date, $whereId, $campaign->getId());
 
-        $this->logger->debug('Query : '.$queryString);
+        $this->logger->debug('getTeamDonationsByDayQuery Query : '.$queryString);
 
         return $queryString;
     }
@@ -317,6 +357,10 @@ class QueryHelper
               array_push($newObjectArray, $objects[$key]);
           }
 
+          foreach ($newObjectArray as $object) {
+              $this->logger->debug('sortObject Output Data: '.print_r($object, true));
+          }
+
         return $newObjectArray;
     }
 
@@ -344,19 +388,24 @@ class QueryHelper
 
         $rank = 0;
         $amount = 9999999999999999999; //some astronomical number
+        $newObjectArray = [];
         foreach ($sortedObjects as $sortedObject) {
             if ($sortedObject[$amountField] < $amount) {
                 ++$rank;
             }
 
-            foreach ($objects as &$object) {
+            foreach ($objects as $object) {
                 if ($object['id'] == $sortedObject['id']) {
                     $object['rank'] = $rank;
+                    array_push($newObjectArray, $object);
                     break;
                 }
             }
             $amount = $sortedObject[$amountField];
         }
+        //Once we are done, we replace Objects with newObjectArray
+        $objects = $newObjectArray;
+
 
         if ($limit > 0) {
             $counter = 0;
@@ -370,13 +419,17 @@ class QueryHelper
             $objects = $newArray;
         }
 
+        foreach ($objects as $object) {
+            $this->logger->debug('getRanks Output Data: '.print_r($object, true));
+        }
+
         return $objects;
     }
 
     public function getRank(array $objects, $id, array $settings)
     {
         foreach ($objects as $object) {
-            $this->logger->debug('getRanks Input Data: '.print_r($object, true));
+            $this->logger->debug('getRank Input Data: '.print_r($object, true));
         }
 
         if (isset($settings['amount_field'])) {
@@ -450,6 +503,18 @@ class QueryHelper
     {
         return $this->getRank($this->getTeamsData($options), $id, $options);
     }
+
+    public function getGradeRanks(array $options)
+    {
+        return $this->getRanks($this->getGradesData($options), $options);
+    }
+
+    public function getGradeRank($id, array $options)
+    {
+        return $this->getRank($this->getGradesData($options), $id, $options);
+    }
+
+
 
     public function getStudentRanks(array $options)
     {
