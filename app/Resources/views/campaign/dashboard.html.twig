@@ -2,6 +2,13 @@
 
 {% block title %}{{campaign.name}}{% endblock %}
 
+{% block meta %}
+  <meta property="og:image" content="{{ main_app_url }}/assets/img/FunRun2017-banner.png"/>
+  <meta property="og:description" content="{{ campaign.description }}" />
+  <meta property="og:title" content="Help the {{ campaign.name }} Today!" />
+  <meta property="og:url" content="{{ main_app_url }}/{{ path('campaign_index', {'campaignUrl': campaignUrl}) }}" />
+{% endblock %}
+
 {% block css %}
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.12/fh-3.1.2/r-2.1.0/sc-1.4.2/datatables.min.css"/>
 {% endblock %}
