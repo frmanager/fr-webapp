@@ -31,7 +31,8 @@ class GradeController extends Controller
     {
         $entity = 'Grade';
         $em = $this->getDoctrine()->getManager();
-
+        $logger = $this->get('logger');
+        $limit = 3;
 
         //CODE TO CHECK TO SEE IF CAMPAIGN EXISTS
         $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
@@ -59,11 +60,10 @@ class GradeController extends Controller
           return $this->redirectToRoute('campaign_splash', array('campaignUrl'=>$campaign->getUrl(), 'campaign'=>$campaign));
         }
 
-        $grades = $em->getRepository('AppBundle:Grade')->findBy(array("campaign"=>$campaign));
-
+        $queryHelper = new QueryHelper($em, $logger);
 
         return $this->render('campaign/grade.index.html.twig', array(
-            'grades' => $grades,
+            'grades' => $queryHelper->getGradeRanks(array('campaign' => $campaign, 'limit'=> 0)),
             'entity' => $entity,
             'campaign' => $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl),
         ));

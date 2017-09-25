@@ -29,14 +29,10 @@
                     {% for grade in grades %}
                         <tr>
                             <td>
-                                {{ grade.name }}
+                                {{ grade.grade_name }}
                             </td>
-                            <td style="text-align:center;">
-                                TBD
-                            </td>
-                            <td style="text-align:center;">
-                                TBD
-                            </td>
+                            <td style="text-align:right;">{% if not grade.donation_amount == 0 %}${{ grade.donation_amount|number_format(2, '.', ',')}}</span>{% endif %}</td>
+                            <td style="text-align:center;vertical-align: middle;"><span class="badge badge-{% if grade.rank == 1 %}success{% elseif grade.rank == 2 %}warning{% elseif grade.rank == 3 %}primary{% else %}default{% endif %}">{{ grade.rank}}</span></td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -48,10 +44,9 @@
 {% block javascripts %}
   <script type="application/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
   <script type="application/javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js"></script>
-
     <script>
         $(document).ready(function() {
-            $('.table').DataTable({ "pageLength": 50, "order": [[ 1, "desc" ]]});
+            $('.table').DataTable({ "pageLength": 10, "order": [[ 1, "desc" ]]});
         });
     </script>
 {% endblock %}

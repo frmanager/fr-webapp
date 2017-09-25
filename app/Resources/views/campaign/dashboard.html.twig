@@ -110,9 +110,7 @@
                                     <span class="badge badge-{% if classroom_ranking.rank == 1 %}success{% elseif classroom_ranking.rank == 2 %}warning{% elseif classroom_ranking.rank == 3 %}primary{% else %}default{% endif %}">{{ classroom_ranking.rank }}</span>
                                 </td>
                                 <td>
-                                    <a href="{{ path('classroom_show', { 'campaignUrl':campaign.url, 'id': classroom_ranking.id }) }}">{{ classroom_ranking.grade_name }}
-                                        -
-                                        {{ classroom_ranking.classroom_name }}</a>
+                                    <a href="{{ path('classroom_show', { 'campaignUrl':campaign.url, 'id': classroom_ranking.id }) }}">{{ classroom_ranking.grade_name }} - {{ classroom_ranking.classroom_name }}</a>
                                 </td>
                                 <td style="text-align:right;">${{ classroom_ranking.donation_amount|number_format(2, '.', ',') }}</td>
 
@@ -131,37 +129,33 @@
         </div>
         <div class="col-sm-6">
           <div class="card">
-            <div class="card-header">Top
-                {{ ranking_limit }}
-                Student Rankings
+            <div class="card-header">Top {{ ranking_limit }} Team Rankings -
+                <a href="{{ path('team_index', {'campaignUrl':campaign.url}) }}">
+                    <small>(click here to view all)</small>
+                </a>
             </div>
-            {% if student_rankings | length > 0 %}
+            {% if team_rankings | length > 0 %}
                 <table class="table table-striped table-condensed">
                     <thead>
                         <tr>
                             <th>Rank</th>
-                            <th>Classroom</th>
-                            <th>Student</th>
+                            <th>Team</th>
                             <th>Amount</th>
-
                         </tr>
                     </thead>
                     <tbody>
-                        {% for student_ranking in student_rankings %}
+                        {% for team_ranking in team_rankings %}
                             <tr>
                                 <td style="text-align:center;vertical-align: middle;">
-                                    <span class="badge badge-{% if student_ranking.rank == 1 %}success{% elseif student_ranking.rank == 2 %}warning{% elseif student_ranking.rank == 3 %}primary{% else %}default{% endif %}">{{ student_ranking.rank }}</span>
+                                    <span class="badge badge-{% if team_ranking.rank == 1 %}success{% elseif team_ranking.rank == 2 %}warning{% elseif team_ranking.rank == 3 %}primary{% else %}default{% endif %}">{{ team_ranking.rank }}</span>
                                 </td>
                                 <td>
-                                    {% if is_granted('ROLE_USER') %}
-                                        <a href="{{ path('classroom_show', { 'campaignUrl':campaign.url, 'id': student_ranking.classroom_id }) }}">{{ student_ranking.classroom_name }}</a>
-                                    {% else %}{{ student_ranking.classroom_name }}{% endif %}
+                                    <a href="{{ path('team_show', { 'campaignUrl':campaign.url, 'teamUrl': team_ranking.team_url }) }}">{{ team_ranking.team_name }}</a>
                                 </td>
                                 <td>
-                                    {{ student_ranking.student_name }}
+                                    {{ team_ranking.team_name }}
                                 </td>
-                                <td style="text-align:right;">${{ student_ranking.donation_amount|number_format(2, '.', ',') }}</td>
-
+                                <td style="text-align:right;">${{ team_ranking.donation_amount|number_format(2, '.', ',') }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
