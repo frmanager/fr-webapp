@@ -98,7 +98,14 @@
 			</li>-->
       {% if campaign is defined and not notStarted %}
         <li class="nav-item{% if app.request.attributes.get('_route')=='donation_index'%} active{% endif %}">
-        <a href="{{ path('donation_index', {'campaignUrl':campaign.url}) }}" class="nav-link">Donate</a>
+          {% if app.request.attributes.get('_route') == 'team_show' %}
+            <a href="{{ path('donation_index', {'campaignUrl':campaign.url, 'teamUrl':team.url, 'type':'team'}) }}" class="nav-link">Donate</a>
+          {% elseif app.request.attributes.get('_route') == 'classroom_show' %}
+            <a href="{{ path('donation_index', {'campaignUrl':campaign.url, 'classroomID':classroom.id, 'type':'classroom'}) }}" class="nav-link">Donate</a>
+          {% else %}
+            <a href="{{ path('donation_index', {'campaignUrl':campaign.url}) }}" class="nav-link">Donate</a>
+          {% endif %}
+
         </li>
         <li class="dropdown nav-item">
           <a class="nav-link dropdown-toggle" href="#" class="dropdown-toggle" id="drop2" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
