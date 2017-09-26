@@ -147,21 +147,36 @@ class DonationHelper
                             $counter ++;
                         }
 
-                        foreach ($classroom->getStudents() as $student) {
-                            $donationDatabase = new DonationDatabase();
-                            $donationDatabase->setStudentName($student->getName());
-                            $donationDatabase->setTeam($team);
-                            $donationDatabase->setStudent($student);
-                            $donationDatabase->setDonatedAt($donation->getDonatedAt());
-                            $donationDatabase->setCampaign($donation->getCampaign());
-                            $donationDatabase->setClassroom($classroom);
-                            $donationDatabase->setDonation($donation);
-                            $donationDatabase->setAmount(round($donation->getAmount()/$counter, 2)); //Evenly distributed
-                            $donationDatabase->setType($donation->getType());
-                            $donationDatabase->setPaymentMethod($donation->getPaymentMethod());
-                            $this->em->persist($donationDatabase);
-                            $this->em->flush();
+                        if ($counter == 0) {
+                              $donationDatabase = new DonationDatabase();
+                              $donationDatabase->setTeam($team);
+                              $donationDatabase->setDonatedAt($donation->getDonatedAt());
+                              $donationDatabase->setCampaign($donation->getCampaign());
+                              $donationDatabase->setClassroom($classroom);
+                              $donationDatabase->setDonation($donation);
+                              $donationDatabase->setAmount($donation->getAmount()); //Evenly distributed
+                              $donationDatabase->setType($donation->getType());
+                              $donationDatabase->setPaymentMethod($donation->getPaymentMethod());
+                              $this->em->persist($donationDatabase);
+                              $this->em->flush();
+                        } else {
+                            foreach ($classroom->getStudents() as $student) {
+                                $donationDatabase = new DonationDatabase();
+                                $donationDatabase->setStudentName($student->getName());
+                                $donationDatabase->setTeam($team);
+                                $donationDatabase->setStudent($student);
+                                $donationDatabase->setDonatedAt($donation->getDonatedAt());
+                                $donationDatabase->setCampaign($donation->getCampaign());
+                                $donationDatabase->setClassroom($classroom);
+                                $donationDatabase->setDonation($donation);
+                                $donationDatabase->setAmount(round($donation->getAmount()/$counter, 2)); //Evenly distributed
+                                $donationDatabase->setType($donation->getType());
+                                $donationDatabase->setPaymentMethod($donation->getPaymentMethod());
+                                $this->em->persist($donationDatabase);
+                                $this->em->flush();
+                            }
                         }
+
                     }
                 }
             }
