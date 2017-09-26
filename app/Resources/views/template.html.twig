@@ -33,7 +33,7 @@
 {% if campaign is defined and campaign.theme is not null %}
  {% set theme = campaign.theme %}
 {% else %}
-  {% set theme = 'superhero' %}
+  {% set theme = 'cerulean' %}
 {% endif %}
 <link rel="stylesheet" href="{{ asset('assets/css/bootswatch_v4/' ~ theme ~ '.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/template.css') }}">
@@ -88,15 +88,15 @@
   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
   </button>
+   {% if campaign is defined %}
   <a class="navbar-brand" href="{{ path('campaign_index', {'campaignUrl': campaignUrl}) }}">{{campaign.name}}</a>
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
-    {% if campaign is defined %}
 		<ul class="navbar-nav mr-auto">
 			<!--<li class="nav-item{% if app.request.attributes.get('_route')=='campaign_index'%} active{% endif %}">
 			<a href="{{ path('campaign_index', {'campaignUrl': campaignUrl}) }}" class="nav-link">
 			<i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard </a>
 			</li>-->
-      {% if not notStarted %}
+      {% if campaign is defined and not notStarted %}
         <li class="nav-item{% if app.request.attributes.get('_route')=='donation_index'%} active{% endif %}">
         <a href="{{ path('donation_index', {'campaignUrl':campaign.url}) }}" class="nav-link">Donate</a>
         </li>
@@ -116,7 +116,7 @@
       {% endif %}
     </ul>
     {% endif %}
-    {% if not notStarted %}
+    {% if campaign is defined and not notStarted %}
       <ul class="navbar-nav ml-auto">
       {% if is_granted('ROLE_USER') and campaign is defined %}
           <li class="dropdown nav-item">

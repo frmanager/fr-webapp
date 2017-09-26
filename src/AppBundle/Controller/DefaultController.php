@@ -33,7 +33,7 @@ class DefaultController extends Controller
                 $em = $this->getDoctrine()->getManager();
 
                 return $this->render('campaign/campaign.index.html.twig', array(
-                    'campaigns' => $em->getRepository('AppBundle:Campaign')->findAll(),
+                    'campaigns' => $em->getRepository('AppBundle:Campaign')->findBy(array('onlineFlag'=>true)),
                     'entity' => $entity,
                 ));
             }else{
