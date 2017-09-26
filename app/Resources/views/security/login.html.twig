@@ -48,10 +48,17 @@
             </div>
           </div>
         </div>
-        <div style="text-align:center">
-          <a href="{{ path('homepage') }}" class="btn btn-info">Back</a>
-          <input class="btn btn-primary" type="submit" id="_submit" name="_submit" value="Log in"/>
-        </div>
+        <div class="row">
+          <div class="col">
+            <a href="{{ path('campaign_index', {'campaignUrl':campaign.url}) }}" class="btn btn-info">Back</a>
+            <button type="submit" id="submit" class="btn btn-primary">Login</button>
+          </div><!-- ./col -->
+          <div class="col">
+            <small>Don't have a FR Manager account? click
+              <a href="{{ path('user_registration', {'campaignUrl':campaign.url}) }}">HERE</a>
+            </small>
+          </div><!-- ./col -->
+        </div><!-- ./row -->
       </form>
     </div>
   </div>

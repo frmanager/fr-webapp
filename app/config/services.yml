@@ -25,7 +25,7 @@ services:
 
     app.CampaignSubscriber:
         class: AppBundle\EventSubscriber\CampaignSubscriber
-        arguments: ['@service_container']
+        arguments: ['@router', '@service_container', '@doctrine.orm.entity_manager',  '@logger']
         tags:
           - { name: kernel.event_subscriber }
 
