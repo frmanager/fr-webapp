@@ -27,12 +27,11 @@ class DefaultController extends Controller
         if(null !== $request->query->get('action')){
             $action = $request->query->get('action');
 
-
             if($action === 'list_campaigns'){
                 $entity = 'Campaign';
                 $em = $this->getDoctrine()->getManager();
 
-                return $this->render('campaign/campaign.index.html.twig', array(
+                return $this->render('campaign/campaign.list.html.twig', array(
                     'campaigns' => $em->getRepository('AppBundle:Campaign')->findBy(array('onlineFlag'=>true)),
                     'entity' => $entity,
                 ));
