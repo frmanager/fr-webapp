@@ -98,7 +98,7 @@ class DonationHelper
                             $donationDatabase->setCampaign($donation->getCampaign());
                             $donationDatabase->setClassroom($classroom);
                             $donationDatabase->setDonation($donation);
-                            $donationDatabase->setAmount(round($donation->getAmount()/$counter, 2)); //Evenly distributed
+                            $donationDatabase->setAmount(($donation->getAmount()/$counter)); //Evenly distributed
                             $donationDatabase->setType($donation->getType());
                             $donationDatabase->setPaymentMethod($donation->getPaymentMethod());
                             $this->em->persist($donationDatabase);
@@ -131,7 +131,7 @@ class DonationHelper
                       $donationDatabase->setCampaign($donation->getCampaign());
                       $donationDatabase->setDonatedAt($donation->getDonatedAt());
                       $donationDatabase->setDonation($donation);
-                      $donationDatabase->setAmount(round($donation->getAmount()/$counter, 2)); //Evenly distributed
+                      $donationDatabase->setAmount(($donation->getAmount()/$counter)); //Evenly distributed
                       $donationDatabase->setType($donation->getType());
                       $donationDatabase->setPaymentMethod($donation->getPaymentMethod());
                       $this->em->persist($donationDatabase);
@@ -169,7 +169,7 @@ class DonationHelper
                                 $donationDatabase->setCampaign($donation->getCampaign());
                                 $donationDatabase->setClassroom($classroom);
                                 $donationDatabase->setDonation($donation);
-                                $donationDatabase->setAmount(round($donation->getAmount()/$counter, 2)); //Evenly distributed
+                                $donationDatabase->setAmount(($donation->getAmount()/$counter)); //Evenly distributed
                                 $donationDatabase->setType($donation->getType());
                                 $donationDatabase->setPaymentMethod($donation->getPaymentMethod());
                                 $this->em->persist($donationDatabase);
@@ -188,6 +188,8 @@ class DonationHelper
             $counter ++;
         }
         $this->em->flush();
+
+        $this->calculateFundsRaised($options);
     }
 
 
@@ -205,6 +207,27 @@ class DonationHelper
 
         $result = $qb->getQuery()->getResult();
     }
+
+
+    private function calculateFundsRaised(array $options)
+    {
+      if (isset($options['campaign'])) {
+          $teams = $this->em->getRepository('AppBundle:Team')->findByCampaign($options['campaign']);
+      } else {
+          $teams = $this->em->getRepository('AppBundle:Team')->findAll();
+      }
+
+      foreach ($teams as $team) {
+        $fundsraised = 0;
+        foreach ($team->getDonationDatabases() as $donationDatabase) {
+          $fundsraised += $donationDatabase->getAmount();
+        }
+        $team->setFundsRaised($fundsraised);
+        $this->em->persist($team);
+        $this->em->flush();
+      }
+    }
+
 
 
     public function convertToDay($inDate)

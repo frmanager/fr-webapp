@@ -4,7 +4,7 @@
 
 {% block meta %}
   <meta property="og:image" content="{{ main_app_url }}/assets/img/FunRun2017-banner.png"/>
-  <meta property="og:description" content="{{ campaign.description }}" />
+  <meta property="og:description" content="{{ campaign.description|striptags }}" />
   <meta property="og:title" content="Help the {{ campaign.name }} Today!" />
   <meta property="og:url" content="{{ main_app_url }}/{{ path('campaign_index', {'campaignUrl': campaignUrl}) }}" />
 {% endblock %}
@@ -93,7 +93,7 @@
     </div>
     <br><br>
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-md-6">
           <div class="card">
             <div class="card-header">Top {{ ranking_limit }} Class Rankings -
                 <a href="{{ path('classroom_index', {'campaignUrl':campaign.url}) }}">
@@ -134,7 +134,7 @@
             {% endif %}
           </div>
         </div>
-        <div class="col-sm-6">
+        <div class="col-md-6">
           <div class="card">
             <div class="card-header">Top {{ ranking_limit }} Team Rankings -
                 <a href="{{ path('team_index', {'campaignUrl':campaign.url}) }}">
@@ -158,9 +158,6 @@
                                 </td>
                                 <td>
                                     <a href="{{ path('team_show', { 'campaignUrl':campaign.url, 'teamUrl': team_ranking.team_url }) }}">{{ team_ranking.team_name }}</a>
-                                </td>
-                                <td>
-                                    {{ team_ranking.team_name }}
                                 </td>
                                 <td style="text-align:right;">${{ team_ranking.donation_amount|number_format(2, '.', ',') }}</td>
                             </tr>

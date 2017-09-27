@@ -31,47 +31,6 @@ class CampaignawardController extends Controller
         $entity = 'Campaignaward';
         $em = $this->getDoctrine()->getManager();
 
-        $campaignawardtypes = $em->getRepository('AppBundle:Campaignawardtype')->findAll();
-        if (empty($campaignawardtypes)) {
-            $defaultCampaignawardtypes = [];
-
-            array_push($defaultCampaignawardtypes, array('name' => 'Classroom/Class', 'value' => 'classroom', 'description' => ''));
-            array_push($defaultCampaignawardtypes, array('name' => 'Student/Individual', 'value' => 'student', 'description' => ''));
-
-            foreach ($defaultCampaignawardtypes as $defaultCampaignawardtype) {
-                $em = $this->getDoctrine()->getManager();
-
-                $campaignawardtype = new Campaignawardtype();
-                $campaignawardtype->setDisplayName($defaultCampaignawardtype['name']);
-                $campaignawardtype->setValue($defaultCampaignawardtype['value']);
-                $campaignawardtype->setDescription($defaultCampaignawardtype['description']);
-
-                $em->persist($campaignawardtype);
-                $em->flush();
-            }
-        }
-
-        $campaignawardstyles = $em->getRepository('AppBundle:Campaignawardstyle')->findAll();
-        if (empty($campaignawardstyles)) {
-            $defaultCampaignawardstyles = [];
-
-            array_push($defaultCampaignawardstyles, array('name' => 'Place', 'value' => 'place', 'description' => ''));
-            array_push($defaultCampaignawardstyles, array('name' => 'Donation Level', 'value' => 'level', 'description' => 'award received if (Classroom/Student) reach donation amount'));
-
-            foreach ($defaultCampaignawardstyles as $defaultCampaignawardstyle) {
-                $em = $this->getDoctrine()->getManager();
-
-                $campaignawardstyle = new Campaignawardstyle();
-                $campaignawardstyle->setDisplayName($defaultCampaignawardstyle['name']);
-                $campaignawardstyle->setValue($defaultCampaignawardstyle['value']);
-                $campaignawardstyle->setDescription($defaultCampaignawardstyle['description']);
-
-                $em->persist($campaignawardstyle);
-                $em->flush();
-            }
-        }
-
-        $em->clear();
 
         $campaignawards = $em->getRepository('AppBundle:'.$entity)->findAll();
 

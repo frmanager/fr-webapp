@@ -41,7 +41,41 @@ class CampaignController extends Controller
      $reportDate->modify('-1 day');
 
      // replace this example code with whatever you need
-     return $this->render('campaign/dashboard.html.twig', array(
+     return $this->render('campaign/campaign.index.html.twig', array(
+       'new_classroom_awards' => $queryHelper->getClassroomAwards(array('campaign' => $campaign, 'limit' => 5, 'order_by' => array('field' => 'donated_at',  'order' => 'asc'))),
+       'classroom_rankings' => $queryHelper->getClassroomRanks(array('campaign' => $campaign)),
+       'report_date' => $reportDate,
+       'ranking_limit' => $limit,
+       'campaign_awards' =>  $em->getRepository('AppBundle:Campaignaward')->findBy(array('campaign'=>$campaign)),
+       'teams' => $em->getRepository('AppBundle:Team')->findBy(array('campaign'=>$campaign),array('fundsRaised' => 'DESC')),
+       'totals' => $queryHelper->getTotalDonations(array('campaign' => $campaign)),
+       'campaign' => $campaign
+     ));
+
+  }
+
+
+
+  /**
+   * @Route("/dashboard", name="campaign_dashboard")
+   */
+   public function campaignDashboardAction($campaignUrl)
+   {
+
+     $logger = $this->get('logger');
+     $limit = 3;
+     $em = $this->getDoctrine()->getManager();
+
+     //CODE TO CHECK TO SEE IF CAMPAIGN EXISTS
+     $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
+
+     $queryHelper = new QueryHelper($em, $logger);
+
+     $reportDate = $queryHelper->convertToDay(new DateTime());
+     $reportDate->modify('-1 day');
+
+     // replace this example code with whatever you need
+     return $this->render('campaign/campaign.dashboard.html.twig', array(
        'new_classroom_awards' => $queryHelper->getClassroomAwards(array('campaign' => $campaign, 'limit' => 5, 'order_by' => array('field' => 'donated_at',  'order' => 'asc'))),
        'classroom_rankings' => $queryHelper->getClassroomRanks(array('campaign' => $campaign,'limit'=> $limit)),
        'report_date' => $reportDate,
@@ -50,7 +84,6 @@ class CampaignController extends Controller
        'totals' => $queryHelper->getTotalDonations(array('campaign' => $campaign,)),
        'campaign' => $campaign
      ));
-
 
   }
 
