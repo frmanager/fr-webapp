@@ -35,7 +35,7 @@ Class Campaign
   private $description;
 
   /**
-   * @ORM\Column(type="string", length=255, nullable=true)
+   * @ORM\Column(type="text", length=255, nullable=true)
    */
   private $theme;
 
@@ -150,8 +150,7 @@ Class Campaign
   /**
    *  @var blob
    *
-   * @ORM\Column(type="blob", nullable=false)
-   * @Assert\NotNull()
+   * @ORM\Column(type="blob", nullable=true)
    */
   private $donationReceiptText;
 
