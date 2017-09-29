@@ -76,27 +76,26 @@
       <br>
       <div class="row">
       {% for team in teams %}
-
         {% if team.imageName is null %}
         {% set profileImageUrl = '/assets/img/team-' ~ team.teamType.value ~ '-image-2.png' %}
         {% else %}
         {% set profileImageUrl = '/uploads/team_profile_photos/' ~team.imageName %}
         {% endif %}
         <div class="col-sm-3">
-          <div class="card">
+          <div class="card my-1">
+            <div class="text-center team-image-boundary-box" style="background-color: #fff;border-bottom: 1px solid rgba(0,0,0,0.125);">
             {% if team.imageName is null %}
-                <div class="text-center" style="background-color: #fff;border-bottom: 1px solid rgba(0,0,0,0.125);">
                   {% if team.teamType.value == "teacher" %}
-                    <i class="fa fa-5x fa-apple" aria-hidden="true"></i>
+                    <span class="align-middle"><i class="fa fa-5x fa-apple" aria-hidden="true"></i></span>
                   {% elseif team.teamType.value == "student" %}
-                    <i class="fa fa-5x fa-graduation-cap" aria-hidden="true"></i>
+                    <span class="align-middle"><i class="fa fa-5x fa-graduation-cap" aria-hidden="true"></i></span>
                   {% elseif team.teamType.value == "family" %}
-                    <i class="fa fa-5x fa-users" aria-hidden="true"></i>
+                    <span class="align-middle"><i class="fa fa-5x fa-users" aria-hidden="true"></i></span>
                   {% endif %}
-                </div>
             {% else %}
-            <div class="text-center" style="background-color: #fff;border-bottom: 1px solid rgba(0,0,0,0.125);padding:5px;"><img class="img-fluid rounded-circle" src="/uploads/team_profile_photos/{{team.imageName}}" alt="Card image cap"></div>
+            <div class="text-center" style="background-color: #fff;border-bottom: 1px solid rgba(0,0,0,0.125);"><img class="img-fluid" src="/uploads/team_profile_photos/{{team.imageName}}" alt="Card image cap"></div>
             {% endif %}
+            </div>
             <div class="card-text text-center">
                 <small><a href="{{ path('team_show', {'campaignUrl':campaign.url, 'teamUrl':team.url}) }}">{{team.name}}</a></small>
                 <br>
@@ -104,9 +103,6 @@
             </div><!-- ./card-text -->
           </div><!-- ./card -->
         </div>
-        {% if loop.index is divisible by(4) %}
-         {{'</div><br><div class="row">'}}
-        {% endif %}
        {% endfor %}
     </div><!-- ./row -->
     <hr>
@@ -117,7 +113,7 @@
     {% for classroom_ranking in classroom_rankings %}
 
       <div class="col-sm-3">
-        <div class="card">
+        <div class="card my-1">
           <div class="card-text text-center">
               <small><a href="{{ path('classroom_show', {'campaignUrl':campaign.url, 'id':classroom_ranking.id}) }}">{{classroom_ranking.classroom_name}}</a></small>
               <br>
@@ -125,9 +121,6 @@
           </div><!-- ./card-text -->
         </div><!-- ./card -->
       </div>
-      {% if loop.index is divisible by(4) %}
-       {{'</div><br><div class="row">'}}
-      {% endif %}
      {% endfor %}
   </div><!-- ./row -->
 
@@ -142,7 +135,7 @@
 
 <script>
 
-//Slow scrolling for anchro nav script
+//Slow scrolling for anchor nav script
 $('a[href*="#"]')
   // Remove links that don't actually link to anything
   .not('[href="#"]')
@@ -186,5 +179,8 @@ $('a[href*="#"]')
           $this.html(event.strftime('<span class="badge badge-danger">%D</span> day%!D left to donate!</span>'));
       });
   });
+
+
+
 </script>
 {% endblock %}
