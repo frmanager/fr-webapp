@@ -212,6 +212,12 @@ class Donation
     */
    private $PaypalPaymentDetails;
 
+   /**
+    * @var json
+    *
+    * @ORM\Column(name="paypal_authorization", type="json", nullable=true)
+    */
+   private $paypalAuthorization;
 
    /**
     * @ORM\Column(type="boolean")
@@ -1081,5 +1087,29 @@ class Donation
     public function getDonationDatabases()
     {
         return $this->donationDatabases;
+    }
+
+    /**
+     * Set paypalAuthorization
+     *
+     * @param json $paypalAuthorization
+     *
+     * @return Donation
+     */
+    public function setPaypalAuthorization($paypalAuthorization)
+    {
+        $this->paypalAuthorization = $paypalAuthorization;
+
+        return $this;
+    }
+
+    /**
+     * Get paypalAuthorization
+     *
+     * @return json
+     */
+    public function getPaypalAuthorization()
+    {
+        return $this->paypalAuthorization;
     }
 }

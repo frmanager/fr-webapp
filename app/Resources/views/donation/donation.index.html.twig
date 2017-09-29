@@ -105,14 +105,14 @@
           <div class="col-md-6">
             <div class="form-group">
               <label class="control-label required" for="donation_firstName">First Name</label>
-              <input type="text" class="form-control form-control-lg" placeholder="last name" id="donation_firstName" name="donation[firstName]" value="{% if formData is defined and formData.firstName is defined %}{{ formData.firstName }}{% endif %}">
+              <input type="text" class="form-control form-control-lg" placeholder="First Name" id="donation_firstName" name="donation[firstName]" value="{% if formData is defined and formData.firstName is defined %}{{ formData.firstName }}{% endif %}">
             </div>
           </div>
           <!-- ./column -->
           <div class="col-md-6">
             <div class="form-group">
               <label class="control-label required" for="donation_lastName">Last Name</label>
-              <input type="text" class="form-control form-control-lg" placeholder="last name" id="donation_lastName" name="donation[lastName]" value="{% if formData is defined and formData.lastName is defined %}{{ formData.lastName }}{% endif %}">
+              <input type="text" class="form-control form-control-lg" placeholder="Last Name" id="donation_lastName" name="donation[lastName]" value="{% if formData is defined and formData.lastName is defined %}{{ formData.lastName }}{% endif %}">
             </div>
           </div>
           <!-- ./column -->
@@ -151,26 +151,26 @@
             <div class="lead">Select a Payment Method</div>
             <div class="form-group-lg">
               <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio" name="donation[paymentMethod]" id="donation_paymentMethod_2" value="cc" checked>
+                  Credit Card (<i class="fa fa-cc-paypal" aria-hidden="true"></i>
+                  <i class="fa fa-cc-visa" aria-hidden="true"></i>
+                  <i class="fa fa-cc-mastercard" aria-hidden="true"></i>
+                  <i class="fa fa-cc-discover" aria-hidden="true"></i>
+                  <i class="fa fa-cc-amex" aria-hidden="true"></i>)
+                </label>
+              </div>
+              <div class="form-check form-check-inline">
               <label class="form-check-label">
-                <input type="radio" name="donation[paymentMethod]" id="donation_paymentMethod_1" value="paypal" checked>
+                <input type="radio" name="donation[paymentMethod]" id="donation_paymentMethod_1" value="paypal">
                 Paypal (<i class="fa fa-paypal" aria-hidden="true"></i>)
-              </label>
-            </div>
-            <div class="form-check form-check-inline">
-              <label class="form-check-label">
-                <input type="radio" name="donation[paymentMethod]" id="donation_paymentMethod_2" value="cc" disabled>
-                Credit Card (<i class="fa fa-cc-paypal" aria-hidden="true"></i>
-                <i class="fa fa-cc-visa" aria-hidden="true"></i>
-                <i class="fa fa-cc-mastercard" aria-hidden="true"></i>
-                <i class="fa fa-cc-discover" aria-hidden="true"></i>
-                <i class="fa fa-cc-amex" aria-hidden="true"></i>) <small>(Comming Soon!)</small>
               </label>
             </div>
           </div><!-- ./form-group -->
           </div><!-- ./col -->
         </div><!-- ./row -->
         <br>
-        <div class="collapse" id="cc_form">
+        <div class="" id="cc_form">
           <div class="row">
             <div class="col-md-12">
               <div class="row">
@@ -557,7 +557,7 @@
 
         <div class="row">
           <div class="col">
-            <div class="card">
+            <div class="card my-1">
               <img src="{{ profileImageUrl }}" alt="Family Image" class="card-img-top img-fluid">
               <div class="card-block">
                 <h4 class="card-title">{{ team.name }}</h4>
@@ -576,14 +576,14 @@
             </div>
             <!-- ./card -->
           </div>
-          <!-- ./row -->
+          <!-- ./col -->
         </div>
-        <!-- ./col -->
+        <!-- ./row -->
         <br>
       {% endif %}
       <div class="row">
         <div class="col">
-          <div class="card">
+          <div class="card  my-1">
             <div class="card-header">About your
               {{donationType|capitalize}}
               Donation
@@ -630,17 +630,35 @@
           </div>
           <!-- ./card -->
         </div>
-        <!-- ./row -->
+        <!-- ./col -->
       </div>
-      <!-- ./col -->
+      <!-- ./row -->
+      <div class="row">
+        <div class="col">
+          <div class="card my-1">
+            <div class="card-header">Secure Donations</div>
+            <div class="card-block">
+              <p>We take security seriously at FRManager, which is why we have partnered with PayPal to provide the upmost level of security for your donation.</p>
+              <!-- PayPal Logo --><table border="0" cellpadding="10" cellspacing="0" align="center"><tr><td align="center"></td></tr><tr><td align="center"><a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" onclick="javascript:window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700'); return false;"><img src="https://www.paypalobjects.com/digitalassets/c/website/marketing/na/us/logo-center/9_bdg_secured_by_pp_2line.png" border="0" alt="Secured by PayPal"></a></td></tr></table><!-- PayPal Logo -->
+            </div>
+            <!-- ./card-block -->
+          </div>
+          <!-- ./card -->
+        </div>
+        <!-- ./col -->
+      </div>
+      <!-- ./row -->
     </div>
-    <!-- /Column -->
+    <!-- ./col -->
   </div>
-  <!-- /Row -->
+  <!-- ./row -->
 </form>
+
 {% endblock %}
 
 {% block javascripts %}
+<script type='application/javascript' src="{{ asset('assets/js/libs/spin.min.js') }}"></script>
+
 <script>
   $(document).ready(function() {
     //called when key is pressed in textbox
@@ -650,6 +668,8 @@
         return false;
       }
     });
+
+    $('#cc_form').collapse("show");
 
     $('input:radio[name="donation[paymentMethod]"]').change(function() {
       if ($(this).val() == "cc") {
@@ -662,6 +682,51 @@
     $(function() {
       $('[data-toggle="tooltip"]').tooltip()
     })
+
+
+    $( "#submit" ).click(function() {
+
+    var opts = {
+      lines: 13 // The number of lines to draw
+    , length: 28 // The length of each line
+    , width: 14 // The line thickness
+    , radius: 42 // The radius of the inner circle
+    , scale: 1 // Scales overall size of the spinner
+    , corners: 1 // Corner roundness (0..1)
+    , color: '#000' // #rgb or #rrggbb or array of colors
+    , opacity: 0.25 // Opacity of the lines
+    , rotate: 0 // The rotation offset
+    , direction: 1 // 1: clockwise, -1: counterclockwise
+    , speed: 1 // Rounds per second
+    , trail: 60 // Afterglow percentage
+    , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+    , zIndex: 2e9 // The z-index (defaults to 2000000000)
+    , className: 'spinner' // The CSS class to assign to the spinner
+    , top: '50%' // Top position relative to parent
+    , left: '50%' // Left position relative to parent
+    , shadow: false // Whether to render a shadow
+    , hwaccel: false // Whether to use hardware acceleration
+    , position: 'absolute' // Element positioning
+    }
+
+
+    var target = document.getElementById('submit')
+    var spinner = new Spinner(opts).spin(target);
+
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
   });
 </script>
 {% endblock %}
