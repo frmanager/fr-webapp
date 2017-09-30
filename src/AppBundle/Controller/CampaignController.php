@@ -63,7 +63,7 @@ class CampaignController extends Controller
    {
 
      $logger = $this->get('logger');
-     $limit = 3;
+     $limit = 10;
      $em = $this->getDoctrine()->getManager();
 
      //CODE TO CHECK TO SEE IF CAMPAIGN EXISTS
@@ -78,6 +78,7 @@ class CampaignController extends Controller
      return $this->render('campaign/campaign.dashboard.html.twig', array(
        'new_classroom_awards' => $queryHelper->getClassroomAwards(array('campaign' => $campaign, 'limit' => 5, 'order_by' => array('field' => 'donated_at',  'order' => 'asc'))),
        'classroom_rankings' => $queryHelper->getClassroomRanks(array('campaign' => $campaign,'limit'=> $limit)),
+       'student_rankings' => $queryHelper->getStudentRanks(array('campaign' => $campaign, 'limit'=> $limit)),
        'report_date' => $reportDate,
        'ranking_limit' => $limit,
        'team_rankings' => $queryHelper->getTeamRanks(array('campaign' => $campaign,'limit'=> $limit)),
