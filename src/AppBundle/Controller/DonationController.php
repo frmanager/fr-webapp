@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use PayPal\Api\Amount;
 use PayPal\Api\Details;
+use PayPal\Api\Address;
 use PayPal\Api\FundingInstrument;
 use PayPal\Api\Item;
 use PayPal\Api\ItemList;
@@ -19,7 +20,9 @@ use PayPal\Api\Payment;
 use PayPal\Api\PaymentCard;
 use PayPal\Api\Transaction;
 use PayPal\Api\RedirectUrls;
+use PayPal\Api\Capture;
 use PayPal\Api\PaymentExecution;
+use PayPal\Exception\PayPalConnectionException;
 use AppBundle\Utils\CampaignHelper;
 use AppBundle\Entity\Donation;
 use AppBundle\Utils\DonationHelper;
@@ -189,7 +192,7 @@ class DonationController extends Controller
                 $logger->debug('Processing a VISA Card');
                 $cardType = 'visa';
               }else if(preg_match('/^5[1-5][0-9]{5,}|222[1-9][0-9]{3,}|22[3-9][0-9]{4,}|2[3-6][0-9]{5,}|27[01][0-9]{4,}|2720[0-9]{3,}$/', $params['donation']['cc']['number'])){
-                $this->addFlash('warning','Card was a MasterCard');
+                $logger->debug('Card was a MasterCard');
                 $cardType = 'mastercard';
               }else if(preg_match('/^3[47][0-9]{5,}$/', $params['donation']['cc']['number'])){
                 $logger->debug('Processing a AMEX Card');
@@ -268,47 +271,51 @@ class DonationController extends Controller
           );
 
           if($this->container->getParameter('kernel.environment') == "dev" || $this->container->getParameter('kernel.environment') == "test"){
-          $apiContext->setConfig(array('mode' => 'sandbox'));
+            $apiContext->setConfig(array('mode' => 'sandbox'));
+            $logger->debug('Mode set to sandbox');
+
           }else{
             $apiContext->setConfig(array('mode' => 'live'));
+            $logger->debug('Mode set to live');
           }
 
-          $item1 = new Item();
-          $item1->setName('Donation to '.$campaign->getName())
-              ->setCurrency('USD')
-              ->setQuantity(1)
-              ->setPrice($donation->getAmount());
-
-          $itemList = new ItemList();
-          $itemList->setItems(array($item1));
-
-          $details = new Details();
-          $details->setTax(0)
-              ->setSubtotal($donation->getAmount());
-
-          $amount = new Amount();
-          $amount->setCurrency("USD")
-              ->setTotal($donation->getAmount())
-              ->setDetails($details);
-
-          //Here we are making sure the campaign gets the donation, not us!
-          $payee = new Payee();
-          $payee->setEmail($campaign->getPaypalEmail());
-
-          $transaction = new Transaction();
-          $transaction->setAmount($amount)
-              ->setItemList($itemList)
-              ->setDescription('Donation to '.$campaign->getName())
-              ->setPayee($payee)
-              ->setInvoiceNumber($donation->getTransactionId());
-
-
-          //TODO: Create "Batch" Payout to receive funds https://paypal.github.io/PayPal-PHP-SDK/sample/doc/payouts/CreateBatchPayout.html
-
-          $payer = new Payer();
-          $payment = new Payment();
           //IF A PAYPAL PAYMENT
           if($params['donation']['paymentMethod'] == "paypal"){
+            $item1 = new Item();
+            $item1->setName('Donation to '.$campaign->getName())
+                ->setCurrency('USD')
+                ->setQuantity(1)
+                ->setPrice($donation->getAmount());
+
+            $itemList = new ItemList();
+            $itemList->setItems(array($item1));
+
+            $details = new Details();
+            $details->setTax(0)
+                ->setSubtotal($donation->getAmount());
+
+            $amount = new Amount();
+            $amount->setCurrency("USD")
+                ->setTotal($donation->getAmount())
+                ->setDetails($details);
+
+            //Here we are making sure the campaign gets the donation, not us!
+            $payee = new Payee();
+            $payee->setEmail($campaign->getPaypalEmail());
+
+            $transaction = new Transaction();
+            $transaction->setAmount($amount)
+                ->setItemList($itemList)
+                ->setDescription('Donation to '.$campaign->getName())
+                ->setPayee($payee)
+                ->setInvoiceNumber($donation->getTransactionId());
+
+            //TODO: Create "Batch" Payout to receive funds https://paypal.github.io/PayPal-PHP-SDK/sample/doc/payouts/CreateBatchPayout.html
+
+            $payer = new Payer();
+
+            $payment = new Payment();
+
             $payer->setPaymentMethod("paypal");
 
             $redirectUrls = new RedirectUrls();
@@ -327,7 +334,7 @@ class DonationController extends Controller
           }else {
 
             $card = new PaymentCard();
-
+            $logger->debug("Payment Card type set to: ".$cardType);
             $array = explode(" ",$params['donation']['cc']['cardholderName']);
             $firstName = $array[0];
             $lastName  = $array[count($array)-1];
@@ -341,36 +348,95 @@ class DonationController extends Controller
                 ->setBillingCountry($params['donation']['cc']['country'])
                 ->setLastName($lastName);
 
-            $fi = new FundingInstrument();
-            $fi->setPaymentCard($card);
+              $fi = new FundingInstrument();
+              $fi->setPaymentCard($card);
 
-            $payer->setPaymentMethod("credit_card")
-                ->setFundingInstruments(array($fi));
+              $payer = new Payer();
+              $payer->setPaymentMethod("credit_card")
+                  ->setFundingInstruments(array($fi));
 
-            $payment = new Payment();
-            $payment->setIntent("sale")
-                ->setPayer($payer)
-                ->setTransactions(array($transaction));
+              $amount = new Amount();
+              $amount->setCurrency("USD")
+                  ->setTotal($donation->getAmount());
+
+              $payee = new Payee();
+              $payee->setEmail($campaign->getPaypalEmail());
+
+              $transaction = new Transaction();
+              $transaction->setAmount($amount)
+                  ->setDescription('Donation to '.$campaign->getName());
+
+              $payment = new Payment();
+              $payment->setIntent("authorize")
+                  ->setPayer($payer)
+                  ->setTransactions(array($transaction));
+
           }
 
-
-          try {
+         try {
               $payment->create($apiContext);
+
+              if($params['donation']['paymentMethod'] == "cc"){
+                $donation->setDonationStatus("AUTHORIZED");
+                $em->persist($donation);
+                $em->flush();
+              }
+
+          } catch (PayPalConnectionException $ex) {
+              $logger->critical("Paypal Payment PayPalConnectionException Failure. code:".$ex->getCode()." data:".$ex->getData());
+              $this->get('session')->getFlashBag()->add('danger', 'There was an issue processing the payment. Please check your information and try again');
+              $donation->setDonationStatus("FAILED");
+              $em->persist($donation);
+              $em->flush();
+              $fail = true;
           } catch (Exception $ex) {
-              exit(1);
+              $donation->setDonationStatus("FAILED");
+              $this->get('session')->getFlashBag()->add('danger', 'There was an issue processing the payment. Please check your information and try again');
+              $em->persist($donation);
+              $em->flush();
+              $logger->critical("Paypal Rest API Exception Failure. code:".$ex->getCode()." data:".$ex->getData());
+              $fail = true;
           }
 
 
           //IF A PAYPAL PAYMENT
-          if($params['donation']['paymentMethod'] == "paypal"){
-            $approvalUrl = $payment->getApprovalLink();
-            return $this->redirect($approvalUrl);
-          }else {
-            $payment->setPaypalPaymentId = $payment->getId();
-            return $this->redirectToRoute('donation_done', array('campaignUrl'=> $campaignUrl, 'success'=>true, 'transactionId'=>$donation->getTransactionId()));
+          if(!$fail){
+            if($params['donation']['paymentMethod'] == "paypal"){
+              $approvalUrl = $payment->getApprovalLink();
+              return $this->redirect($approvalUrl);
+            }else {
+              $transactions = $payment->getTransactions();
+              $relatedResources = $transactions[0]->getRelatedResources();
+              $authorization = $relatedResources[0]->getAuthorization();
+              $logger->debug("Authorization: ".print_r($authorization, true));
+              $donation->setPaypalAuthorization(json_decode($authorization, true));
+              $em->persist($donation);
+              $em->flush();
+              $logger->debug("Capturing Payment");
+              try {
+                  $authId = $authorization->getId();
+
+                  $amt = new Amount();
+                  $amt->setCurrency("USD")
+                      ->setTotal($donation->getAmount());
+
+                  ### Capture
+                  $capture = new Capture();
+                  $capture->setAmount($amt);
+                  $getCapture = $authorization->capture($capture, $apiContext);
+                  $donation->setDonationStatus("ACCEPTED");
+                  $em->persist($donation);
+                  $em->flush();
+                  } catch (Exception $ex) {
+                    $logger->critical("Paypal Rest API Exception Failure. code:".$ex->getCode()." data:".$ex->getData());
+                    $fail = true;
+                  }
+
+                  //return $getCapture;
+                  return $this->redirectToRoute('donation_done', array('campaignUrl'=> $campaignUrl, 'success'=>true, 'transactionId'=>$donation->getTransactionId()));
+            }
           }
         }
-
     }
 
 
@@ -431,7 +497,8 @@ class DonationController extends Controller
           $failure = true;
         }
 
-        if(!$failure && $donation->getDonationStatus() == "ACCEPTED"){
+        //CC transactions are already completed once they get here
+        if(!$failure && $donation->getDonationStatus() == "ACCEPTED" && $donation->getPaymentMethod() == "paypal"){
           $this->get('session')->getFlashBag()->add('info', 'This donation was already processed');
           $logger->info("DONATION ISSUE: Donation was already accepted: ".$campaign->getId()." and transaction_id: ".$transactionId);
           $failure = true;
@@ -459,97 +526,99 @@ class DonationController extends Controller
 
 
         if(!$failure){
-
-          if(null == $request->query->get('PayerID')){
-            $logger->info("DONATION ISSUE: Paypal PayerID was not found. campaign_id: ".$campaign->getId()." and transaction_id: ".$transactionId);
-            $failure = true;
-          }
-
-          if(null == $request->query->get('paymentId')){
-            $logger->info("DONATION ISSUE: Paypal paymentId was not found. campaign_id: ".$campaign->getId()." and transaction_id: ".$transactionId);
-            $failure = true;
-          }
-
-          if(!$failure){
-            $apiContext = new \PayPal\Rest\ApiContext(
-                    new \PayPal\Auth\OAuthTokenCredential(
-                        $this->getParameter('paypal.paypal_rest.client_id'),     // ClientID
-                        $this->getParameter('paypal.paypal_rest.client_secret')      // ClientSecret
-                    )
-            );
-
-            if($this->container->getParameter('kernel.environment') == "dev" || $this->container->getParameter('kernel.environment') == "test"){
-            $apiContext->setConfig(array('mode' => 'sandbox'));
-            }else{
-              $apiContext->setConfig(array('mode' => 'live'));
+          if($donation->getPaymentMethod() == "paypal"){
+            if(null == $request->query->get('PayerID')){
+              $logger->info("DONATION ISSUE: Paypal PayerID was not found. campaign_id: ".$campaign->getId()." and transaction_id: ".$transactionId);
+              $failure = true;
             }
 
-            $donation->setPaypalPayerId($request->query->get('PayerID'));
-            $donation->setPaypalToken($request->query->get('token'));
-            $donation->setPaypalPaymentId($request->query->get('paymentId'));
-            $donation->setPaypalSuccessFlag($request->query->get('success'));
+            if(null == $request->query->get('paymentId')){
+              $logger->info("DONATION ISSUE: Paypal paymentId was not found. campaign_id: ".$campaign->getId()." and transaction_id: ".$transactionId);
+              $failure = true;
+            }
 
-             $logger->debug("Looking for success parameter");
-              if ($donation->getPaypalSuccessFlag() == true) {
-                  $logger->debug("Payment was a success");
-                  $donation->setDonationStatus("ACCEPTED");
+            if(!$failure){
+              $apiContext = new \PayPal\Rest\ApiContext(
+                      new \PayPal\Auth\OAuthTokenCredential(
+                          $this->getParameter('paypal.paypal_rest.client_id'),     // ClientID
+                          $this->getParameter('paypal.paypal_rest.client_secret')      // ClientSecret
+                      )
+              );
 
-                  try {
-                    $payment = Payment::get($donation->getPaypalPaymentId(), $apiContext);
-                  } catch (PayPal\Exception\PayPalConnectionException $ex) {
-                      $logger->critical("Paypal Payment PayPalConnectionException Failure. code:".$ex->getCode()." data:".$ex->getData());
-                      exit(1);
-                  } catch (Exception $ex) {
-                      $logger->critical("Paypal Payment getPaymentDetails Failure");
-                      exit(1);
-                  }
-
-                  $execution = new PaymentExecution();
-                  $execution->setPayerId($donation->getPaypalPayerId());
-
-                  try {
-                      $result = $payment->execute($execution, $apiContext);
-                      $PaypalPaymentDetails = Payment::get($donation->getPaypalPaymentId(), $apiContext);
-                      $donation->setPaypalPaymentDetails(json_decode($PaypalPaymentDetails, true));
-                  } catch (\PayPal\Exception\PayPalConnectionException $ex) {
-                      $logger->critical("Paypal Payment PayPalConnectionException Failure. code:".$ex->getCode()." data:".$ex->getData());
-                      $donation->setDonationStatus("FAILED");
-                      $this->get('session')->getFlashBag()->add('danger', 'There was an issue processing the payment, it has been cancelled');
-                      $failure = true;
-                  } catch (Exception $ex) {
-                      $logger->critical("Paypal Payment Execution Failure");
-                      $donation->setDonationStatus("FAILED");
-                      $this->get('session')->getFlashBag()->add('danger', 'There was an issue processing the payment, it has been cancelled');
-                      $failure = true;
-                    }
-              } else {
-                  $donation->setDonationStatus("FAILED");
-                  exit;
+              if($this->container->getParameter('kernel.environment') == "dev" || $this->container->getParameter('kernel.environment') == "test"){
+              $apiContext->setConfig(array('mode' => 'sandbox'));
+              }else{
+                $apiContext->setConfig(array('mode' => 'live'));
               }
+
+              $donation->setPaypalPayerId($request->query->get('PayerID'));
+              $donation->setPaypalToken($request->query->get('token'));
+              $donation->setPaypalPaymentId($request->query->get('paymentId'));
+              $donation->setPaypalSuccessFlag($request->query->get('success'));
+
+               $logger->debug("Looking for success parameter");
+                if ($donation->getPaypalSuccessFlag() == true) {
+                    $logger->debug("Payment was a success");
+                    $donation->setDonationStatus("ACCEPTED");
+
+                    try {
+                      $payment = Payment::get($donation->getPaypalPaymentId(), $apiContext);
+                    } catch (PayPalConnectionException $ex) {
+                        $logger->critical("Paypal Payment PayPalConnectionException Failure. code:".$ex->getCode()." data:".$ex->getData());
+                        exit(1);
+                    } catch (Exception $ex) {
+                        $logger->critical("Paypal Payment getPaymentDetails Failure");
+                        exit(1);
+                    }
+
+                    $execution = new PaymentExecution();
+                    $execution->setPayerId($donation->getPaypalPayerId());
+
+                    try {
+                        $result = $payment->execute($execution, $apiContext);
+                        $PaypalPaymentDetails = Payment::get($donation->getPaypalPaymentId(), $apiContext);
+                        $donation->setPaypalPaymentDetails(json_decode($PaypalPaymentDetails, true));
+                    } catch (PayPalConnectionException $ex) {
+                        $logger->critical("Paypal Payment PayPalConnectionException Failure. code:".$ex->getCode()." data:".$ex->getData());
+                        $donation->setDonationStatus("FAILED");
+                        $this->get('session')->getFlashBag()->add('danger', 'There was an issue processing the payment, it has been cancelled');
+                        $failure = true;
+                    } catch (Exception $ex) {
+                        $logger->critical("Paypal Payment Execution Failure");
+                        $donation->setDonationStatus("FAILED");
+                        $this->get('session')->getFlashBag()->add('danger', 'There was an issue processing the payment, it has been cancelled');
+                        $failure = true;
+                      }
+                } else {
+                    $donation->setDonationStatus("FAILED");
+                    exit;
+                }
+
+          }
 
             //Save Data
             $em->persist($donation);
             $em->flush();
-
-            if(!$failure){
-              //Send Email
-              $message = (new \Swift_Message("Thank you for your Donation to ".$campaign->getName()))
-                ->setFrom($campaign->getEmail())
-                ->setTo($donation->getDonorEmail())
-                ->setContentType("text/html")
-                ->setBody(
-                    $this->renderView('email/donation.success.email.twig', array('donation' => $donation,'campaign' => $campaign))
-                );
-
-              $this->get('mailer')->send($message);
-              $logger->debug("Done mailer");
-              $logger->debug("Doing a Donation Database Refresh");
-              $donationHelper = new DonationHelper($em, $logger);
-              $donationHelper->reloadDonationDatabase(array('campaign'=>$campaign));
-            }else{
-              return $this->redirectToRoute('donation_index', array('campaignUrl'=>$campaign->getUrl()));
-            }
         }
+
+          if(!$failure){
+            //Send Email
+            $message = (new \Swift_Message("Thank you for your Donation to ".$campaign->getName()))
+              ->setFrom($campaign->getEmail())
+              ->setTo($donation->getDonorEmail())
+              ->setContentType("text/html")
+              ->setBody(
+                  $this->renderView('email/donation.success.email.twig', array('donation' => $donation,'campaign' => $campaign))
+              );
+
+            $this->get('mailer')->send($message);
+            $logger->debug("Done mailer");
+            $logger->debug("Doing a Donation Database Refresh");
+            $donationHelper = new DonationHelper($em, $logger);
+            $donationHelper->reloadDonationDatabase(array('campaign'=>$campaign));
+          }else{
+            return $this->redirectToRoute('donation_index', array('campaignUrl'=>$campaign->getUrl()));
+          }
       }
 
       if($failure){
