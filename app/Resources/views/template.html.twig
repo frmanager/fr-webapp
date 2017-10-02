@@ -20,7 +20,7 @@
   {% endif %}
   {% endfor %}
 {% endif %}
-
+<!DOCTYPE html>
 <html>
 <head>
 <base target="_parent"/>
@@ -109,7 +109,7 @@
         </li>
         <li class="dropdown nav-item">
           <a class="nav-link dropdown-toggle" href="#" class="dropdown-toggle" id="drop2" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-          Rankings <span class="caret"></span></span>
+          Rankings <span class="caret"></span>
           </a>
             <div class="dropdown-menu" aria-labelledby="drop2">
         			<a class="dropdown-item {% if app.request.attributes.get('_route')=='grade_index'%} active {% endif %}" href="{{ path('grade_index', {'campaignUrl': campaignUrl}) }}">
