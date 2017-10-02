@@ -58,7 +58,6 @@ class CampaignawardController extends Controller
       $campaign =  $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
       $queryHelper = new QueryHelper($em, $logger);
       $reportDate = $queryHelper->convertToDay(new DateTime());
-      $reportDate->modify('-1 day');
 
       // replace this example code with whatever you need
       return $this->render('default/classroomAwards.html.twig', array(
