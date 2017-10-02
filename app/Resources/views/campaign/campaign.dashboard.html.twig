@@ -31,7 +31,7 @@
                   <span>{{ (totals.donation_amount / campaign.fundingGoal * 100)|number_format(2, '.', ',')}}% Complete</span>
               </div>
           </div>
-          <p>Raised by {{ totals.total_donations }} donors<p>
+          <p>Raised by {{ totals.total_donations }} donors</p>
           <p style="text-align:center;vertical-align: middle;">
               <div id="track" data-countdown="{{ campaign.endDate|date('Y/m/d') }}"></div>
           </p>
@@ -200,7 +200,7 @@
                                     <a href="{{ path('classroom_show', { 'campaignUrl':campaign.url, 'id': student_ranking.classroom_id }) }}">{{ student_ranking.grade_name }} - {{ student_ranking.classroom_name }}</a>
                                 </td>
                                 <td>
-                                    {{ student_ranking.student_name }}</a>
+                                    {{ student_ranking.student_name }}
                                 </td>
                                 <td style="text-align:right;">${{ student_ranking.donation_amount|number_format(2, '.', ',') }}</td>
 
