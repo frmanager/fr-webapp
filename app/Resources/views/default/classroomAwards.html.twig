@@ -60,7 +60,7 @@
             <tr {% if classroom.donated_at|date("m/d/y") == report_date|date("m/d/y") %} class="table-success" {% endif %}>
               <td>{{ classroom.donated_at|date("l, F d") }}</td>
               <td>${{ classroom.cumulative_donation_amount|number_format(2, '.', ',') }}</td>
-              <td>${{ classroom.campaignaward_amount }}- {{ classroom.campaignaward_name }}</td>
+              <td>${{ classroom.campaignaward_amount }} - {{ classroom.campaignaward_name }}</td>
             </tr>
       {% endfor %}
         </tbody>

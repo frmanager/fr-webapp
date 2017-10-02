@@ -31,7 +31,7 @@
                             <td>
                                 {{ grade.grade_name }}
                             </td>
-                            <td style="text-align:right;">{% if not grade.donation_amount == 0 %}${{ grade.donation_amount|number_format(2, '.', ',')}}</span>{% endif %}</td>
+                            <td style="text-align:right;">{% if not grade.donation_amount == 0 %}${{ grade.donation_amount|number_format(2, '.', ',')}}{% endif %}</td>
                             <td style="text-align:center;vertical-align: middle;"><span class="badge badge-{% if grade.rank == 1 %}success{% elseif grade.rank == 2 %}warning{% elseif grade.rank == 3 %}primary{% else %}default{% endif %}">{{ grade.rank}}</span></td>
                         </tr>
                     {% endfor %}

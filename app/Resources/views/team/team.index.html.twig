@@ -32,7 +32,7 @@
                             <td>
                                 <a href="{{ path('team_show', {'campaignUrl':campaign.url, 'teamUrl': team.team_url }) }}">{{ team.team_name }}</a>
                             </td>
-                            <td style="text-align:right;">{% if not team.donation_amount == 0 %}${{ team.donation_amount|number_format(2, '.', ',')}}</span>{% endif %}</td>
+                            <td style="text-align:right;">{% if not team.donation_amount == 0 %}${{ team.donation_amount|number_format(2, '.', ',')}}{% endif %}</td>
                             <td style="text-align:center;vertical-align: middle;">
                               <span class="badge badge-{% if team.rank == 1 %}success{% elseif team.rank == 2 %}warning{% elseif team.rank == 3 %}primary{% else %}default{% endif %}">{{ team.rank }}</span>
                             </td>
