@@ -2,70 +2,77 @@
 
 {% block body %}
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-8">
       <h1>Awards by Teacher</h1>
-    </div><!-- ./column -->
-  </div><!-- ./row -->
+    </div>
+    <!-- ./column -->
+  </div>
+  <!-- ./row -->
   <hr/>
   <div class="card card-outline-primary mb-3 text-center">
     <div class="card-block">
       NOTE: New awards are highlighted green.
-    </div><!-- ./card-block -->
-  </div><!-- ./card -->
+    </div>
+    <!-- ./card-block -->
+  </div>
+  <!-- ./card -->
   <br>
   <hr>
   <br>
   {% set classroom_id = -1 %}
   {% set start = true %}
   {% for classroom in classrooms %}
-    {% if classroom_id != classroom.id %}
-      {% if start == false %}
-      </tbody>
-    </table>
-  </div><!-- ./card-block -->
-</div><!-- ./card -->
-</div><!-- ./col -->
-</div><!-- ./row -->
-<br>
-{% else %}
-  {% set start = false %}
-{% endif %}
-<div class="row">
-  <div class="col-md-10 offset-md-1">
-    <div class="card">
+      {% if classroom_id != classroom.id %}
+        {% if start == false %}
+                      </tbody>
+                    </table>
+                  </div>
+                  <!-- ./card-block -->
+                </div>
+                <!-- ./card -->
+                </div>
+                <!-- ./col -->
+                </div>
+                <!-- ./row -->
+                <br>
+        {% else %}
+        {% set start = false %}
+        {% endif %}
+  <div class="row">
+    <div class="col-md-10 offset-md-1">
+      <div class="card">
       <div class="card-block">
-        <h4 class="card-title">
-          <a href="{{ path('classroom_show', {'campaignUrl':campaign.url, 'id': classroom.id }) }}">
-            <span class="hidden-xs">{{ classroom.grade_name }}
-              -</span>
-            {{ classroom.classroom_name }}</a>
-        </h4>
-
-        <table class="table table-bordered table-condensed table-striped">
-          <thead>
-            <tr>
-              <th class="col-xs-4">Date Earned</th>
-              <th class="col-xs-3">Total Donations</th>
-              <th class="col-xs-5">Award Level</th>
+          <h4 class="card-title">
+            <a href="{{ path('classroom_show', {'campaignUrl':campaign.url, 'id': classroom.id }) }}">
+              <span class="hidden-xs">{{ classroom.grade_name }} - </span>{{ classroom.classroom_name }}</a>
+          </h4>
+          <table class="table table-bordered table-condensed table-striped">
+            <thead>
+              <tr>
+                <th class="col-xs-4">Date Earned</th>
+                <th class="col-xs-3">Total Donations</th>
+                <th class="col-xs-5">Award Level</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% endif %}
+            {% set classroom_id = classroom.id %}
+            <tr {% if classroom.donated_at|date("m/d/y") == report_date|date("m/d/y") %} class="table-success" {% endif %}>
+              <td>{{ classroom.donated_at|date("l, F d") }}</td>
+              <td>${{ classroom.cumulative_donation_amount|number_format(2, '.', ',') }}</td>
+              <td>${{ classroom.campaignaward_amount }}- {{ classroom.campaignaward_name }}</td>
             </tr>
-          </thead>
-          <tbody>
-          {% endif %}{% set classroom_id = classroom.id %}
-          <tr {% if classroom.donated_at == report_date %} class="success" {% endif %}>
-            <td>{{ classroom.donated_at|date("l, F d") }}</td>
-            <td>${{ classroom.cumulative_donation_amount|number_format(2, '.', ',') }}
-            </td>
-            <td>${{ classroom.campaignaward_amount }}
-              -
-              {{ classroom.campaignaward_name }}</td>
-
-          </tr>
+      {% endfor %}
         </tbody>
       </table>
-      {% endfor %}
-    </div><!-- ./card-block -->
-  </div><!-- ./card -->
-</div><!-- ./col -->
-</div><!-- ./row -->
+      <!-- ./table -->
+      </div>
+      <!-- ./card-block -->
+    </div>
+    <!-- ./card -->
+  </div>
+  <!-- ./col -->
+</div>
+<!-- ./row -->
 <br>
 {% endblock %}
