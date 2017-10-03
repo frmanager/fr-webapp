@@ -1,0 +1,34 @@
+{% extends 'template.email.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h4 class="display-4">This is an email to inform you that you that someone has donated ${{donation.amount}} to your Team!</h4>
+        </div><!-- ./column -->
+    </div><!-- ./row -->
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+        <div class="card">
+          <div class="card-header">
+            Donation Summary
+          </div>
+          <div class="card-block">
+            <hr>
+            {% if donation.type == 'teacher' %}
+              <p class="card-text"><strong>Donation to:</strong> {{campaign.name}}</p>
+            {% elseif donation.type == 'student' %}
+              <p class="card-text"><strong>Donation to:</strong> {{donation.classroom.name}} - {{donation.studentName}}</p>
+            {% elseif donation.type == 'team' %}
+              <p class="card-text"><strong>Donation to:</strong> {{donation.team.name}}</p>
+            {% else %}
+            {% endif %}
+            <p class="card-text"><strong>Donor Name:</strong> {{ donation.donorFirstName }} {{ donation.donorLastName }}</p>
+            <p class="card-text"><strong>Donor Email:</strong> {{ donation.donorEmail }}</p>
+            <p class="card-text"><strong>Donation Date:</strong> {{donation.donatedAt|date('Y/m/d')}}</p>
+            <p class="card-text"><strong>Donation Amount:</strong> ${{donation.amount}}</p>
+            <p class="card-text"><strong>Donation Message:</strong> {{donation.donorComment}}</p>
+          </div>
+        </div><!-- ./card -->
+    </div><!-- ./column -->
+</div><!-- ./row -->
+{% endblock %}
