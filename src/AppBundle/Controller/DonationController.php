@@ -117,6 +117,12 @@ class DonationController extends Controller
           $fail = true;
         }
 
+        if (!$fail && filter_var($params['donation']['email'], FILTER_VALIDATE_EMAIL) == false) {
+          $this->addFlash('warning','This is not a valid Email Address');
+          $fail = true;
+        }
+
+
         if (!$fail && $donationType == 'team'){
           if(empty($params['donation']['teamId'])){
             $this->addFlash('warning','No Team was selected');
@@ -602,8 +608,8 @@ class DonationController extends Controller
         }
 
           if(!$failure){
-            //Send Email
-            $message = (new \Swift_Message("Thank you for your Donation to ".$campaign->getName()))
+            //Send Email to Donor
+            $message = (new \Swift_Message("[FRManager] Thank you for your Donation to ".$campaign->getName()))
               ->setFrom($campaign->getEmail())
               ->setTo($donation->getDonorEmail())
               ->setContentType("text/html")
@@ -612,7 +618,24 @@ class DonationController extends Controller
               );
 
             $this->get('mailer')->send($message);
-            $logger->debug("Done mailer");
+            $logger->debug("Done Mailer to Donor");
+
+
+            //Send Email to Recipient of Donation (If Team)
+            if($donation->getType() == "team"){
+
+            $message = (new \Swift_Message("[FRManager] ".$donation->getDonorFirstName()." ".$donation->getDonorLastName()." Has made a donation to your team!"))
+              ->setFrom($campaign->getEmail())
+              ->setTo($donation->getTeam()->getUser()->getEmail())
+              ->setContentType("text/html")
+              ->setBody(
+                  $this->renderView('email/donation.notify.email.twig', array('donation' => $donation,'campaign' => $campaign))
+              );
+
+            $this->get('mailer')->send($message);
+            $logger->debug("Done Mailer to Recipient of Donation");
+            }
+
             $logger->debug("Doing a Donation Database Refresh");
             $donationHelper = new DonationHelper($em, $logger);
             $donationHelper->reloadDonationDatabase(array('campaign'=>$campaign));
