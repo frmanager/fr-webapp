@@ -51,6 +51,8 @@ twig:
     globals:
         main_app_url: "%main_app_url%"
         admin_app_url: "%admin_app_url%"
+        credit_card_flag: "%feature.credit_card%"
+
 
 # Doctrine Configuration
 doctrine:
