@@ -91,7 +91,7 @@ class DonationController extends Controller
       $donationType = 'campaign';
     }
 
-    $logger->debug("Donation Object:", $donation);
+    $logger->debug("Donation Object:", print_r($donation, true));
 
     if ($request->isMethod('POST')) {
         $fail = false;
@@ -176,6 +176,12 @@ class DonationController extends Controller
         $paymentMethod = $params['donation']['paymentMethod'];
         if(!$fail && $paymentMethod == "cc"){
 
+          if(!$fail && $this->container->hasParameter('feature.credit_card') && $this->container->getParameter('feature.credit_card') == false){
+            $this->addFlash('warning','We are not currently accepting Credit Card Donations');
+            $fail = true;
+          }
+
+
           if(!$fail && empty($params['donation']['cc']['cardholderName'])){
             $this->addFlash('warning','Cardholder Name is required');
             $fail = true;
@@ -237,6 +243,7 @@ class DonationController extends Controller
             $this->addFlash('warning','Card CVV is required');
             $fail = true;
           }
+
         }
 
         if(!$fail){
@@ -337,7 +344,7 @@ class DonationController extends Controller
                 ->setRedirectUrls($redirectUrls)
                 ->setTransactions(array($transaction));
 
-          }else {
+          }else if($params['donation']['paymentMethod'] == "cc"){
 
             $card = new PaymentCard();
             $logger->debug("Payment Card type set to: ".$cardType);
@@ -361,10 +368,12 @@ class DonationController extends Controller
               $payer->setPaymentMethod("credit_card")
                   ->setFundingInstruments(array($fi));
 
+
               $amount = new Amount();
               $amount->setCurrency("USD")
                   ->setTotal($donation->getAmount());
 
+              //Here we are making sure the campaign gets the donation, not us!
               $payee = new Payee();
               $payee->setEmail($campaign->getPaypalEmail());
 
@@ -415,7 +424,9 @@ class DonationController extends Controller
               $relatedResources = $transactions[0]->getRelatedResources();
               $authorization = $relatedResources[0]->getAuthorization();
               $logger->debug("Authorization: ".print_r($authorization, true));
-              $donation->setPaypalAuthorization(json_decode($authorization, true));
+              $donation->setPaypalPaymentDetails(json_decode($authorization, true));
+              $donation->setPaypalPaymentId($authorization->getId());
+
               $em->persist($donation);
               $em->flush();
               $logger->debug("Capturing Payment");
@@ -430,9 +441,11 @@ class DonationController extends Controller
                   $capture = new Capture();
                   $capture->setAmount($amt);
                   $getCapture = $authorization->capture($capture, $apiContext);
+
                   $donation->setDonationStatus("ACCEPTED");
                   $em->persist($donation);
                   $em->flush();
+
                   } catch (Exception $ex) {
                     $logger->critical("Paypal Rest API Exception Failure. code:".$ex->getCode()." data:".$ex->getData());
                     $fail = true;
@@ -527,6 +540,11 @@ class DonationController extends Controller
         if(!$success){
           $this->get('session')->getFlashBag()->add('info', 'This donation was cancelled.');
           $logger->info("Donation was cancelled on the paypal side.");
+          $failure = true;
+        }
+
+        //We don't need to process anything for Credit Card Transactions
+        if(!$failure && $donation->getPaymentMethod() == "cc"){
           $failure = true;
         }
 
@@ -644,7 +662,7 @@ class DonationController extends Controller
           }
       }
 
-      if($failure){
+      if($failure && $donation->getDonationStatus() !== "ACCEPTED"){
         return $this->render('donation/donation.cancelled.html.twig', array(
             'campaign' => $campaign,
         ));
