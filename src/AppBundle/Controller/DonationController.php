@@ -91,7 +91,6 @@ class DonationController extends Controller
       $donationType = 'campaign';
     }
 
-    $logger->debug("Donation Object:", print_r($donation, true));
 
     if ($request->isMethod('POST')) {
         $fail = false;
