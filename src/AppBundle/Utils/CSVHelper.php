@@ -46,6 +46,10 @@ class CSVHelper
         }
 
         fclose($this->getCSVFile());
+    }
+
+    public function unlink()
+    {
         unlink($this->getFilePath().$this->getFileName());
     }
 
