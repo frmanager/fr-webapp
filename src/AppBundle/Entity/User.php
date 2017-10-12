@@ -42,14 +42,24 @@ class User implements UserInterface
     private $apiKey;
 
     /**
-     * @ORM\Column(type="string", unique=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     private $emailConfirmationCode;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $emailConfirmationCodeTimestamp;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $passwordResetCode;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $passwordResetCodeTimestamp;
 
     /**
      * @var UserStatus
@@ -613,5 +623,53 @@ class User implements UserInterface
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * Set passwordResetCode
+     *
+     * @param string $passwordResetCode
+     *
+     * @return User
+     */
+    public function setPasswordResetCode($passwordResetCode)
+    {
+        $this->passwordResetCode = $passwordResetCode;
+
+        return $this;
+    }
+
+    /**
+     * Get passwordResetCode
+     *
+     * @return string
+     */
+    public function getPasswordResetCode()
+    {
+        return $this->passwordResetCode;
+    }
+
+    /**
+     * Set passwordResetCodeTimestamp
+     *
+     * @param \DateTime $passwordResetCodeTimestamp
+     *
+     * @return User
+     */
+    public function setPasswordResetCodeTimestamp($passwordResetCodeTimestamp)
+    {
+        $this->passwordResetCodeTimestamp = $passwordResetCodeTimestamp;
+
+        return $this;
+    }
+
+    /**
+     * Get passwordResetCodeTimestamp
+     *
+     * @return \DateTime
+     */
+    public function getPasswordResetCodeTimestamp()
+    {
+        return $this->passwordResetCodeTimestamp;
     }
 }
