@@ -78,7 +78,7 @@
           <div class="form-group">
             <div class="col-sm-12">
               <label class="required" for="team_description">Call for Action</label>
-              <textarea placeholder="Help the Mrs. Smith get to the top of the charts!..." id="team_description" name="team[description]" rows="3" class="form-control"{% if team is not null and team['description'] is not null %}{{ team['description'] }}{% endif %}</textarea>
+              <textarea placeholder="Help the Mrs. Smith get to the top of the charts!..." id="team_description" name="team[description]" rows="3" class="form-control">{% if team is not null and team['description'] is not null %}{{ team['description'] }}{% endif %}</textarea>
             </div>
           </div>
           <div class="form-group">
