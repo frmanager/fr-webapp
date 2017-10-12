@@ -299,6 +299,12 @@ class RegistrationController extends Controller
         return $this->redirectToRoute('register_team_select', array('campaignUrl' => $campaign->getUrl()));
       }
 
+      $teamCheck = $em->getRepository('AppBundle:Team')->findOneBy(array('campaign'=>$campaign, 'user'=>$this->get('security.token_storage')->getToken()->getUser()));
+      if(!is_null($teamCheck)){
+        $this->get('session')->getFlashBag()->add('warning', 'You already have a team and do not need to register a new one');
+        return $this->redirectToRoute('team_show', array('campaignUrl'=>$campaign->getUrl(), 'teamUrl' => $teamCheck->getUrl()));
+      }
+
       if ($request->isMethod('POST')) {
           $fail = false;
           $params = $request->request->all();
@@ -374,9 +380,10 @@ class RegistrationController extends Controller
               foreach ($params['team']['students'] as $key => $student) {
                 if(!empty($student['classroomID']) && !empty($student['name']) && !$student['classroomID'] !== '' && $student['name'] !== ''){
                   $teamStudent = new TeamStudent();
+                  $classroom = $em->getRepository('AppBundle:Classroom')->find($student['classroomID']);
                   $teamStudent->setTeam($team);
-                  $teamStudent->setClassroom($em->getRepository('AppBundle:Classroom')->find($student['classroomID']));
-                  $teamStudent->setGrade($em->getRepository('AppBundle:Grade')->find($teamStudent->getClassroom()->getGrade()));
+                  $teamStudent->setClassroom($classroom);
+                  $teamStudent->setGrade($em->getRepository('AppBundle:Grade')->find($classroom->getGrade()));
                   $teamStudent->setName($student['name']);
                   $teamStudent->setCreatedBy($this->get('security.token_storage')->getToken()->getUser());
                   $em->persist($teamStudent);
