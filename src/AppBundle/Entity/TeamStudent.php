@@ -11,9 +11,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="team_students",uniqueConstraints={@ORM\UniqueConstraint(columns={"name", "team_id"})})
+ * @ORM\Table(name="team_students",uniqueConstraints={@ORM\UniqueConstraint(columns={"name", "team_id", "classroom_id"})})
  * @UniqueEntity(
- *     fields={"team_id", "name"},
+ *     fields={"team_id", "classroom_id", "name"},
  *     errorPath="name",
  *     message="Duplicate Student Entry for Identified Team"
  * )

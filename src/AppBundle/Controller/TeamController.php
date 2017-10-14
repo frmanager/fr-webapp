@@ -265,8 +265,6 @@ class TeamController extends Controller
                   $team->setClassroom($em->getRepository('AppBundle:Classroom')->find($params['team']['classroom']['classroomID']));
               }
 
-              $team->setUser($this->get('security.token_storage')->getToken()->getUser());
-              $team->setCreatedBy($this->get('security.token_storage')->getToken()->getUser());
               $em->persist($team);
               $em->flush();
 
@@ -277,6 +275,7 @@ class TeamController extends Controller
 
               //If is a "family" page, we need to add students
               if($team->getTeamType()->getValue() == "family"){
+                if(!empty($params['team']['students'])){
                   foreach ($params['team']['students'] as $key => $student) {
                     $teamStudent = $em->getRepository('AppBundle:TeamStudent')->find($student['id']);
                     if(!empty($teamStudent)){
@@ -290,6 +289,7 @@ class TeamController extends Controller
                       $logger->info("Could not find TeamStudent #".$student['id']);
                     }
                   }
+                }
 
                   if(!empty($params['team']['newStudent'])){
                     $student = $params['team']['newStudent'];
@@ -309,6 +309,9 @@ class TeamController extends Controller
                   $student = $params['team']['student'];
                   $logger->debug("Adding TeamStudents".$team->getId());
                   $teamStudent = $em->getRepository('AppBundle:TeamStudent')->findOneBy(array('team'=>$team));
+                  if(empty($teamStudent)){
+                    $teamStudent = new TeamStudent();
+                  }
                   $teamStudent->setTeam($team);
                   $teamStudent->setClassroom($em->getRepository('AppBundle:Classroom')->find($student['classroomID']));
                   $teamStudent->setGrade($em->getRepository('AppBundle:Grade')->find($teamStudent->getClassroom()->getGrade()));

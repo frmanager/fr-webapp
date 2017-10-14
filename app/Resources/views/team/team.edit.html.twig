@@ -148,7 +148,7 @@
                       </select>
                     </div>
                     <div class="col-sm-3">
-                      <input type="text" id="team_students_name" value="{{ team.teamStudents.0.name }}" placeholder="David S." name="team[student][name]" class="form-control">
+                      <input type="text" id="team_students_name" value="{% if team.teamStudents.0 is defined %}{{ team.teamStudents.0.name }}{% endif %}" placeholder="David S." name="team[student][name]" class="form-control">
                     </div>
                   </div>
                   <!-- ./form-group -->

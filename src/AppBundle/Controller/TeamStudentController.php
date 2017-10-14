@@ -29,7 +29,7 @@ class TeamStudentController extends Controller
    * @Route("/", name="teamStudent_index")
    * @Method({"GET", "POST"})
    */
-  public function teamIndexAction($campaignUrl, $teamUrl)
+  public function teamStudentIndexAction($campaignUrl, $teamUrl)
   {
     $logger = $this->get('logger');
 
