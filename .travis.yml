@@ -17,6 +17,7 @@ before_script:
 - php bin/console doctrine:database:create --env=dev
 - php bin/console doctrine:schema:create --env=dev
 - php bin/console hautelook:fixtures:load --env=dev --quiet
+- php bin/console app:refresh-donation-db
 notifications:
   slack:
     secure: hudPbND+/7pUtRKFDoV/1S0GnItezjc3MYEBvH1xJt6LbXD33kC5lL6bOpnyM9boXDlGlbZ3QmYWYAqCCpfWjtMEwwAku9jnU0MqmlxpEQ0zi6j6Ex5aGAQ4Oq3pQ5mh+CfNgSVjXbmDJtDGbcZAUFaG3uVbOAGRdQ096rV8o4wiTyASfR3lp/o3TW0pzH+lk6jxkdEW9YNgr7g5IQkTBKCJuZ7rxhIMJzqvpCTbjV1a6uMFFTuxM3M6YwMuALOvjChUzagZwWPA8rngatgzGBfvD0z2sWqAXiCWSXnTSGLmIZZgcSM4QxXG0nwTDX8wTLOz3kQsLiKqkptGD8v2pmbDIPd66Gj6orOedDbuuA3uFrgqsecXyJEeSxFAwkkReiDIcCHQEjFsnig0ELkmH9vSIvYdsH8AiNzIStjbyX6E3Sj5AM3/AHq+J+mXFpbtsFeBRWD49JRTNuTkXsi8wtp+/vKjaLRL/eZxyUI0e/vSMfZhrfwD7/wLIocnyivpF96bISCAvTpsmcOiGCPbY9/vNVBXeajJg3PHMJ2F+rx/BQcRyMpNDDwMGeKmQYisTiJRFpncC0kY9YtSi+hEPDvMf87LpsAz1gb7YCBdguAcKUihOckD2LVvXgo6JapwMk5qfPE8YDlbBglszmi1kKm1xtPzqFWAJiGIjcrKvwI=
