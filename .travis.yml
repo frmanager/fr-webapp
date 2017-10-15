@@ -24,6 +24,8 @@ notifications:
 addons:
   sonarcloud:
     organization: frmanager-github
+    branches:
+      - test
     token:
       secure: uiL7xxxs3uMWJeC4FczTsRuLcB+bvL5wKw9eVN8rJiPAMlHlv2d1f3o+lb9eGWKJZyc33/pGQt7x4YilVGOHOU4dtwjYIFnOYU4l1eopumEbR5hX7Kal5lQo1CKBX7WnQecWeg0Bk/X/nep+S7KmMaDMTzte/74w8KGDrtcUmUqmQI2tzR2+AedA5Muw60hWPn0PgYE/GG+iCspxfnkL+WgChRu9niAM54OTgWnQUiChyOV7N629vokOGJ19ncph9qOZLdvGxYgqsmoXJcG52Hhu+liShKimGvOBPv2q16G7Q2FjIMeIIyLjUtEowYDTVp8UtkpPTeftP7+EUp4cQOpt+9OI++svjxjJJYcdR1BfDI09An1RpRkt2B5yCaZK5Bm2e41zKzgMIgepgRNxGvjEixIpdnglJGqmceWGavig+vZfWycGskd9pEciQUT4VmY5VSg+RJCRl4ETjJYccHPmb0+PynCFOnue3yTGyJZYw2tT4M/WPtIX4sipVeGuMn+JAkkREeqJ0EcCcdsmvmX3Dnz/ZP+682XQinWY/PymD/dqtaRWcsBNEqJA7bZzSq2Qs9Ggy570XA8eoJBh9T09vBNXonGuZUj1TIKNX33kkngVr8wS5+VPx93zSaREf10yI6dFMViooy2QeVcBom3ePbQ/vgkJfqB64G9t3p4=
 script:
