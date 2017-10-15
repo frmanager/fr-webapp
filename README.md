@@ -1,18 +1,20 @@
-[![Build Status](https://travis-ci.org/frmanager/fr-webapp.svg?branch=master)](https://travis-ci.org/frmanager/fr-webapp) [![Quality Status](https://sonarcloud.io/api/badges/gate?key=fr-webapp)](https://sonarcloud.io/dashboard?id=fr-webapp)
+[![Build Status](https://travis-ci.org/frmanager/fr-webapp.svg?branch=master)](https://travis-ci.org/frmanager/fr-webapp)
+
+[![Quality Status](https://sonarcloud.io/api/badges/gate?key=fr-webapp)](https://sonarcloud.io/dashboard?id=fr-webapp)
 
 
-#LRES PTO Superhero Fun Run Management Website
+# LRES PTO Superhero Fun Run Management Website
 This Symphony2 Application is used to manage the "LRES PTO" FunRun, which is a school fundraiser where classes and students compete to raise donations for the PTO. This portal handles the daily data ingest, analytics, calculations, and notifications.
 
 The ultimate goal will be for the system to be developed in an "Open Source" spirit where other schools can either leverage the same system, or download and configure the application to use for their own purposes without much customization.
 
 
-##Setup
+## Setup
 
 This is a SYMFONY2 PHP based application designed to be run on a Dreamhost Shared server and MYSQL server. This is important because it proves that shared hosting (which can sometimes be free for non-profits) can set this up and host it for free.
 
 
-##Components
+## Components
 
 - PHP 5.6 or above
 - Composer (PHP Package Management)
@@ -22,7 +24,7 @@ This is a SYMFONY2 PHP based application designed to be run on a Dreamhost Share
 - pear (Net_FTP) (Specific for Dreamhost)
 
 
-##Configuration
+## Configuration
 
 
 1. Download repository from Github
@@ -59,7 +61,7 @@ URL:[localhost:8000](localhost:8000)
 
 
 
-##CI/CD (Phing) Configuration
+## CI/CD (Phing) Configuration
 The Phing configuration is dynamic and will support any amount of environments. It requires SSH and FTP access to the server. I'm still in the initial phases, but essentially all you have to do is do a base setup as follows:
 
 
@@ -131,7 +133,7 @@ php bin/console hautelook:fixtures:load
 
 Need to set default timezone as date.timezone = "America/New_York"
 
-##Paypal CURL issue with Dreamhost
+## Paypal CURL issue with Dreamhost
 
 There is an active issue I am investigating related to the dreamhost hosting. The Paypal PHP Rest SDK does not appear to work (At Least for Sandbox mode). I have narrowed the issue down to the local CURL version/configuration.
 
