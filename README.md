@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/frmanager/fr-webapp.svg?branch=master)](https://travis-ci.org/frmanager/fr-webapp) [![Quality Status](https://sonarcloud.io/api/badges/gate?key=fr-webapp)](https://sonarcloud.io/dashboard?id=fr-webapp)
+[![Build Status](https://travis-ci.org/frmanager/fr-webapp.svg?branch=test)](https://travis-ci.org/frmanager/fr-webapp) [![Quality Status](https://sonarcloud.io/api/badges/gate?key=fr-webapp:test)](https://sonarcloud.io/dashboard?id=fr-webapp:test)
 
 
 #LRES PTO Superhero Fun Run Management Website
