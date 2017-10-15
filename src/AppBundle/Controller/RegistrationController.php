@@ -334,7 +334,7 @@ class RegistrationController extends Controller
 
           //If it is a student team, a class and student name is required
           if($teamType->getValue() == "student"){
-            if(empty($params['team']['students'][1]['classroomID']) or empty($params['team']['students'][1]['name']) or $params['team']['students'][1]['classroomID'] == '' or $params['team']['students'][1]['name'] == ''){
+            if(empty($params['team']['students'][1]['classroomID']) || empty($params['team']['students'][1]['name']) || $params['team']['students'][1]['classroomID'] == '' || $params['team']['students'][1]['name'] == ''){
               $this->addFlash('warning','Student classrom and name is required');
               $fail = true;
             }
@@ -342,7 +342,7 @@ class RegistrationController extends Controller
 
           //If it is a teacher team a class is required
           if($teamType->getValue() == "teacher"){
-            if(empty($params['team']['classroom']['classroomID']) or $params['team']['classroom']['classroomID'] == ''){
+            if(empty($params['team']['classroom']['classroomID']) || $params['team']['classroom']['classroomID'] == ''){
               $this->addFlash('warning','Please select a classroom');
               $fail = true;
             }
@@ -375,7 +375,7 @@ class RegistrationController extends Controller
             $em->flush();
 
             //If is a "family" page, we need to add students
-            if($teamType->getValue() == "family" or $teamType->getValue() == "student"){
+            if($teamType->getValue() == "family" || $teamType->getValue() == "student"){
               $logger->debug("Adding TeamStudents to Team ".$team->getId());
               foreach ($params['team']['students'] as $key => $student) {
                 if(!empty($student['classroomID']) && !empty($student['name']) && !$student['classroomID'] !== '' && $student['name'] !== ''){

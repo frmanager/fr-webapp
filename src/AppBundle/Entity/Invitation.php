@@ -5,7 +5,10 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/** @ORM\Entity */
+/**
+ * @ORM\Entity
+ * @codeCoverageIgnore
+ */
 class Invitation
 {
     /** @ORM\Id @ORM\Column(type="string", length=6) */

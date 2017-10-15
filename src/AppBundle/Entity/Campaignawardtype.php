@@ -13,6 +13,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table(name="campaignawardtype", uniqueConstraints={@ORM\UniqueConstraint(columns={"value"}), @ORM\UniqueConstraint(columns={"name"})})
  * @UniqueEntity(fields={"name"})
  * @UniqueEntity(fields={"value"})
+ * @codeCoverageIgnore
  */
 class Campaignawardtype
 {

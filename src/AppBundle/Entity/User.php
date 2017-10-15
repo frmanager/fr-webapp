@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 /**
  * @ORM\Entity
  * @ORM\Table(name="user",uniqueConstraints={@ORM\UniqueConstraint(columns={"email"})})
+ * @codeCoverageIgnore
  */
 class User implements UserInterface
 {

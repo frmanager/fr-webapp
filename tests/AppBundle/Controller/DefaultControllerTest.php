@@ -6,7 +6,9 @@ use AppBundle\Utils\QueryHelper;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 
-//This test case will test the HTTPS redirect
+/**
+  * @covers DefaultController::indexAction
+  */
 class DefaultControllerTest extends WebTestCase
 {
     public function testIndex()
