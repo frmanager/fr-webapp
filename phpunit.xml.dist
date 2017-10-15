@@ -25,7 +25,14 @@
                 <directory>src/*Bundle/Resources</directory>
                 <directory>src/*/*Bundle/Resources</directory>
                 <directory>src/*/Bundle/*Bundle/Resources</directory>
+                <directory>src/*/Bundle/*Bundle/Entity</directory>
             </exclude>
         </whitelist>
     </filter>
+
+    <logging>
+      <!-- and this is where your report will be written -->
+      <log type="coverage-clover" target="./build/reports/clover.xml"/>
+      <log type="junit" target="./build/reports/junit.xml" logIncompleteSkipped="false"/>   
+    </logging>
 </phpunit>

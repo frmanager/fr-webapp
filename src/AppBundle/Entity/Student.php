@@ -16,6 +16,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *     errorPath="name",
  *     message="Duplicate Student for Identified Classroom"
  * )
+ *
+ * @codeCoverageIgnore
  */
 class Student
 {

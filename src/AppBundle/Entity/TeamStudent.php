@@ -17,6 +17,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  *     errorPath="name",
  *     message="Duplicate Student Entry for Identified Team"
  * )
+ *
+ * @codeCoverageIgnore
  */
 class TeamStudent
 {

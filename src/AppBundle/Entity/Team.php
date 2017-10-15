@@ -15,6 +15,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *     errorPath="url",
  *     message="This URL is already registered"
  * )
+ *
+ * @codeCoverageIgnore
  */
 class Team
 {

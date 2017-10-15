@@ -12,6 +12,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *
  * @ORM\Entity
  * @ORM\Table(name="donation_database")
+ * @codeCoverageIgnore
  */
 class DonationDatabase
 {

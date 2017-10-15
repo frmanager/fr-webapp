@@ -5,11 +5,19 @@ use AppBundle\Utils\QueryHelper;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+
+/**
+ * @coversDefaultClass \AppBundle\Controller\DefaultController
+ */
 class DefaultControllerTest extends WebTestCase
 {
-    public function testIndex()
+
+    /**
+    * @covers ::indexAction
+    */
+    public function testIndexAction()
     {
-        $client = static::createClient();
+        $client = static::createClient(array(),array('HTTPS' => true));
 
         $crawler = $client->request('GET', '/');
 

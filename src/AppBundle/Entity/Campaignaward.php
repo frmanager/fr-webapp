@@ -15,6 +15,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *     errorPath="campaignawardtype",
  *     message="Cannot have duplicative places or amounts for this type and style"
  * )
+ *
+ * @codeCoverageIgnore
  */
 class Campaignaward
 {

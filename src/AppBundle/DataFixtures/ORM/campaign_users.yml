@@ -1,10 +1,4 @@
 AppBundle\Entity\CampaignUser:
-    campaignUser{1..10}:
+    campaignUser{1..4}:
         user: '@user<current()>'
-        campaign: '@campaign<current()>'
-    campaignUser11:
-        user: '@user1'
-        campaign: '@campaign2'
-    campaignUser12:
-        user: '@user1'
-        campaign: '@campaign3'        
+        campaign: '@campaign1'

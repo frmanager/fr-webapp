@@ -17,6 +17,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  *     errorPath="name",
  *     message="Duplicate Campaign Entry for Identified User"
  * )
+ *
+ * @codeCoverageIgnore
  */
 class CampaignUser
 {

@@ -457,7 +457,6 @@ class QueryHelper
             foreach ($objects as $object) {
                 if ($object['id'] == $sortedObject['id'] && $sortedObject['id'] == $id) {
                     return $rank;
-                    break;
                 }
             }
             $amount = $sortedObject[$amountField];

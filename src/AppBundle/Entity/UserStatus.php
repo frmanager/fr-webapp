@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  * @ORM\Table(name="user_status",uniqueConstraints={@ORM\UniqueConstraint(columns={"name"})})
+ * @codeCoverageIgnore
  */
 class UserStatus
 {

@@ -12,6 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @ORM\Entity
  * @ORM\Table(name="campaign",uniqueConstraints={@ORM\UniqueConstraint(columns={"url"})})
+ * @codeCoverageIgnore
  */
 Class Campaign
 {
