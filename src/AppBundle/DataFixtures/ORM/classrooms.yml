@@ -1,9 +1,49 @@
 AppBundle\Entity\Classroom:
-    classroom{1..100}:
-        teacherName: Teachers Name
-        name: <title()> <lastName()>s Class
-        email: <email()>
-        grade: '@grade*'
+    classroom1:
+        teacherName: Classroom1 Teachers Name
+        name: Classroom1's Class
+        email: classroom1@gmail.com
+        grade: '@grade1'
+        __calls:
+            - setCampaignFromGrade:
+                  0: null
+    classroom2:
+        teacherName: Classroom2 Teachers Name
+        name: Classroom2's Class
+        email: classroom2@gmail.com
+        grade: '@grade1'
+        __calls:
+            - setCampaignFromGrade:
+                  0: null
+    classroom3:
+        teacherName: Classroom3 Teachers Name
+        name: Classroom3's Class
+        email: classroom3@gmail.com
+        grade: '@grade2'
+        __calls:
+            - setCampaignFromGrade:
+                  0: null
+    classroom4:
+        teacherName: Classroom4 Teachers Name
+        name: classroom4's Class
+        email: classroom4@gmail.com
+        grade: '@grade2'
+        __calls:
+            - setCampaignFromGrade:
+                  0: null
+    classroom5:
+        teacherName: Classroom5 Teachers Name
+        name: Classroom5's Class
+        email: Classroom5@gmail.com
+        grade: '@grade3'
+        __calls:
+            - setCampaignFromGrade:
+                  0: null
+    classroom6:
+        teacherName: Classroom6 Teachers Name
+        name: Classroom6's Class
+        email: classroom6@gmail.com
+        grade: '@grade3'
         __calls:
             - setCampaignFromGrade:
                   0: null

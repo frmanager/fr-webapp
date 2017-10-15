@@ -1,5 +1,5 @@
 AppBundle\Entity\Campaign:
-    campaign{1..10}:
+    campaign{1..2}:
         name: 'campaign<current()>'
         description: <paragraph(3,true)>
         theme: 'cerulean'

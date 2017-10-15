@@ -1,100 +1,100 @@
 AppBundle\Entity\Campaignaward:
-    campaignawards_place{1..10}:
-        campaign: "@campaign<current()>"
+    campaignawards_place1:
+        campaign: '@campaign1'
         campaignawardstyle: '@campaignawardstyle1'
         campaignawardtype: '@campaignawardtype1'
-        name: <sentence(3,true)>
+        name: Campaignaward Place 1
         place: 1
         amount: null
         description: <paragraph(1,true)>
-    campaignawards_place{11..20}:
-        campaign: "@campaign<subtract(<current()>,10)>"
+    campaignawards_place2:
+        campaign: '@campaign1'
         campaignawardstyle: '@campaignawardstyle1'
         campaignawardtype: '@campaignawardtype1'
-        name: <sentence(3,true)>
+        name: Campaignaward Place 2
         place: 2
         amount: null
         description: <paragraph(1,true)>
-    campaignawards_place{21..30}:
-        campaign: "@campaign<subtract(<current()>,20)>"
+    campaignawards_place3:
+        campaign: '@campaign1'
         campaignawardstyle: '@campaignawardstyle1'
         campaignawardtype: '@campaignawardtype1'
-        name: <sentence(3,true)>
+        name: Campaignaward Place 3
         place: 3
         amount: null
         description: <paragraph(1,true)>
 
-    campaignawards_place{31..40}:
-        campaign:  "@campaign<subtract(<current()>,30)>"
+    campaignawards_place4:
+        campaign:  '@campaign1'
         campaignawardstyle: '@campaignawardstyle1'
         campaignawardtype: '@campaignawardtype2'
-        name: <sentence(3,true)>
+        name: Campaignaward Place 4
         place: 1
         amount: null
         description: <paragraph(1,true)>
-    campaignawards_place{41..50}:
-        campaign:  "@campaign<subtract(<current()>,40)>"
+    campaignawards_place5:
+        campaign:  '@campaign1'
         campaignawardstyle: '@campaignawardstyle1'
         campaignawardtype: '@campaignawardtype2'
-        name: <sentence(3,true)>
+        name: Campaignaward Place 5
         place: 2
         amount: null
         description: <paragraph(1,true)>
-    campaignawards_place{51..60}:
-        campaign:  "@campaign<subtract(<current()>,50)>"
+    campaignawards_place6:
+        campaign:  '@campaign1'
         campaignawardstyle: '@campaignawardstyle1'
         campaignawardtype: '@campaignawardtype2'
-        name: <sentence(3,true)>
+        name: Campaignaward Place 6
         place: 3
         amount: null
         description: <paragraph(1,true)>
 
-    campaignawards_level{1..10}:
-        campaign: '@campaign<current()>'
+    campaignawards_level7:
+        campaign: '@campaign1'
         campaignawardstyle: '@campaignawardstyle2'
         campaignawardtype: '@campaignawardtype1'
-        name (unique): <sentence(3,true)>
+        name (unique): Campaignaward Level 7
         place: null
         amount: 100
         description: <paragraph(1,true)>
-    campaignawards_level{11..20}:
-        campaign: "@campaign<subtract(<current()>,10)>"
+    campaignawards_level8:
+        campaign: '@campaign1'
         campaignawardstyle: '@campaignawardstyle2'
         campaignawardtype: '@campaignawardtype1'
-        name (unique): <sentence(3,true)>
+        name (unique): Campaignaward Level 8
         place: null
         amount: 750
         description: <paragraph(1,true)>
-    campaignawards_level{21..30}:
-        campaign: "@campaign<subtract(<current()>,20)>"
+    campaignawards_level9:
+        campaign: '@campaign1'
         campaignawardstyle: '@campaignawardstyle2'
         campaignawardtype: '@campaignawardtype1'
-        name (unique): <sentence(3,true)>
+        name (unique): Campaignaward Level 9
         place: null
         amount: 2000
         description: <paragraph(1,true)>
 
-    campaignawards_level{31..40}:
-        campaign: "@campaign<subtract(<current()>,30)>"
+    campaignawards_level10:
+        campaign: '@campaign1'
         campaignawardstyle: '@campaignawardstyle2'
         campaignawardtype: '@campaignawardtype2'
-        name (unique): <sentence(3,true)>
+        name (unique): Campaignaward 10
         place: null
         amount: 10
         description: <paragraph(1,true)>
-    campaignawards_level{41..50}:
-        campaign: "@campaign<subtract(<current()>,40)>"
+    campaignawards_level11:
+        campaign: '@campaign1'
         campaignawardstyle: '@campaignawardstyle2'
         campaignawardtype: '@campaignawardtype2'
-        name (unique): <sentence(3,true)>
+        name (unique): Campaignaward 11
         place: null
         amount: 100
         description: <paragraph(1,true)>
-    campaignawards_level{51..60}:
-        campaign: "@campaign<subtract(<current()>,50)>"
+    campaignawards_level12:
+        campaign: '@campaign1'
         campaignawardstyle: '@campaignawardstyle2'
         campaignawardtype: '@campaignawardtype2'
-        name (unique): <sentence(3,true)>
+        name (unique): Campaignaward 12
         place: null
         amount: 250
         description: <paragraph(1,true)>
