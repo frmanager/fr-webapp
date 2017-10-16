@@ -30,7 +30,7 @@ class DonationHelper
             $this->logger->info("DonationHelper::reloadDonationDatabase - Refreshing Donation #".$options['donation']->getId());
             $donations = $this->em->getRepository('AppBundle:Donation')->findBy(array('id'=>$options['donation']->getId()));
         }elseif (isset($options['campaign'])) {
-            $logger->info("DonationHelper::reloadDonationDatabase - Refreshing a Campaign");
+            $this->logger->info("DonationHelper::reloadDonationDatabase - Refreshing a Campaign");
             $donations = $this->em->getRepository('AppBundle:Donation')->findByCampaign($options['campaign']);
         }else {
             $donations = $this->em->getRepository('AppBundle:Donation')->findAll();
