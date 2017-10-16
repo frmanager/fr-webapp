@@ -201,9 +201,7 @@ class DonationHelper
     {
         $qb = $this->em->createQueryBuilder();
 
-
-
-        if (isset($options['donationID'])) {
+        if (isset($options['donation'])) {
             $qb->delete('AppBundle:DonationDatabase', 'd');
             $qb->where('d = :donation');
             $qb->setParameter('donation', $options['donation']);
