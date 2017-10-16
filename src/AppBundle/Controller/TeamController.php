@@ -140,10 +140,6 @@ class TeamController extends Controller
               $logger->debug("Flushing");
               $em->flush();
 
-              $logger->debug("Doing a Donation Database Refresh");
-              $donationHelper = new DonationHelper($em, $logger);
-              $donationHelper->reloadDonationDatabase(array('campaign'=>$campaign));
-
               $this->get('session')->getFlashBag()->add('info', 'Student has been removed');
               return $this->redirectToRoute('team_edit', array('campaignUrl' => $campaign->getUrl(), 'teamUrl' => $teamUrl));
             }
@@ -321,9 +317,6 @@ class TeamController extends Controller
                 }
 
               $em->flush();
-
-              $donationHelper = new DonationHelper($em, $logger);
-              $donationHelper->reloadDonationDatabase(array('campaign'=>$campaign));
 
               $this->addFlash('success','Team has been updated!');
               return $this->redirectToRoute('team_edit', array('campaignUrl' => $campaign->getUrl(), 'teamUrl' => $team->getUrl()));
