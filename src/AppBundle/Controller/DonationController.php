@@ -655,7 +655,7 @@ class DonationController extends Controller
 
             $logger->debug("Doing a Donation Database Refresh");
             $donationHelper = new DonationHelper($em, $logger);
-            $donationHelper->reloadDonationDatabase(array('campaign'=>$campaign));
+            $donationHelper->reloadDonationDatabase(array('donation'=>$donation));
           }else{
             return $this->redirectToRoute('donation_index', array('campaignUrl'=>$campaign->getUrl()));
           }

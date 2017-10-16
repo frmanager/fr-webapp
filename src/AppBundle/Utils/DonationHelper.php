@@ -26,9 +26,13 @@ class DonationHelper
         //First thing we do is delete all Records
         $this->truncateDonationDatabase($options);
 
-        if (isset($options['campaign'])) {
+        if (isset($options['donation'])){
+            $this->logger->info("DonationHelper::reloadDonationDatabase - Refreshing Donation #".$options['donation']->getId());
+            $donations = $this->em->getRepository('AppBundle:Donation')->findBy(array('id'=>$options['donation']->getId()));
+        }elseif (isset($options['campaign'])) {
+            $logger->info("DonationHelper::reloadDonationDatabase - Refreshing a Campaign");
             $donations = $this->em->getRepository('AppBundle:Donation')->findByCampaign($options['campaign']);
-        } else {
+        }else {
             $donations = $this->em->getRepository('AppBundle:Donation')->findAll();
         }
 
@@ -197,7 +201,13 @@ class DonationHelper
     {
         $qb = $this->em->createQueryBuilder();
 
-        if (isset($options['campaign'])) {
+
+
+        if (isset($options['donationID'])) {
+            $qb->delete('AppBundle:DonationDatabase', 'd');
+            $qb->where('d = :donation');
+            $qb->setParameter('donation', $options['donation']);
+        }else if (isset($options['campaign'])) {
             $qb->delete('AppBundle:DonationDatabase', 'd');
             $qb->where('d.campaign = :campaign');
             $qb->setParameter('campaign', $options['campaign']);
