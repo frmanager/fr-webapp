@@ -180,9 +180,13 @@ class DonationController extends Controller
             $fail = true;
           }
 
+          if(!$fail && empty($params['donation']['cc']['cardholderFirstName'])){
+            $this->addFlash('warning','Cardholder First Name is required');
+            $fail = true;
+          }
 
-          if(!$fail && empty($params['donation']['cc']['cardholderName'])){
-            $this->addFlash('warning','Cardholder Name is required');
+          if(!$fail && empty($params['donation']['cc']['cardholderLastName'])){
+            $this->addFlash('warning','Cardholder Last Name is required');
             $fail = true;
           }
 
@@ -347,18 +351,15 @@ class DonationController extends Controller
 
             $card = new PaymentCard();
             $logger->debug("Payment Card type set to: ".$cardType);
-            $array = explode(" ",$params['donation']['cc']['cardholderName']);
-            $firstName = $array[0];
-            $lastName  = $array[count($array)-1];
 
             $card->setType($cardType)
                 ->setNumber($params['donation']['cc']['number'])
                 ->setExpireMonth($params['donation']['cc']['expirationMonth'])
                 ->setExpireYear($params['donation']['cc']['expirationYear'])
                 ->setCvv2($params['donation']['cc']['cvv'])
-                ->setFirstName($firstName)
+                ->setFirstName($params['donation']['cc']['cardholderFirstName'])
                 ->setBillingCountry($params['donation']['cc']['country'])
-                ->setLastName($lastName);
+                ->setLastName($params['donation']['cc']['cardholderLastName']);
 
               $fi = new FundingInstrument();
               $fi->setPaymentCard($card);
@@ -627,7 +628,7 @@ class DonationController extends Controller
           if(!$failure){
             //Send Email to Donor
             $message = (new \Swift_Message("[FRManager] Thank you for your Donation to ".$campaign->getName()))
-              ->setFrom($campaign->getEmail())
+              ->setFrom($this->getParameter('mailer_user'))
               ->setTo($donation->getDonorEmail())
               ->setContentType("text/html")
               ->setBody(
@@ -642,7 +643,7 @@ class DonationController extends Controller
             if($donation->getType() == "team"){
 
             $message = (new \Swift_Message("[FRManager] ".$donation->getDonorFirstName()." ".$donation->getDonorLastName()." Has made a donation to your team!"))
-              ->setFrom($campaign->getEmail())
+              ->setFrom($this->getParameter('mailer_user'))
               ->setTo($donation->getTeam()->getUser()->getEmail())
               ->setContentType("text/html")
               ->setBody(
