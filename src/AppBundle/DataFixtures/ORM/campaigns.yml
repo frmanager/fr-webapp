@@ -4,7 +4,7 @@ AppBundle\Entity\Campaign:
         description: <paragraph(3,true)>
         theme: 'cerulean'
         url: 'campaign<current()>'
-        email: 'davidlarrimore@gamil.com'
+        email: 'davidlarrimore@gmail.com'
         createdBy: '@user<current()>'
         startDate: <dateTimeBetween('-30 days', '+5 days')>
         endDate: <dateTimeBetween('+15 days','+90 days')>
