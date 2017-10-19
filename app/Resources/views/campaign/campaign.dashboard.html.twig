@@ -19,7 +19,7 @@
             <img class="img-fluid center-block" src="/assets/img/FunRun2017-banner.png"/>
         </div>
         <div class="col-md-4">
-          <p class="lead"><strong>{{totals.donation_amount|number_format(0, '.', ',')}}$</strong> of ${{campaign.fundingGoal|number_format(0, '.', ',')}} goal</p>
+          <p class="lead"><strong>${{totals.donation_amount|number_format(0, '.', ',')}}</strong> of ${{campaign.fundingGoal|number_format(0, '.', ',')}} goal</p>
           <div class="progress">
               <div
                   class="progress-bar progress-bar-warning"
