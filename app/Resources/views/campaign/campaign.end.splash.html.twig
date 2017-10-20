@@ -1,0 +1,202 @@
+{% extends 'template.html.twig' %}
+
+{% block title %}{{campaign.name}}{% endblock %}
+
+{% block meta %}
+  <meta property="og:image" content="{{ main_app_url }}/assets/img/FunRun2017-banner.png"/>
+  <meta property="og:description" content="{{ campaign.description|striptags }}" />
+  <meta property="og:title" content="Help the {{ campaign.name }} Today!" />
+  <meta property="og:url" content="{{ main_app_url }}/{{ path('campaign_index', {'campaignUrl': campaignUrl}) }}" />
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.12/fh-3.1.2/r-2.1.0/sc-1.4.2/datatables.min.css"/>
+{% endblock %}
+
+{% block body %}
+<br>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-inverse" style="background-color: #333; border-color: #333;">
+      <div class="card-block text-center">
+        <h3 class="display-5" style="text-align:center;padding-bottom:20px;">This Campaign has ended. Thank you so much for your donations!</h3>
+      </div>
+    </div>
+    <!-- ./card -->
+  </div>
+  <!-- ./column -->
+</div>
+<!-- ./row -->
+<br><br>
+<div class="row">
+  <div class="col-md-12 text-center">
+    <img class="img-fluid " src="/assets/img/FunRun2017-banner.png"/>
+  </div>
+</div>
+<br><hr><br>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-outline-primary">
+      <div class="card-block text-center">
+        <div class="row">
+        <div class="col-md-4"><strong>${{totals.donation_amount|number_format(0, '.', ',')}}</strong> of ${{campaign.fundingGoal|number_format(0, '.', ',')}} goal</div>
+        <div class="col-md-4">
+          <div class="progress">
+            <div
+                class="progress-bar progress-bar-warning"
+                role="progressbar"
+                aria-valuenow="{{ totals.donation_amount / campaign.fundingGoal * 100}}"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                style="width:{{ totals.donation_amount / campaign.fundingGoal * 100}}%">
+                <span>{{ (totals.donation_amount / campaign.fundingGoal * 100)|number_format(2, '.', ',')}}% Complete</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">Raised by {{ totals.total_donations }} donors</div>
+      </div><!-- ./row -->
+      </div>
+    </div>
+    <!-- ./card -->
+  </div>
+  <!-- ./column -->
+</div>
+<!-- ./row -->
+<br><hr><br>
+    <div class="row">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">Top {{ ranking_limit }} Class Rankings</div>
+            {% if classroom_rankings | length > 0 %}
+                <table class="table table-striped table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Classroom</th>
+                            <th>Amount</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for classroom_ranking in classroom_rankings %}
+                            <tr>
+                                <td style="text-align:center;vertical-align: middle;">
+                                    <span class="badge badge-{% if classroom_ranking.rank == 1 %}success{% elseif classroom_ranking.rank == 2 %}warning{% elseif classroom_ranking.rank == 3 %}primary{% else %}default{% endif %}">{{ classroom_ranking.rank }}</span>
+                                </td>
+                                <td>
+                                    <a href="{{ path('classroom_show', { 'campaignUrl':campaign.url, 'id': classroom_ranking.id }) }}">{{ classroom_ranking.grade_name }} - {{ classroom_ranking.classroom_name }}</a>
+                                </td>
+                                <td style="text-align:right;">${{ classroom_ranking.donation_amount|number_format(2, '.', ',') }}</td>
+
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="panel-body" style="font-size:120%;">
+                    <div style="text-align:center">
+                        <span class="lead">Not enough data to calculate classroom rankings</span>
+                    </div>
+                </div>
+            {% endif %}
+          </div><!-- ./card -->
+        </div><!-- ./col -->
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">Top {{ ranking_limit }} Team Rankings</div>
+            {% if team_rankings | length > 0 %}
+                <table class="table table-striped table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Team</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for team_ranking in team_rankings %}
+                            <tr>
+                                <td style="text-align:center;vertical-align: middle;">
+                                    <span class="badge badge-{% if team_ranking.rank == 1 %}success{% elseif team_ranking.rank == 2 %}warning{% elseif team_ranking.rank == 3 %}primary{% else %}default{% endif %}">{{ team_ranking.rank }}</span>
+                                </td>
+                                <td>
+                                    <a href="{{ path('team_show', { 'campaignUrl':campaign.url, 'teamUrl': team_ranking.team_url }) }}">{{ team_ranking.team_name }}</a>
+                                </td>
+                                <td style="text-align:right;">${{ team_ranking.donation_amount|number_format(2, '.', ',') }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="panel-body" style="font-size:120%;">
+                    <div style="text-align:center">
+                        <span class="lead">Not enough data to calculate student rankings</span>
+                    </div>
+                </div>
+            {% endif %}
+          </div><!-- ./card -->
+        </div><!-- ./col -->
+    </div><!-- ./row -->
+    <br><br>
+    <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">Top {{ ranking_limit }} Student Rankings</div>
+            {% if student_rankings | length > 0 %}
+                <table class="table table-striped table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Classroom</th>
+                            <th>Student</th>
+                            <th>Amount</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student_ranking in student_rankings %}
+                            <tr>
+                                <td style="text-align:center;vertical-align: middle;">
+                                    <span class="badge badge-{% if student_ranking.rank == 1 %}success{% elseif student_ranking.rank == 2 %}warning{% elseif student_ranking.rank == 3 %}primary{% else %}default{% endif %}">{{ student_ranking.rank }}</span>
+                                </td>
+                                <td>
+                                    <a href="{{ path('classroom_show', { 'campaignUrl':campaign.url, 'id': student_ranking.classroom_id }) }}">{{ student_ranking.grade_name }} - {{ student_ranking.classroom_name }}</a>
+                                </td>
+                                <td>
+                                    {{ student_ranking.student_name }}
+                                </td>
+                                <td style="text-align:right;">${{ student_ranking.donation_amount|number_format(2, '.', ',') }}</td>
+
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="panel-body" style="font-size:120%;">
+                    <div style="text-align:center">
+                        <span class="lead">Not enough data to calculate student rankings</span>
+                    </div>
+                </div>
+            {% endif %}
+          </div><!-- ./card -->
+        </div><!-- ./col -->
+      </div><!-- ./row -->
+
+
+{% endblock %}
+
+{% block javascripts %}
+<script type='application/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.min.js"></script>
+<script type="application/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.12/fh-3.1.2/r-2.1.0/sc-1.4.2/datatables.min.js"></script>
+<script type='application/javascript' src="{{ asset('assets/js/libs/jquery.countdown.min.js') }}"></script>
+
+<script>
+        $('[data-countdown]').each(function() {
+            var $this = $(this),
+                finalDate = $(this).data('countdown');
+            $this.countdown(finalDate, function(event) {
+                $this.html(event.strftime('<span class="badge badge-danger">%D</span> day%!D left to donate!</span>'));
+            });
+        });
+</script>
+{% endblock %}

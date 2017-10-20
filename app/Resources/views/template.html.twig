@@ -9,6 +9,11 @@
   {% else %}
     {% set notStarted = false %}
   {% endif %}
+  {% if date('now' | date('Y/m/d')) >= date(campaign.startDate | date('Y/m/d')) %}
+    {% set isEnded = true %}
+  {% else %}
+    {% set isEnded = false %}
+  {% endif %}
 {% endif %}
 {% set userTeam = null %}
 {% set hasTeamFlag = false %}
@@ -91,12 +96,12 @@
    {% if campaign is defined %}
   <a class="navbar-brand" href="{{ path('campaign_index', {'campaignUrl': campaignUrl}) }}">{{campaign.name}}</a>
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+    {% if campaign is defined and not notStarted and not isEnded %}
 		<ul class="navbar-nav mr-auto">
-			<li class="nav-item{% if app.request.attributes.get('_route')=='campaign_index'%} active{% endif %}">
-			<a href="{{ path('campaign_dashboard', {'campaignUrl': campaignUrl}) }}" class="nav-link">
-			<i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard </a>
-			</li>
-      {% if campaign is defined and not notStarted %}
+  			<li class="nav-item{% if app.request.attributes.get('_route')=='campaign_index'%} active{% endif %}">
+  			     <a href="{{ path('campaign_dashboard', {'campaignUrl': campaignUrl}) }}" class="nav-link">
+  			     <i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard </a>
+  			</li>
         <li class="nav-item{% if app.request.attributes.get('_route')=='donation_index'%} active{% endif %}">
           {% if app.request.attributes.get('_route') == 'team_show' %}
             <a href="{{ path('donation_index', {'campaignUrl':campaign.url, 'teamUrl':team.url, 'type':'team'}) }}" class="nav-link">Donate</a>
@@ -120,10 +125,10 @@
               <span class="fa fa-users"></span> Team Rankings</a>
             </div>
       		</li>
-      {% endif %}
     </ul>
     {% endif %}
-    {% if campaign is defined and not notStarted %}
+    {% endif %}
+    {% if campaign is defined and not notStarted and not isEnded %}
       <ul class="navbar-nav ml-auto">
       {% if is_granted('ROLE_USER') and campaign is defined %}
           <li class="dropdown nav-item">

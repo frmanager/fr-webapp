@@ -53,7 +53,9 @@ class CampaignSubscriber implements EventSubscriberInterface
         //TODO: Add logic to account for campaigns that users want a demo of (Offline but registered)
         //This will most likely require a login force of somesort.
 
-        
+        $routeParams = explode('::',$event->getRequest()->attributes->get('_controller'));
+        $this->logger->debug("CampaignSubscriber Route Params: ".$event->getRequest()->attributes->get('_controller'));
+
         $campaign = $this->em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
         if(is_null($campaign)){
           $this->logger->debug("CampaignSubscriber did not find campaign: ".$campaignUrl);
@@ -82,8 +84,13 @@ class CampaignSubscriber implements EventSubscriberInterface
                   return new RedirectResponse($redirectUrl);
               });
             }
-        }elseif($campaign->getStartDate() > new DateTime("now")){
+        }elseif($campaign->getStartDate() > new DateTime("now") && $routeParams[1] !== 'spashAction'){
             $redirectUrl = $this->router->generate('campaign_splash', array('campaignUrl'=>$campaign->getUrl(), 'campaign'=>$campaign));
+            $event->setController(function() use ($redirectUrl) {
+                return new RedirectResponse($redirectUrl);
+            });
+        }elseif($campaign->getEndDate() <= new DateTime("now") && $routeParams[1] !== 'endSpashAction'){
+            $redirectUrl = $this->router->generate('campaign_end_splash', array('campaignUrl'=>$campaign->getUrl(), 'campaign'=>$campaign));
             $event->setController(function() use ($redirectUrl) {
                 return new RedirectResponse($redirectUrl);
             });
