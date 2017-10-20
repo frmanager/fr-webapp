@@ -110,6 +110,16 @@ class QueryHelper
             $whereId = '';
         }
 
+        if (isset($options['team_type'])) {
+          if($options['team_type'] == 'studentAndFamily'){
+            $whereTeamType = 'AND tt.value in (\'student\',\'family\')';
+          }elseif($options['team_type'] == 'teacher'){
+            $whereTeamType = 'AND tt.value = \'teacher\'';
+          }
+        } else {
+            $whereTeamType = '';
+        }
+
         $queryString = sprintf('SELECT t.id as id,
                       t.name as team_name,
                       t.description as team_description,
@@ -120,15 +130,16 @@ class QueryHelper
                       sum(d.amount) as donation_amount,
                       count(d.amount) as total_donations
                  FROM AppBundle:Team t
-      LEFT OUTER JOIN AppBundle:TeamType tt
+                 JOIN AppBundle:TeamType tt
                  WITH tt.id = t.teamType
+                   %s
       LEFT OUTER JOIN AppBundle:DonationDatabase d
                  WITH t.id = d.team
                    %s
                    %s
                 WHERE t.campaign = %s
              GROUP BY t.id
-             ORDER BY donation_amount DESC', $date, $whereId, $campaign->getId());
+             ORDER BY donation_amount DESC', $whereTeamType,$date, $whereId, $campaign->getId());
 
         $this->logger->debug('getTeamsDataQuery Query : '.$queryString);
 

@@ -112,6 +112,41 @@ class CampaignController extends Controller
   }
 
 
+  /**
+   * Displays Coming Soon Splash Page
+   *
+   * @Route("/thank_you", name="campaign_end_splash")
+   * @Method("GET")
+   */
+  public function endSpashAction($campaignUrl)
+  {
+    $logger = $this->get('logger');
+    $limit = 15;
+    $em = $this->getDoctrine()->getManager();
+
+    //CODE TO CHECK TO SEE IF CAMPAIGN EXISTS
+    $campaign = $em->getRepository('AppBundle:Campaign')->findOneByUrl($campaignUrl);
+
+    $queryHelper = new QueryHelper($em, $logger);
+
+    $reportDate = $queryHelper->convertToDay(new DateTime());
+    $reportDate->modify('-1 day');
+
+    // replace this example code with whatever you need
+    return $this->render('campaign/campaign.end.splash.html.twig', array(
+      'new_classroom_awards' => $queryHelper->getClassroomAwards(array('campaign' => $campaign, 'limit' => 5, 'order_by' => array('field' => 'donated_at',  'order' => 'asc'))),
+      'classroom_rankings' => $queryHelper->getClassroomRanks(array('campaign' => $campaign,'limit'=> $limit)),
+      'student_rankings' => $queryHelper->getStudentRanks(array('campaign' => $campaign, 'limit'=> $limit)),
+      'report_date' => $reportDate,
+      'ranking_limit' => $limit,
+      'family_team_rankings' => $queryHelper->getTeamRanks(array('campaign' => $campaign,'limit'=> $limit, 'team_type'=>'studentAndFamily')),
+      'teacher_team_rankings' => $queryHelper->getTeamRanks(array('campaign' => $campaign,'limit'=> $limit, 'team_type'=>'teacher')),
+      'totals' => $queryHelper->getTotalDonations(array('campaign' => $campaign,)),
+      'campaign' => $campaign
+    ));
+  }
+
+
 
     /**
      * Finds and displays a Campaign entity.
