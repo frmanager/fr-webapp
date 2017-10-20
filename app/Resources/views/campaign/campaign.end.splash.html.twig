@@ -64,9 +64,9 @@
 <!-- ./row -->
 <br><hr><br>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
           <div class="card">
-            <div class="card-header">Top {{ ranking_limit }} Class Rankings</div>
+            <div class="card-header">Top Classroom Rankings</div>
             {% if classroom_rankings | length > 0 %}
                 <table class="table table-striped table-condensed">
                     <thead>
@@ -84,7 +84,7 @@
                                     <span class="badge badge-{% if classroom_ranking.rank == 1 %}success{% elseif classroom_ranking.rank == 2 %}warning{% elseif classroom_ranking.rank == 3 %}primary{% else %}default{% endif %}">{{ classroom_ranking.rank }}</span>
                                 </td>
                                 <td>
-                                    <a href="{{ path('classroom_show', { 'campaignUrl':campaign.url, 'id': classroom_ranking.id }) }}">{{ classroom_ranking.grade_name }} - {{ classroom_ranking.classroom_name }}</a>
+                                    {{ classroom_ranking.grade_name }} - {{ classroom_ranking.classroom_name }}
                                 </td>
                                 <td style="text-align:right;">${{ classroom_ranking.donation_amount|number_format(2, '.', ',') }}</td>
 
@@ -101,10 +101,92 @@
             {% endif %}
           </div><!-- ./card -->
         </div><!-- ./col -->
+      </div><!-- ./row -->
+      <br>
+      <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">Top Student Rankings</div>
+              {% if student_rankings | length > 0 %}
+                  <table class="table table-striped table-condensed">
+                      <thead>
+                          <tr>
+                              <th>Rank</th>
+                              <th>Classroom</th>
+                              <th>Student</th>
+                              <th>Amount</th>
+
+                          </tr>
+                      </thead>
+                      <tbody>
+                          {% for student_ranking in student_rankings %}
+                              <tr>
+                                  <td style="text-align:center;vertical-align: middle;">
+                                      <span class="badge badge-{% if student_ranking.rank == 1 %}success{% elseif student_ranking.rank == 2 %}warning{% elseif student_ranking.rank == 3 %}primary{% else %}default{% endif %}">{{ student_ranking.rank }}</span>
+                                  </td>
+                                  <td>
+                                      {{ student_ranking.grade_name }} - {{ student_ranking.classroom_name }}
+                                  </td>
+                                  <td>
+                                      {{ student_ranking.student_name }}
+                                  </td>
+                                  <td style="text-align:right;">${{ student_ranking.donation_amount|number_format(2, '.', ',') }}</td>
+
+                              </tr>
+                          {% endfor %}
+                      </tbody>
+                  </table>
+              {% else %}
+                  <div class="panel-body" style="font-size:120%;">
+                      <div style="text-align:center">
+                          <span class="lead">Not enough data to calculate student rankings</span>
+                      </div>
+                  </div>
+              {% endif %}
+            </div><!-- ./card -->
+          </div><!-- ./col -->
+        </div><!-- ./row -->
+        <br>
+      <div class="row">
         <div class="col-md-6">
           <div class="card">
-            <div class="card-header">Top {{ ranking_limit }} Team Rankings</div>
-            {% if team_rankings | length > 0 %}
+            <div class="card-header">Top Student/Family Team Rankings</div>
+            {% if family_team_rankings | length > 0 %}
+                <table class="table table-striped table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Team Name</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for family_team_ranking in family_team_rankings %}
+                            <tr>
+                                <td style="text-align:center;vertical-align: middle;">
+                                    <span class="badge badge-{% if family_team_ranking.rank == 1 %}success{% elseif family_team_ranking.rank == 2 %}warning{% elseif family_team_ranking.rank == 3 %}primary{% else %}default{% endif %}">{{ family_team_ranking.rank }}</span>
+                                </td>
+                                <td>
+                                  {{ family_team_ranking.team_name }}
+                                </td>
+                                <td style="text-align:right;">${{ family_team_ranking.donation_amount|number_format(2, '.', ',') }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="panel-body" style="font-size:120%;">
+                    <div style="text-align:center">
+                        <span class="lead">Not enough data to calculate student rankings</span>
+                    </div>
+                </div>
+            {% endif %}
+          </div><!-- ./card -->
+        </div><!-- ./col -->
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">Top Teacher Team Rankings</div>
+            {% if teacher_team_rankings | length > 0 %}
                 <table class="table table-striped table-condensed">
                     <thead>
                         <tr>
@@ -114,15 +196,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for team_ranking in team_rankings %}
+                        {% for teacher_team_ranking in teacher_team_rankings %}
+
                             <tr>
                                 <td style="text-align:center;vertical-align: middle;">
-                                    <span class="badge badge-{% if team_ranking.rank == 1 %}success{% elseif team_ranking.rank == 2 %}warning{% elseif team_ranking.rank == 3 %}primary{% else %}default{% endif %}">{{ team_ranking.rank }}</span>
+                                    <span class="badge badge-{% if teacher_team_ranking.rank == 1 %}success{% elseif teacher_team_ranking.rank == 2 %}warning{% elseif teacher_team_ranking.rank == 3 %}primary{% else %}default{% endif %}">{{ teacher_team_ranking.rank }}</span>
                                 </td>
                                 <td>
-                                    <a href="{{ path('team_show', { 'campaignUrl':campaign.url, 'teamUrl': team_ranking.team_url }) }}">{{ team_ranking.team_name }}</a>
+                                    {{ teacher_team_ranking.team_name }}
                                 </td>
-                                <td style="text-align:right;">${{ team_ranking.donation_amount|number_format(2, '.', ',') }}</td>
+                                <td style="text-align:right;">${{ teacher_team_ranking.donation_amount|number_format(2, '.', ',') }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -136,52 +219,8 @@
             {% endif %}
           </div><!-- ./card -->
         </div><!-- ./col -->
+
     </div><!-- ./row -->
-    <br><br>
-    <div class="row">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header">Top {{ ranking_limit }} Student Rankings</div>
-            {% if student_rankings | length > 0 %}
-                <table class="table table-striped table-condensed">
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>Classroom</th>
-                            <th>Student</th>
-                            <th>Amount</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for student_ranking in student_rankings %}
-                            <tr>
-                                <td style="text-align:center;vertical-align: middle;">
-                                    <span class="badge badge-{% if student_ranking.rank == 1 %}success{% elseif student_ranking.rank == 2 %}warning{% elseif student_ranking.rank == 3 %}primary{% else %}default{% endif %}">{{ student_ranking.rank }}</span>
-                                </td>
-                                <td>
-                                    <a href="{{ path('classroom_show', { 'campaignUrl':campaign.url, 'id': student_ranking.classroom_id }) }}">{{ student_ranking.grade_name }} - {{ student_ranking.classroom_name }}</a>
-                                </td>
-                                <td>
-                                    {{ student_ranking.student_name }}
-                                </td>
-                                <td style="text-align:right;">${{ student_ranking.donation_amount|number_format(2, '.', ',') }}</td>
-
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                <div class="panel-body" style="font-size:120%;">
-                    <div style="text-align:center">
-                        <span class="lead">Not enough data to calculate student rankings</span>
-                    </div>
-                </div>
-            {% endif %}
-          </div><!-- ./card -->
-        </div><!-- ./col -->
-      </div><!-- ./row -->
-
 
 {% endblock %}
 

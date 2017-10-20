@@ -9,7 +9,7 @@
   {% else %}
     {% set notStarted = false %}
   {% endif %}
-  {% if date('now' | date('Y/m/d')) >= date(campaign.startDate | date('Y/m/d')) %}
+  {% if date('now' | date('Y/m/d')) >= date(campaign.endDate | date('Y/m/d')) %}
     {% set isEnded = true %}
   {% else %}
     {% set isEnded = false %}

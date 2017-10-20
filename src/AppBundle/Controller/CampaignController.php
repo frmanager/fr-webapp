@@ -139,7 +139,8 @@ class CampaignController extends Controller
       'student_rankings' => $queryHelper->getStudentRanks(array('campaign' => $campaign, 'limit'=> $limit)),
       'report_date' => $reportDate,
       'ranking_limit' => $limit,
-      'team_rankings' => $queryHelper->getTeamRanks(array('campaign' => $campaign,'limit'=> $limit)),
+      'family_team_rankings' => $queryHelper->getTeamRanks(array('campaign' => $campaign,'limit'=> $limit, 'team_type'=>'studentAndFamily')),
+      'teacher_team_rankings' => $queryHelper->getTeamRanks(array('campaign' => $campaign,'limit'=> $limit, 'team_type'=>'teacher')),
       'totals' => $queryHelper->getTotalDonations(array('campaign' => $campaign,)),
       'campaign' => $campaign
     ));
