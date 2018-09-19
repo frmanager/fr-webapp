@@ -12,7 +12,7 @@ require('fastclick');
 
 import '../css/simple-line-icons.css';
 import '../css/fontawesome.min.css';
-//import '../css/bootswatch_v4/superhero.min.css';
+import '../css/bootswatch_v4/superhero.min.css';
 import '../css/template.css';
 
 //Custom scripts required by this view -->

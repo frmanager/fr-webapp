@@ -3,7 +3,7 @@
 {% set campaignUrl = null %}
 {% set campaignUrl = app.request.attributes.get('_route_params')['campaignUrl'] %}
 {% if team.imageName is null %}
-{% set profileImageUrl = '/assets/img/team-' ~ team.teamType.value ~ '-image-2.png' %}
+{% set profileImageUrl = '/static/img/team-' ~ team.teamType.value ~ '-image-2.png' %}
 {% else %}
 {% set profileImageUrl = '/uploads/team_profile_photos/' ~team.imageName %}
 {% endif %}

@@ -558,7 +558,7 @@
     <div class="col-md-4">
       {% if donationType == "team" %}
       {% if team.imageName is null %}
-      {% set profileImageUrl = '/assets/img/team-' ~ team.teamType.value ~ '-image-2.png' %}
+      {% set profileImageUrl = '/static/img/team-' ~ team.teamType.value ~ '-image-2.png' %}
       {% else %}
       {% set profileImageUrl = '/uploads/team_profile_photos/' ~team.imageName %}
       {% endif %}
