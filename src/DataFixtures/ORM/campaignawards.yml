@@ -1,0 +1,100 @@
+App\Entity\Campaignaward:
+    campaignawards_place1:
+        campaign: '@campaign1'
+        campaignawardstyle: '@campaignawardstyle1'
+        campaignawardtype: '@campaignawardtype1'
+        name: Campaignaward Place 1
+        place: 1
+        amount: null
+        description: <paragraph(1,true)>
+    campaignawards_place2:
+        campaign: '@campaign1'
+        campaignawardstyle: '@campaignawardstyle1'
+        campaignawardtype: '@campaignawardtype1'
+        name: Campaignaward Place 2
+        place: 2
+        amount: null
+        description: <paragraph(1,true)>
+    campaignawards_place3:
+        campaign: '@campaign1'
+        campaignawardstyle: '@campaignawardstyle1'
+        campaignawardtype: '@campaignawardtype1'
+        name: Campaignaward Place 3
+        place: 3
+        amount: null
+        description: <paragraph(1,true)>
+
+    campaignawards_place4:
+        campaign:  '@campaign1'
+        campaignawardstyle: '@campaignawardstyle1'
+        campaignawardtype: '@campaignawardtype2'
+        name: Campaignaward Place 4
+        place: 1
+        amount: null
+        description: <paragraph(1,true)>
+    campaignawards_place5:
+        campaign:  '@campaign1'
+        campaignawardstyle: '@campaignawardstyle1'
+        campaignawardtype: '@campaignawardtype2'
+        name: Campaignaward Place 5
+        place: 2
+        amount: null
+        description: <paragraph(1,true)>
+    campaignawards_place6:
+        campaign:  '@campaign1'
+        campaignawardstyle: '@campaignawardstyle1'
+        campaignawardtype: '@campaignawardtype2'
+        name: Campaignaward Place 6
+        place: 3
+        amount: null
+        description: <paragraph(1,true)>
+
+    campaignawards_level7:
+        campaign: '@campaign1'
+        campaignawardstyle: '@campaignawardstyle2'
+        campaignawardtype: '@campaignawardtype1'
+        name (unique): Campaignaward Level 7
+        place: null
+        amount: 100
+        description: <paragraph(1,true)>
+    campaignawards_level8:
+        campaign: '@campaign1'
+        campaignawardstyle: '@campaignawardstyle2'
+        campaignawardtype: '@campaignawardtype1'
+        name (unique): Campaignaward Level 8
+        place: null
+        amount: 750
+        description: <paragraph(1,true)>
+    campaignawards_level9:
+        campaign: '@campaign1'
+        campaignawardstyle: '@campaignawardstyle2'
+        campaignawardtype: '@campaignawardtype1'
+        name (unique): Campaignaward Level 9
+        place: null
+        amount: 2000
+        description: <paragraph(1,true)>
+
+    campaignawards_level10:
+        campaign: '@campaign1'
+        campaignawardstyle: '@campaignawardstyle2'
+        campaignawardtype: '@campaignawardtype2'
+        name (unique): Campaignaward 10
+        place: null
+        amount: 10
+        description: <paragraph(1,true)>
+    campaignawards_level11:
+        campaign: '@campaign1'
+        campaignawardstyle: '@campaignawardstyle2'
+        campaignawardtype: '@campaignawardtype2'
+        name (unique): Campaignaward 11
+        place: null
+        amount: 100
+        description: <paragraph(1,true)>
+    campaignawards_level12:
+        campaign: '@campaign1'
+        campaignawardstyle: '@campaignawardstyle2'
+        campaignawardtype: '@campaignawardtype2'
+        name (unique): Campaignaward 12
+        place: null
+        amount: 250
+        description: <paragraph(1,true)>

@@ -1,0 +1,162 @@
+{% extends 'template.html.twig' %}
+
+{% block body %}
+{% set campaignUrl = null %}
+{% set campaignUrl = app.request.attributes.get('_route_params')['campaignUrl'] %}
+{% if app.request.get('team') is not empty %}
+{% set team = app.request.get('team') %}
+{% else %}
+{% set team = null %}
+{% endif %}
+
+<div class="row">
+  <div class="col-sm-12">
+    <h2>Step 3. Create your {{ teamType.name }} Page!</h2>
+    <br/>
+  </div>
+</div>
+  <div class="row">
+    <div class="col-sm-4">
+      <img src="/static/img/team-{{ teamType.value }}-image-2.png" class="img-fluid rounded" alt="Team Image">
+    </div>
+    <div class="col-sm-8">
+      <p style="text-align:left;">
+        {% if error is defined %}
+          <p class="well-sm bg-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+        {% endif %}
+        <form name="team" method="post" class="form-horizontal">
+        {% if teamType.value == 'family' %}
+          <div class="form-group">
+            <div class="col-sm-6">
+              <label class="required" for="team_name">Team Name</label>
+              <input type="text" placeholder="The Smith Family" value="{% if team is not null and team['name'] is not null %}{{ team['name'] }}{% endif %}" id="team_name" required="required" name="team[name]" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-12">
+              <label class="required" for="team_description">Call for Action</label>
+              <textarea placeholder="Help the Smith family get to the top of the charts!..." id="team_description" name="team[description]" rows="3" class="form-control">{% if team is not null and team['description'] is not null %}{{ team['description'] }}{% endif %}</textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-4">
+              <label class="required" for="team_name">Campaign Goal</label>
+              <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">$</span>
+                <input type="number" min=0 id="team_fundingGoal" value="{% if team is null or team['fundingGoal'] is empty %}500{% else %}{{ team['fundingGoal'] }}{% endif %}" name="team[fundingGoal]" class="form-control text-right">
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="form-group">
+            <div class="col-sm-12"><h4>Add up to 3 children <small>(Don't worry, you can add more later)</small></h4></div>
+          </div>
+          {% set k = 3 %}
+          {% for i in range(1, k) %}
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="team_students_{{i}}_classroomID">Child {{i}}</label>
+            <div class="col-sm-6">
+              <select id="team_students_{{i}}_classroomID" name="team[students][{{i}}][classroomID]" class="form-control">
+                <option value="" selected="selected">Select Classroom</option>
+                {% for classroom in classrooms %}
+                  <option value="{{classroom.id}}" {% if team is not null and team['students'][i]['classroomID'] is not empty and team['students'][i]['classroomID'] == classroom.id %}selected{% endif %}>{{classroom.grade.name}} - {{classroom.name}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-sm-3">
+              <input type="text" id="team_students_{{i}}_name" value="{% if team is not empty and team['students'][i]['name'] is not empty %}{{ team['students'][i]['name'] }}{% endif %}" placeholder="David S." name="team[students][{{i}}][name]" class="form-control">
+            </div>
+          </div>
+          {% endfor %}
+        {%  elseif teamType.value == 'teacher' %}
+          <div class="form-group">
+            <div class="col-sm-6">
+              <label class="required" for="team_name">Team Name</label>
+              <input type="text" id="team_name" required="required" value="{% if team is not empty and team['name'] is not empty %}{{ team['name'] }}{% endif %}" name="team[name]" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-12">
+              <label class="required" for="team_description">Call for Action</label>
+              <textarea placeholder="Help the Mrs. Smith get to the top of the charts!..." id="team_description" name="team[description]" rows="3" class="form-control">{% if team is not null and team['description'] is not null %}{{ team['description'] }}{% endif %}</textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-4">
+              <label class="required" for="team_fundingGoal">Campaign Goal</label>
+              <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">$</span>
+                <input type="number" min=0 id="team_fundingGoal" value="{% if team is null or team['fundingGoal'] is empty %}500{% else %}{{ team['fundingGoal'] }}{% endif %}" name="team[fundingGoal]" class="form-control">
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="form-group">
+            <div class="col-sm-6">
+                <label class="required" for="team_classroom_classroomID">Classroom</label>
+                <select id="team_classroom_classroomID" name="team[classroom][classroomID]" class="form-control">
+                  <option value="" selected="selected">Select Classroom</option>
+                  {% for classroom in classrooms %}
+                    <option value="{{classroom.id}}" {% if team is not null and team['classroom']['classroomID'] is not empty and team['classroom']['classroomID'] == classroom.id %}selected{% endif %}>{{classroom.grade.name}} - {{classroom.name}}</option>
+                  {% endfor %}
+                </select>
+            </div>
+          </div>
+        {%  elseif teamType.value == 'student' %}
+          <div class="form-group">
+            <div class="col-sm-6">
+              <label class="required" for="team_name">Team Name</label>
+              <input type="text" id="team_name" required="required" value="{% if team is not empty and team['name'] is not empty %}{{ team['name'] }}{% endif %}" name="team[name]" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-12">
+              <label class="required" for="team_description">Call for Action</label>
+              <textarea placeholder="Help the Stephen get to the top of the charts!..." id="team_description" name="team[description]" rows="3" class="form-control">{% if team is not null and team['description'] is not null %}{{ team['description'] }}{% endif %}</textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-4">
+              <label class="required" for="team_fundingGoal">Campaign Goal</label>
+              <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">$</span>
+                <input type="number" min=0 id="team_fundingGoal" value="{% if team is null or team['fundingGoal'] is empty %}500{% else %}{{ team['fundingGoal'] }}{% endif %}" name="team[fundingGoal]" class="form-control">
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="form-group row">
+            <label class="col-sm-3 col-form-label" for="team_students_1_classroomID">Student Info</label>
+            <div class="col-sm-6">
+              <select id="team_students_1_classroomID" name="team[students][1][classroomID]" class="form-control">
+                <option value="" selected="selected">Select Classroom</option>
+                {% for classroom in classrooms %}
+                  <option value="{{classroom.id}}" {% if team is not null and team['students'][1]['classroomID'] is not empty and team['students'][1]['classroomID'] == classroom.id %}selected{% endif %}>{{classroom.grade.name}} - {{classroom.name}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-sm-3">
+              <input type="text" id="team_students_1_name" value="{% if team is not empty and team['students'][1]['name'] is not empty %}{{ team['students'][1]['name'] }}{% endif %}" placeholder="David S." name="team[students][1][name]" class="form-control">
+            </div>
+          </div>
+        {%  endif %}
+        <hr>
+        <div class="form-group">
+          <div class="col-sm-12">
+            <a class="btn btn-warning" href="{{ path('register_team_select', {'campaignUrl': campaign.url }) }}"><i class="fa fa-arrow-left" aria-hidden="true"></i>&nbsp;Select a different page type</a><button type="submit" id="submit" class="btn btn-primary pull-right">Create your Page!</button>
+          </div>
+        </div>
+        <input type="hidden" id="team_campaignID" name="team[campaignID]"><input type="hidden" id="user__token" name="team[_token]" value="oPf8W_BVWF3f9zvbETkokwPUnKXWK_I9HYOGSyt5Thk">
+        <input type="hidden" id="team_teamType" name="team[teamType]" value="{{ teamType.name }}">
+      </form>
+      </div>
+    </div>
+  {% endblock body %}
+
+  {% block javascripts %}
+  <script type="text/javascript">
+    $(document).ready(function(){
+
+    });
+  </script>
+  {% endblock %}

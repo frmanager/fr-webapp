@@ -1,4 +1,0 @@
-app_student:
-    resource: "@AppBundle/Resources/config/routing/student.php"
-    prefix:   /student
-

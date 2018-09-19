@@ -1,0 +1,49 @@
+security:
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        our_db_provider:
+            entity:
+                class: App:User
+                property: email
+
+    encoders:
+        App\Entity\User:
+            algorithm: bcrypt
+
+    firewalls:
+        main:
+            pattern: ^/
+            provider: our_db_provider
+            form_login:
+                provider: our_db_provider
+                login_path: /security/login
+                check_path: /security/login
+                default_target_path: loginRedirect
+            logout:
+                path: /security/logout
+                target: homepage
+            anonymous:    true
+
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+            # activate different ways to authenticate
+
+            # http_basic: true
+            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+
+            # form_login: true
+            # https://symfony.com/doc/current/security/form_login_setup.html
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        # - { path: ^/admin, roles: ROLE_ADMIN }
+        # - { path: ^/profile, roles: ROLE_USER }
+    access_control:
+        - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/account/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/account/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }

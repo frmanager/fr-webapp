@@ -109,7 +109,7 @@ export BOWERPHP_TOKEN=<GITHUB_API_KEY>
 
 
 ```
-php bin/console doctrine:generate:entities AppBundle:Donation
+php bin/console doctrine:generate:entities App:Donation
 ```
 
 

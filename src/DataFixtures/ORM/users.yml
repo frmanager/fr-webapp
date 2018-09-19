@@ -1,0 +1,49 @@
+App\Entity\User:
+    user1: #admin of campaign 1
+        firstName: 'David'
+        lastName: 'Larrimore'
+        email: 'davidlarrimore@gmail.com'
+        username: 'davidlarrimore@gmail.com'
+        password: <{app.alice.parameters.password}>
+        emailConfirmationCode: 12345
+        apiKey: 12345
+        campaignManagerFlag: true
+        fundraiserFlag: true
+        setEmailConfirmationCodeTimestamp: <dateTime()>
+        userStatus: '@userStatus2'
+    user2: #front end user with team for campaign 1 (TeamType=Family)
+        firstName: <firstName()>
+        lastName: <lastName()>
+        email (unique): <freeEmail()>
+        username (unique): <freeEmail()>
+        password: <password()>
+        emailConfirmationCode (unique): <password()>
+        apiKey (unique): <password()>
+        campaignManagerFlag: false
+        fundraiserFlag: true
+        setEmailConfirmationCodeTimestamp: <dateTime()>
+        userStatus: '@userStatus2'
+    user3: #front end user with team for campaign 1 (TeamType=Student)
+        firstName: <firstName()>
+        lastName: <lastName()>
+        email (unique): <freeEmail()>
+        username (unique): <freeEmail()>
+        password: <password()>
+        emailConfirmationCode (unique): <password()>
+        apiKey (unique): <password()>
+        campaignManagerFlag: false
+        fundraiserFlag: true
+        setEmailConfirmationCodeTimestamp: <dateTime()>
+        userStatus: '@userStatus2'
+    user4: #front end user with team for campaign 1 (TeamType=Teacher)
+        firstName: <firstName()>
+        lastName: <lastName()>
+        email (unique): <freeEmail()>
+        username (unique): <freeEmail()>
+        password: <password()>
+        emailConfirmationCode (unique): <password()>
+        apiKey (unique): <password()>
+        campaignManagerFlag: false
+        fundraiserFlag: true
+        setEmailConfirmationCodeTimestamp: <dateTime()>
+        userStatus: '@userStatus2'

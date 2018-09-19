@@ -1,0 +1,226 @@
+App\Entity\Donation:
+    donation1: #campaign donation paypal accepted
+        donorEmail: <freeEmail()>
+        donorFirstName: <firstName()>
+        donorLastName: <lastName()>
+        donorComment: <paragraph(1,true)>
+        student: null
+        team: null
+        classroom: null
+        campaign: '@campaign1'
+        type: 'campaign'
+        amount: 5
+        donatedAt: <dateTimeBetween('-30 days', '0 days')>
+        paymentMethod: "paypal"
+        donationStatus: "ACCEPTED"
+
+    donation2: #campaign donation cc accepted
+        donorEmail: <freeEmail()>
+        donorFirstName: <firstName()>
+        donorLastName: <lastName()>
+        donorComment: <paragraph(1,true)>
+        student: null
+        team: null
+        classroom: null
+        campaign: '@campaign1'
+        type: 'campaign'
+        amount: 5
+        donatedAt: <dateTimeBetween('-30 days', '0 days')>
+        paymentMethod: "cc"
+        donationStatus: "ACCEPTED"
+
+    donation3: #campaign donation paypal accepted
+        student: null
+        team: null
+        classroom: null
+        campaign: '@campaign1'
+        type: 'campaign'
+        amount: 5
+        donatedAt: <dateTimeBetween('-30 days', '0 days')>
+        paymentMethod: "cash"
+        donationStatus: "ACCEPTED"
+
+    donation4: #campaign donation paypal pending
+        donorEmail: <freeEmail()>
+        donorFirstName: <firstName()>
+        donorLastName: <lastName()>
+        donorComment: <paragraph(1,true)>
+        student: null
+        team: null
+        classroom: null
+        campaign: '@campaign1'
+        type: 'campaign'
+        amount: 5
+        donatedAt: <dateTimeBetween('-30 days', '0 days')>
+        paymentMethod: "paypal"
+        donationStatus: "PENDING"
+
+    donation5: #campaign donation paypal failed
+        donorEmail: <freeEmail()>
+        donorFirstName: <firstName()>
+        donorLastName: <lastName()>
+        donorComment: <paragraph(1,true)>
+        student: null
+        team: null
+        classroom: null
+        campaign: '@campaign1'
+        type: 'campaign'
+        amount: 5
+        donatedAt: <dateTimeBetween('-30 days', '0 days')>
+        paymentMethod: "paypal"
+        donationStatus: "FAILED"
+
+    donation6: #classroom1 donation paypal accepted
+        donorEmail: <freeEmail()>
+        donorFirstName: <firstName()>
+        donorLastName: <lastName()>
+        donorComment: <paragraph(1,true)>
+        student: null
+        team: null
+        classroom: '@classroom1'
+        campaign: '@campaign1'
+        type: 'classroom'
+        amount: 15
+        donatedAt: <dateTimeBetween('-30 days', '0 days')>
+        paymentMethod: "paypal"
+        donationStatus: "ACCEPTED"
+
+    donation7: #classroom2 donation paypal accepted
+        donorEmail: <freeEmail()>
+        donorFirstName: <firstName()>
+        donorLastName: <lastName()>
+        donorComment: <paragraph(1,true)>
+        student: null
+        team: null
+        classroom: '@classroom2'
+        campaign: '@campaign1'
+        type: 'classroom'
+        amount: 5
+        donatedAt: <dateTimeBetween('-30 days', '0 days')>
+        paymentMethod: "paypal"
+        donationStatus: "ACCEPTED"
+
+
+    donation8: #classroom3 donation paypal accepted
+        donorEmail: <freeEmail()>
+        donorFirstName: <firstName()>
+        donorLastName: <lastName()>
+        donorComment: <paragraph(1,true)>
+        student: null
+        team: null
+        classroom: '@classroom2'
+        campaign: '@campaign1'
+        type: 'classroom'
+        amount: 25
+        donatedAt: <dateTimeBetween('-30 days', '0 days')>
+        paymentMethod: "paypal"
+        donationStatus: "ACCEPTED"
+
+
+    donation9: #student10 donation paypal accepted
+        donorEmail: <freeEmail()>
+        donorFirstName: <firstName()>
+        donorLastName: <lastName()>
+        donorComment: <paragraph(1,true)>
+        team: null
+        student: '@student10'
+        campaign: '@campaign1'
+        type: 'classroom'
+        amount: 100
+        donatedAt: <dateTimeBetween('-30 days', '0 days')>
+        paymentMethod: "paypal"
+        donationStatus: "ACCEPTED"
+        __calls:
+            - setClassroomFromStudent:
+                  0: null
+
+
+    donation10: #student11 donation paypal accepted
+        donorEmail: <freeEmail()>
+        donorFirstName: <firstName()>
+        donorLastName: <lastName()>
+        donorComment: <paragraph(1,true)>
+        team: null
+        student: '@student11'
+        campaign: '@campaign1'
+        type: 'classroom'
+        amount: 10
+        donatedAt: <dateTimeBetween('-30 days', '0 days')>
+        paymentMethod: "paypal"
+        donationStatus: "ACCEPTED"
+        __calls:
+            - setClassroomFromStudent:
+                  0: null
+
+    donation11: #student12 donation paypal accepted
+        donorEmail: <freeEmail()>
+        donorFirstName: <firstName()>
+        donorLastName: <lastName()>
+        donorComment: <paragraph(1,true)>
+        team: null
+        student: '@student12'
+        campaign: '@campaign1'
+        type: 'classroom'
+        amount: 15
+        donatedAt: <dateTimeBetween('-30 days', '0 days')>
+        paymentMethod: "paypal"
+        donationStatus: "ACCEPTED"
+        __calls:
+            - setClassroomFromStudent:
+                  0: null
+
+
+    donation12: #team1 donation paypal accepted
+        donorEmail: <freeEmail()>
+        donorFirstName: <firstName()>
+        donorLastName: <lastName()>
+        donorComment: <paragraph(1,true)>
+        team: '@team1'
+        campaign: '@campaign1'
+        type: 'team'
+        amount: 15
+        donatedAt: <dateTimeBetween('-30 days', '0 days')>
+        paymentMethod: "paypal"
+        donationStatus: "ACCEPTED"
+
+
+    donation13: #team1 donation paypal accepted
+        donorEmail: <freeEmail()>
+        donorFirstName: <firstName()>
+        donorLastName: <lastName()>
+        donorComment: <paragraph(1,true)>
+        team: '@team1'
+        campaign: '@campaign1'
+        type: 'team'
+        amount: 25
+        donatedAt: <dateTimeBetween('-30 days', '0 days')>
+        paymentMethod: "paypal"
+        donationStatus: "ACCEPTED"
+
+
+    donation14: #team2 donation paypal accepted
+        donorEmail: <freeEmail()>
+        donorFirstName: <firstName()>
+        donorLastName: <lastName()>
+        donorComment: <paragraph(1,true)>
+        team: '@team2'
+        campaign: '@campaign1'
+        type: 'team'
+        amount: 15
+        donatedAt: <dateTimeBetween('-30 days', '0 days')>
+        paymentMethod: "paypal"
+        donationStatus: "ACCEPTED"
+
+
+    donation15: #team3 donation paypal accepted
+        donorEmail: <freeEmail()>
+        donorFirstName: <firstName()>
+        donorLastName: <lastName()>
+        donorComment: <paragraph(1,true)>
+        team: '@team3'
+        campaign: '@campaign1'
+        type: 'team'
+        amount: 15
+        donatedAt: <dateTimeBetween('-30 days', '0 days')>
+        paymentMethod: "paypal"
+        donationStatus: "ACCEPTED"

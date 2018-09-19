@@ -1,0 +1,44 @@
+App\Entity\UserStatus:
+    userStatus1:
+        name: "Registered"
+    userStatus2:
+        name: "Confirmed"
+    userStatus3:
+        name: "Locked"
+    userStatus4:
+        name: "Disabled"
+
+App\Entity\Campaignawardstyle:
+    campaignawardstyle1:
+        name: "Place"
+        value: "place"
+        description: "Students compete for first place"
+    campaignawardstyle2:
+        name: "Donation Level"
+        value: "level"
+        description: "Award received if (Classroom/Student) reach donation amount"
+
+App\Entity\Campaignawardtype:
+    campaignawardtype1:
+        name: "Classroom"
+        value: "classroom"
+        description: "Classroom"
+    campaignawardtype2:
+        name: "Student/Individual"
+        value: "student"
+        description: "Student/Individual"
+
+
+App\Entity\TeamType:
+    rf_team_type1:
+        name: "Student"
+        value: "student"
+        description: "student"
+    rf_team_type2:
+        name: "Teacher"
+        value: "teacher"
+        description: "Teacher"
+    rf_team_type3:
+        name: "Family"
+        value: "family"
+        description: "Family"

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base target="_parent" />
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+  <title>{% block title %}{% endblock %}</title>
+
+  <link rel="shortcut icon" href="{{ asset('static/favicon.ico') }}">
+  <link rel="icon" type="image/x-icon" href="{{ asset('static/favicon.ico') }}"/>
+
+  <!-- WebPack CSS -->
+  <link rel="stylesheet" href="{{ asset('build/app.css') }}">
+
+  {% block css %}{% endblock %}
+
+
+  <!-- GOOGLE ANALYTICS -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-84729114-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+
+</head>
+
+<!-- BODY options, add following classes to body to change options
+
+// Header options
+1. '.header-fixed'		- Fixed Header
+
+// Sidebar options
+1. '.sidebar-fixed'		- Fixed Sidebar
+2. '.sidebar-hidden'		- Hidden Sidebar
+3. '.sidebar-off-canvas'	- Off Canvas Sidebar
+4. '.sidebar-minimized'		- Minimized Sidebar (Only icons)
+5. '.sidebar-compact'		- Compact Sidebar
+
+// Aside options
+1. '.aside-menu-fixed'		- Fixed Aside Menu
+2. '.aside-menu-hidden'		- Hidden Aside Menu
+3. '.aside-menu-off-canvas'     - Off Canvas Aside Menu
+
+// Footer options
+1. 'footer-fixed'		- Fixed footer
+
+-->
+
+<body class="app header-fixed sidebar-fixed {% if campaign is defined %}sidebar-lg-show{% endif %} aside-menu-fixed aside-menu-hidden" data-spy="scroll">
+  <header class="app-header navbar">
+      <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button">☰</button>
+      <a class="navbar-brand" href="{{ path('homepage') }}">
+        <img class="navbar-brand-full" src="{{ asset('static/img/logo.png') }}" width="89" height="25" alt="FR Manager Logo">
+        <img class="navbar-brand-minimized" src="{{ asset('static/img/logo.png') }}" width="30" height="30" alt="FR Manager Logo">
+      </a>
+
+      {% if is_granted('ROLE_USER') %}
+      {% if campaign is defined %}     
+      <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
+        <span class="navbar-toggler-icon"></span>
+      </button>  
+      {% endif %}    
+      <ul class="nav navbar-nav d-md-down-none">
+          {% if campaign is defined %}
+          <li class="nav-item px-3">
+              <span><strong>{{ campaign.name }}</strong></span>
+            </li>
+          {% endif %}
+      </ul>
+      <ul class="nav navbar-nav ml-auto">
+          <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                  <img src="{{ asset('static/img/profile.jpg') }}" class="img-avatar" alt="admin@bootstrapmaster.com">
+                  <span class="d-md-down-none">{{ app.user.username }}</span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right">
+                  <a class="dropdown-item" href="{{ path('profile_edit') }}"><i class="fa fa-user"></i> Profile</a>
+                  <div class="divider"></div>
+                  <a class="dropdown-item" href="{{ path('logout') }}"><i class="fa fa-lock"></i> Logout</a>
+              </div>
+          </li>
+      </ul>
+      {% endif %}
+  </header>
+  <div class="app-body">
+    {% if is_granted('ROLE_USER') and campaign is defined %}
+    <div class="sidebar">
+      <nav class="sidebar-nav">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ path('campaign_index', { 'campaignUrl': campaign.url }) }}"><i class="fa fa-tachometer"></i> Dashboard <span class="badge badge-info">NEW</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" target="_blank" href="{{ main_app_url }}/{{campaign.url}}/"><i class="fa fa-external-link"></i> View Campaign</a>
+          </li>
+          <li class="nav-title">
+              Manage Campaign
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ path('campaign_edit', {'campaignUrl': campaign.url}) }}"><i class="fa fa-wrench" aria-hidden="true"></i> Campaign Settings</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ path('campaignaward_index', { 'campaignUrl': campaign.url }) }}"><i class="fa fa-trophy" aria-hidden="true"></i> Awards</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ path('team_index', {'campaignUrl': campaign.url}) }}"><i class="fa fa-users" aria-hidden="true"></i> Teams</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ path('donation_index', {'campaignUrl': campaign.url}) }}"><i class="fas fa-dollar-sign" aria-hidden="true"></i> Donations</a>
+          </li>
+          <li class="nav-title">
+              Manage School
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ path('grade_index', { 'campaignUrl': campaign.url }) }}"><i class="fa fa-graduation-cap"></i> Grades</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ path('classroom_index', { 'campaignUrl': campaign.url }) }}"><i class="fas fa-apple-alt"></i> Classrooms</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ path('student_index', { 'campaignUrl': campaign.url }) }}"><i class="fa fa-child" aria-hidden="true"></i> Students</a>
+          </li>
+          </li>
+        </ul>
+      </nav>
+    </div>
+   {% endif %}
+
+    <!-- Main content -->
+    <main class="main">
+      <!-- Breadcrumb -->
+      <!--
+        <ol class="breadcrumb">
+        </ol>
+      -->
+      <br/>
+      <!-- Alert -->
+      {% for label, messages in app.flashes %}
+          <div class="container-fluid">
+            <div class="animated fadeIn">
+              {% for message in messages %}
+                  <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    {{ message }}
+                  </div>
+              {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+      <!-- End Alert -->
+      <div class="container-fluid">
+        <div class="animated fadeIn">
+          <br/>
+          {% block body %}{% endblock %}
+          <br/>
+        </div>
+      </div>
+    </main>
+
+<!--
+    <aside class="aside-menu">
+      ...
+    </aside>
+-->
+  </div>
+
+  <footer class="app-footer">
+       Created by <a href="mailto:davidlarrimore@gmail.com"> David Larrimore</a>
+       <!-- <span class="float-right">Admin interface Powered by <a href="http://coreui.io">CoreUI</a> </span> -->
+   </footer>
+
+  <!-- WebPack JS -->
+  <script src="{{ asset('build/app.js') }}"></script>
+
+  {% block javascripts %}{% endblock %}
+
+
+</body>
+</html>
