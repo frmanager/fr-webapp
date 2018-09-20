@@ -9,7 +9,9 @@ parameters:
     credit_card_flag: '%env(FEATURE_CREDIT_CARD)%'
     paypal_rest_client_id: '%env(PAYPAL_REST_CLIENT_ID)%'
     paypal_rest_client_secret: '%env(PAYPAL_REST_CLIENT_SECRET)%'
-    mailer_user: '%env(MAILER_USER)%'
+    mailer_url: '%env(MAILER_URL)%'
+    mailer_username: '%env(MAILER_USERNAME)%'
+    mailer_password: '%env(MAILER_PASSWORD)%'
     
 services:
     # default configuration for services in *this* file
