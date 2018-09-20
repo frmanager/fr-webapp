@@ -1,12 +1,6 @@
 swiftmailer:
-    transport:        gmail
-    username:         '%env(MAILER_USERNAME)%'
-    password:         '%env(MAILER_PASSWORD)%'
-    host:             localhost
-    port:             465
-    encryption:       ssl
-    auth-mode:        login
-    spool: { type: 'memory' }
+    url: 'gmail://davidlarrimore@lrespto.org@localhost'
+    password: '%mailer_password%'
     stream_options:
         ssl:
             allow_self_signed: true
