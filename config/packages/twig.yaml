@@ -4,3 +4,4 @@ twig:
     strict_variables: '%kernel.debug%'
     globals:    
         main_app_url: '%main_app_url%'
+        credit_card_flag: '%credit_card_flag%'

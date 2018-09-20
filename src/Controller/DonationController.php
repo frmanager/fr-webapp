@@ -282,8 +282,8 @@ class DonationController extends Controller
 
           $apiContext = new \PayPal\Rest\ApiContext(
                   new \PayPal\Auth\OAuthTokenCredential(
-                      $this->getParameter('paypal.paypal_rest.client_id'),     // ClientID
-                      $this->getParameter('paypal.paypal_rest.client_secret')      // ClientSecret
+                      $this->getParameter('paypal_rest_client_id'),     // ClientID
+                      $this->getParameter('paypal_rest_client_secret')      // ClientSecret
                   )
           );
 
@@ -565,8 +565,8 @@ class DonationController extends Controller
             if(!$failure){
               $apiContext = new \PayPal\Rest\ApiContext(
                       new \PayPal\Auth\OAuthTokenCredential(
-                          $this->getParameter('paypal.paypal_rest.client_id'),     // ClientID
-                          $this->getParameter('paypal.paypal_rest.client_secret')      // ClientSecret
+                          $this->getParameter('paypal_rest_client_id'),     // ClientID
+                          $this->getParameter('paypal_rest_client_secret')      // ClientSecret
                       )
               );
 

@@ -19,7 +19,7 @@ Encore
      */
     .addEntry('app', './assets/js/app.js')
     .addEntry('homepage', './assets/js/homepage.js') 
-      
+    .addEntry('donation', './assets/js/donation.js')      
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 

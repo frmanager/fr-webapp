@@ -10,6 +10,7 @@
     "pace": "^0.0.4",
     "perfect-scrollbar": "^1.4.0",
     "popper.js": "^1.14.4",
+    "spin.js": "^4.0.0",
     "tether": "^1.4.4",
     "webpack-notifier": "^1.6.0"
   }

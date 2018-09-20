@@ -6,7 +6,11 @@
 parameters:
     locale: 'en'
     main_app_url: '%env(MAIN_APP_URL)%'
-
+    credit_card_flag: '%env(FEATURE_CREDIT_CARD)%'
+    paypal_rest_client_id: '%env(PAYPAL_REST_CLIENT_ID)%'
+    paypal_rest_client_secret: '%env(PAYPAL_REST_CLIENT_SECRET)%'
+    mailer_user: '%env(MAILER_USER)%'
+    
 services:
     # default configuration for services in *this* file
     _defaults:

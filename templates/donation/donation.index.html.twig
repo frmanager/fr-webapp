@@ -1,7 +1,7 @@
 {% extends 'template.html.twig' %}
 
 {% block title %}Donate to the {{ campaign.name}} Campaign{% endblock %}
-
+{% block css %}<link rel="stylesheet" href="{{ asset('build/donation.css') }}">{% endblock%}
 {% block body %}
   {% set campaignUrl = null %}
   {% set campaignUrl = app.request.attributes.get('_route_params')['campaignUrl'] %}
@@ -11,8 +11,6 @@
     {% set formData = app.request.get('donation') %}
     {% set submitted = true %}
   {% endif %}
-  <div id="overlay"></div>
-  <div id="overlay_center"></div>
   <div class="row">
     <div class="col-md-8">
       <div class="row">
@@ -155,17 +153,17 @@
               <div class="form-check form-check-inline">
               <label class="form-check-label">
                 <input type="radio" name="donation[paymentMethod]" id="donation_paymentMethod_1" value="paypal" checked>
-                Paypal (<i class="fa fa-paypal" aria-hidden="true"></i>)
+                Paypal (<i class="fab fa-paypal" aria-hidden="true"></i>)
               </label>
             </div>
             <div class="form-check form-check-inline">
               <label class="form-check-label">
                 <input type="radio" name="donation[paymentMethod]" id="donation_paymentMethod_2" value="cc" {% if credit_card_flag == false %}disabled{% endif %}>
-                Credit Card (<i class="fa fa-cc-paypal" aria-hidden="true"></i>
-                <i class="fa fa-cc-visa" aria-hidden="true"></i>
-                <i class="fa fa-cc-mastercard" aria-hidden="true"></i>
-                <i class="fa fa-cc-discover" aria-hidden="true"></i>
-                <i class="fa fa-cc-amex" aria-hidden="true"></i>){% if credit_card_flag == false %} <small>comming soon!</small>{% endif %}
+                Credit Card (<i class="fab fa-cc-paypal" aria-hidden="true"></i>
+                <i class="fab fa-cc-visa" aria-hidden="true"></i>
+                <i class="fab fa-cc-mastercard" aria-hidden="true"></i>
+                <i class="fab fa-cc-discover" aria-hidden="true"></i>
+                <i class="fab fa-cc-amex" aria-hidden="true"></i>){% if credit_card_flag == false %} <small>comming soon!</small>{% endif %}
               </label>
             </div>
           </div><!-- ./form-group -->
@@ -662,94 +660,9 @@
   </div>
   <!-- ./row -->
 </form>
-
+<div id="overlay_center"></div>
 {% endblock %}
 
 {% block javascripts %}
-<script type='application/javascript' src="{{ asset('assets/js/libs/spin.min.js') }}"></script>
-
-<script>
-  $(document).ready(function() {
-    //called when key is pressed in textbox
-    $("#donation_amount, #donation_cc_expirationMonth, #donation_cc_expirationYear, #donation_cc_cvv").keypress(function(e) {
-      //if the letter is not digit then display error and don't type anything
-      if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
-        return false;
-      }
-    });
-
-    $('#cc_form').collapse("hide");
-
-    $('input:radio[name="donation[paymentMethod]"]').change(function() {
-      if ($(this).val() == "cc") {
-        $('#cc_form').collapse("show");
-      } else {
-        $('#cc_form').collapse("hide");
-      }
-    });
-
-    $(function() {
-      $('[data-toggle="tooltip"]').tooltip()
-    })
-
-
-    $( "#submit" ).click(function() {
-      var failed = false;
-
-      if($("#donation_firstName").val() == ""){
-        failed = true;
-      };
-
-      if($("#donation_lastName").val() == ""){
-        failed = true;
-      };
-
-      if($("#donation_email").val() == ""){
-        failed = true;
-      };
-
-      if(!failed){
-        var opts = {
-          lines: 13 // The number of lines to draw
-        , length: 28 // The length of each line
-        , width: 14 // The line thickness
-        , radius: 42 // The radius of the inner circle
-        , scale: 1 // Scales overall size of the spinner
-        , corners: 1 // Corner roundness (0..1)
-        , color: '#000' // #rgb or #rrggbb or array of colors
-        , opacity: 0.25 // Opacity of the lines
-        , rotate: 0 // The rotation offset
-        , direction: 1 // 1: clockwise, -1: counterclockwise
-        , speed: 1 // Rounds per second
-        , trail: 60 // Afterglow percentage
-        , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
-        , zIndex: 2e9 // The z-index (defaults to 2000000000)
-        , className: 'spinner' // The CSS class to assign to the spinner
-        , top: '50%' // Top position relative to parent
-        , left: '50%' // Left position relative to parent
-        , shadow: false // Whether to render a shadow
-        , hwaccel: false // Whether to use hardware acceleration
-        , position: 'absolute' // Element positioning
-        }
-
-        var target = document.getElementById('overlay_center')
-        var spinner = new Spinner(opts).spin(target);
-        $('#overlay').show()
-      }
-  });
-
-
-
-
-
-
-
-
-
-
-
-
-
-  });
-</script>
+<script src="{{ asset('build/donation.js') }}"></script>
 {% endblock %}

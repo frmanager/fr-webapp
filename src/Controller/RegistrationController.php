@@ -205,7 +205,7 @@ class RegistrationController extends Controller
      * @Route("/confirm_email", name="confirm_email")
      *
      */
-      public function emailConfirmationAction(Request $request, $campaignUrl, LoggerInterface $logger)
+      public function emailConfirmationAction(Request $request, $campaignUrl, LoggerInterface $logger, \Swift_Mailer $mailer)
       {
 
           
@@ -227,7 +227,7 @@ class RegistrationController extends Controller
                 $em->flush();
 
                 //Send Email
-                $message = (new \Swift_Message("FR Manager account activation code"))
+                $message = (new \Swift_Message("[FR Manager] account activation code"))
                   ->setFrom('funrun@lrespto.org') //TODO: Change this to parameter for support email
                   ->setTo($user->getEmail())
                   ->setContentType("text/html")
@@ -235,7 +235,9 @@ class RegistrationController extends Controller
                       $this->renderView('email/email_confirmation.email.twig', array('campaign' => $campaign, 'user' => $user))
                   );
 
-                $this->get('mailer')->send($message);
+                $logger->debug("Sending Email");
+                $emailResult = $mailer->send($message);
+                $logger->debug($emailResult);
 
                 $this->addFlash('info', 'New code has been sent to your email, please check your inbox');
                 return $this->redirectToRoute('confirm_email', array('campaignUrl' => $campaign->getUrl()));

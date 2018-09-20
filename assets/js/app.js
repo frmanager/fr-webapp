@@ -3,10 +3,8 @@
 const $ = require('jquery');
 // JS is equivalent to the normal "bootstrap" package
 // no need to set this to a variable, just require it
-require('jquery');
 require('popper.js')
 require('tether')
-require('bootstrap');
 require('pace');
 require('perfect-scrollbar');
 require('datatables.net-bs4');
@@ -21,6 +19,7 @@ import '../css/template.css';
 //Custom scripts required by this view -->
 
 //LEGACY -->
+import '../js/libs/bootstrap.min.js';
 import '../js/libs/jquery.countdown.min.js';
 import '../js/ie10-viewport-bug-workaround.js';
 

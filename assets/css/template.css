@@ -94,27 +94,3 @@ a.anchor {
   text-align:center
 
 }
-
-
-
-#overlay {
-display: none;
-background-color: black;
-position: fixed;
-left:0;
-top:0;
-height:100%;
-width:100%;
-opacity: 0.5; /* also -moz-opacity, etc. */
-}
-
-#overlay_center {
-background-color: black;
-opacity: 1;
-position: fixed;
-left:50%;
-top:50%;
-width: 100px;
-height: 100px;
-margin: -50px 0 0 -50px;
-}
