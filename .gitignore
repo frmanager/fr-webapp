@@ -3,6 +3,8 @@
 /web/assets/vendor/
 build.properties
 
+/public/uploads/
+
 nbproject/project.xml
 /.scannerwork/
 

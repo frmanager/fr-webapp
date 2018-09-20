@@ -12,7 +12,9 @@ parameters:
     mailer_url: '%env(MAILER_URL)%'
     mailer_username: '%env(MAILER_USERNAME)%'
     mailer_password: '%env(MAILER_PASSWORD)%'
-    
+    team_profile_photos_directory: '%kernel.project_dir%/public/uploads/team_profile_photos'
+    temp_upload_directory: '%kernel.project_dir%/public/uploads/temp'
+
 services:
     # default configuration for services in *this* file
     _defaults:
