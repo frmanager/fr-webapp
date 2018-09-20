@@ -9,11 +9,11 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="team",uniqueConstraints={@ORM\UniqueConstraint(columns={"url"})})
+ * @ORM\Table(name="team",uniqueConstraints={@ORM\UniqueConstraint(columns={"url", "campaign_id"})})
  * @UniqueEntity(
- *     fields={"url"},
+ *     fields={"url","campaign_id"},
  *     errorPath="url",
- *     message="This URL is already registered"
+ *     message="This URL is already registered for this campaign"
  * )
  */
 class Team
