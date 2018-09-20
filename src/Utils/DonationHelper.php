@@ -4,6 +4,7 @@
 
 namespace App\Utils;
 
+use Psr\Log\LoggerInterface;
 use App\Entity\DonationDatabase;
 use Doctrine\ORM\EntityManager;
 use DateTime;
@@ -14,7 +15,7 @@ class DonationHelper
     protected $em;
     protected $logger;
 
-    public function __construct(EntityManager $em, Logger $logger)
+    public function __construct(EntityManager $em, LoggerInterface $logger)
     {
         $this->em = $em;
         $this->logger = $logger;
