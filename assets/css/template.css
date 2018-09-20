@@ -28,7 +28,6 @@ a.anchor {
     -webkit-box-shadow: 1px 1px 3px 1px rgba(50, 50, 50, 0.50);
     -moz-box-shadow: 1px 1px 3px 1px rgba(50, 50, 50, 0.50);
     box-shadow: 1px 1px 3px 1px rgba(50, 50, 50, 0.50);
-    color: #555;
 }
 
 .required:after {
@@ -48,7 +47,6 @@ a.anchor {
   margin-bottom:0px;
 
 }
-
 
 .drop-shadow {
   -webkit-box-shadow: 1px 1px 3px 0px rgba(204,204,204,1);
