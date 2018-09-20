@@ -1,0 +1,4 @@
+App\Entity\CampaignUser:
+    campaignUser{1..4}:
+        user: '@user<current()>'
+        campaign: '@campaign1'

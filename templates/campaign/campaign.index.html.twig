@@ -1,0 +1,186 @@
+{% extends 'template.html.twig' %}
+
+{% block title %}{{campaign.name}}{% endblock %}
+
+{% block meta %}
+  <meta property="og:image" content="{{ main_app_url }}/assets/img/FunRun2017-banner.png"/>
+  <meta property="og:description" content="{{ campaign.description|striptags }}" />
+  <meta property="og:title" content="Help the {{ campaign.name }} Today!" />
+  <meta property="og:url" content="{{ main_app_url }}/{{ path('campaign_index', {'campaignUrl': campaignUrl}) }}" />
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.12/fh-3.1.2/r-2.1.0/sc-1.4.2/datatables.min.css"/>
+{% endblock %}
+
+{% block body %}
+      <div class="row">
+        <div class="col-md-8">
+            <img class="img-fluid center-block" src="/static/img/FunRun2017-banner.png"/>
+        </div>
+        <div class="col-md-4">
+          <p class="lead"><strong>${{totals.donation_amount|number_format(0, '.', ',')}}</strong> of ${{campaign.fundingGoal|number_format(0, '.', ',')}} goal</p>
+          <div class="progress">
+              <div
+                  class="progress-bar progress-bar-warning"
+                  role="progressbar"
+                  aria-valuenow="{{ totals.donation_amount / campaign.fundingGoal * 100}}"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  style="width:{{ totals.donation_amount / campaign.fundingGoal * 100}}%">
+                  <span>{{ (totals.donation_amount / campaign.fundingGoal * 100)|number_format(2, '.', ',')}}% Complete</span>
+              </div>
+          </div>
+          <p>Raised by {{ totals.total_donations }} donors</p>
+          <p style="text-align:center;vertical-align: middle;">
+              <div id="track" data-countdown="{{ campaign.endDate|date('Y/m/d') }}"></div>
+          </p>
+          <hr>
+          <p><a href="{{ path('donation_index', {'campaignUrl':campaign.url}) }}" class="btn btn-primary btn-lg btn-block">DONATE NOW!</a></p>
+          <p><a href="http://www.facebook.com/share.php?u={{ app.request.uri }}" target="_blank" class="btn btn-info btn-block"><i class="fa fa-facebook-official" aria-hidden="true"></i> Share on Facebook</a></p>
+        </div>
+      </div>
+      <hr>
+      <div id="index-nav">
+      <ul class="nav justify-content-center nav-pills">
+        <li class="nav-item">
+          <a class="nav-link" href="#about">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#teams">Teams</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#classrooms">Classrooms</a>
+        </li>
+      </ul>
+    </div>
+      <hr>
+      <div class="row">
+        <div class="col-md-8">
+          <a class="anchor" id="about"></a>
+          <h4>Learn more about {{ campaign.name }}!</h4>
+          <p>{{campaign.description|raw}}</p>
+        </div><!-- ./col -->
+        <div class="col-md-4">
+          <h4>Awards and Prizes</h4>
+          <ul>
+            {% for campaign_award in campaign_awards %}
+              <li><small>{{campaign_award.name}}</small></li>
+            {% endfor %}
+        </ul>
+        </div><!-- ./col -->
+      </div><!-- ./row -->
+      <hr>
+      <a class="anchor" id="teams"></a>
+      <h4>Teams {% if not is_granted('ROLE_USER') and campaign is defined %} <a class="btn btn-primary btn-sm" href="{{ path('user_registration', {'campaignUrl': campaignUrl}) }}" role="button"><small>Create your team now!</small></a>{% endif %}</h4>
+      <br>
+      <div class="row">
+      {% for team in teams %}
+        {% if team.imageName is null %}
+        {% set profileImageUrl = '/static/img/team-' ~ team.teamType.value ~ '-image-2.png' %}
+        {% else %}
+        {% set profileImageUrl = '/uploads/team_profile_photos/' ~team.imageName %}
+        {% endif %}
+        <div class="col-sm-3">
+          <div class="card my-1">
+            <div class="text-center team-image-boundary-box" style="background-color: #fff;border-bottom: 1px solid rgba(0,0,0,0.125);">
+            {% if team.imageName is null %}
+                  {% if team.teamType.value == "teacher" %}
+                    <span class="align-middle"><i class="fa fa-5x fa-apple" aria-hidden="true"></i></span>
+                  {% elseif team.teamType.value == "student" %}
+                    <span class="align-middle"><i class="fa fa-5x fa-graduation-cap" aria-hidden="true"></i></span>
+                  {% elseif team.teamType.value == "family" %}
+                    <span class="align-middle"><i class="fa fa-5x fa-users" aria-hidden="true"></i></span>
+                  {% endif %}
+            {% else %}
+            <div class="text-center" style="background-color: #fff;border-bottom: 1px solid rgba(0,0,0,0.125);"><img class="img-fluid" src="/uploads/team_profile_photos/{{team.imageName}}" alt="Card image cap"></div>
+            {% endif %}
+            </div>
+            <div class="card-text text-center">
+                <small><a href="{{ path('team_show', {'campaignUrl':campaign.url, 'teamUrl':team.url}) }}">{{team.name}}</a></small>
+                <br>
+                <small>${{team.fundsRaised}} raised</small>
+            </div><!-- ./card-text -->
+          </div><!-- ./card -->
+        </div>
+       {% endfor %}
+    </div><!-- ./row -->
+    <hr>
+    <a class="anchor" id="classrooms"></a>
+    <h4>Classrooms</h4>
+    <br>
+    <div class="row">
+    {% for classroom_ranking in classroom_rankings %}
+
+      <div class="col-sm-3">
+        <div class="card my-1">
+          <div class="card-text text-center">
+              <small><a href="{{ path('classroom_show', {'campaignUrl':campaign.url, 'id':classroom_ranking.id}) }}">{{classroom_ranking.classroom_name}}</a></small>
+              <br>
+              <small>${{classroom_ranking.donation_amount|number_format(0, '.', ',')}} raised</small>
+          </div><!-- ./card-text -->
+        </div><!-- ./card -->
+      </div>
+     {% endfor %}
+  </div><!-- ./row -->
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+<script type='application/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.min.js"></script>
+<script type="application/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.12/fh-3.1.2/r-2.1.0/sc-1.4.2/datatables.min.js"></script>
+<script type='application/javascript' src="{{ asset('assets/js/libs/jquery.countdown.min.js') }}"></script>
+
+<script>
+
+//Slow scrolling for anchor nav script
+$('a[href*="#"]')
+  // Remove links that don't actually link to anything
+  .not('[href="#"]')
+  .not('[href="#0"]')
+  .click(function(event) {
+    // On-page links
+    if (
+      location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '')
+      &&
+      location.hostname == this.hostname
+    ) {
+      // Figure out element to scroll to
+      var target = $(this.hash);
+      target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+      // Does a scroll target exist?
+      if (target.length) {
+        // Only prevent default if animation is actually gonna happen
+        event.preventDefault();
+        $('html, body').animate({
+          scrollTop: target.offset().top
+        }, 800, function() {
+          // Callback after animation
+          // Must change focus!
+          var $target = $(target);
+          $target.focus();
+          if ($target.is(":focus")) { // Checking if the target was focused
+            return false;
+          } else {
+            $target.attr('tabindex','-1'); // Adding tabindex for elements not focusable
+            $target.focus(); // Set focus again
+          };
+        });
+      }
+    }
+  });
+
+  $('[data-countdown]').each(function() {
+      var $this = $(this),
+          finalDate = $(this).data('countdown');
+      $this.countdown(finalDate, function(event) {
+          $this.html(event.strftime('<span class="badge badge-danger">%D</span> day%!D left to donate!</span>'));
+      });
+  });
+
+
+
+</script>
+{% endblock %}

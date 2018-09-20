@@ -1,0 +1,19 @@
+App\Entity\Grade:
+    grade1:
+        campaign: '@campaign1'
+        name: "1st Grade"
+    grade2:
+        campaign: '@campaign1'
+        name: "2nd Grade"
+    grade3:
+        campaign: '@campaign1'
+        name: "3rd Grade"
+    grade4:
+        campaign: '@campaign2'
+        name: "1st Grade"
+    grade5:
+        campaign: '@campaign2'
+        name: "2nd Grade"
+    grade6:
+        campaign: '@campaign2'
+        name: "3rd Grade"

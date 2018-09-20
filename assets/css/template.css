@@ -1,0 +1,96 @@
+body {
+  background: url(/static/img/header-bg.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/static/img/header-bg.jpg', sizingMethod='scale');
+  -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/static/img/header-bg.jpg', sizingMethod='scale')";
+  
+  min-width:800px; /* suppose you want minimun width of 1000px */
+  width: auto !important;  /* Firefox will set width as auto */
+}
+
+a.anchor {
+    display: block;
+    position: relative;
+    top: -75px;
+    visibility: hidden;
+}
+
+.body-container {
+    background: #fff;
+    background-color: white;
+    color: black;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-shadow: 1px 1px 3px 1px rgba(50, 50, 50, 0.50);
+    -moz-box-shadow: 1px 1px 3px 1px rgba(50, 50, 50, 0.50);
+    box-shadow: 1px 1px 3px 1px rgba(50, 50, 50, 0.50);
+}
+
+.required:after {
+  content:" *";
+  color:red;
+}
+
+.back-to-top {
+    cursor: pointer;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display:none;
+}
+
+.dashboard-ticker, .dashboard-ticker .progress{
+  margin-bottom:0px;
+
+}
+
+.drop-shadow {
+  -webkit-box-shadow: 1px 1px 3px 0px rgba(204,204,204,1);
+  -moz-box-shadow: 1px 1px 3px 0px rgba(204,204,204,1);
+  box-shadow: 1px 1px 3px 0px rgba(204,204,204,1);
+}
+
+
+#track span{
+  font-size: 12px;
+  padding-left:5px;
+  padding-right:5px;
+  padding-top:1px;
+  padding-bottom:1px;
+}
+
+
+#trackSplash span {
+ font-size:32px;
+ line-height:40px;
+ color:red;
+}
+
+
+.footer{
+  background:#ccc;
+  padding:0px;
+  margin-right: -15px;
+  margin-left: -15px;
+  border-top:1px solid #888;
+}
+
+
+.image-overlay-text {
+  z-index: 1;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+   /*demo*/
+  bottom: 5px;
+  background: red;
+  max-width:100px;
+  text-align:center
+
+}

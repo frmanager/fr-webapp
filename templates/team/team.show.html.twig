@@ -1,0 +1,143 @@
+{% extends 'template.html.twig' %}
+
+{% if team.imageName is null %}
+{% set profileImageUrl = '/static/img/team-' ~ team.teamType.value ~ '-image-2.png' %}
+{% else %}
+{% set profileImageUrl = '/uploads/team_profile_photos/' ~team.imageName %}
+{% endif %}
+
+
+{% block meta %}
+  <meta property="og:image" content="{{ main_app_url }}{{ profileImageUrl }}"/>
+  <meta property="og:description" content="{{ team.description }}" />
+  <meta property="og:title" content="Help the {{ team.name }}" />
+  <meta property="og:url" content="{{ main_app_url }}/{{ path('team_show', {'campaignUrl': campaignUrl, "teamUrl": team.url}) }}" />
+{% endblock %}
+
+{% block title %}
+  Help the {{ team.name }}
+{% endblock %}
+
+{% block body %}
+{% set number_of_donations = 0 %}
+{% set donation_amount = 0 %}
+{% for donation in team.donations %}
+  {% if donation.donationStatus == "ACCEPTED" %}
+    {% set number_of_donations = number_of_donations + 1 %}
+    {% set donation_amount = donation_amount + donation.amount %}
+  {% endif %}
+{% endfor %}
+
+{% set nonConfirmed = false %}
+<div class="row">
+    <div class="col-md-12">
+        <h1 style="text-align:center;">{{ team.name }}</h1>
+    </div>
+</row>
+<!--
+    <div class="col-md-6">
+        {% if is_granted('ROLE_USER') and app.user.id == team.user.id %}<a href="{{ path('team_edit', {'campaignUrl':campaign.url, 'teamUrl': team.url }) }}" class="btn btn-primary pull-right"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Team</a>{% endif %}
+    </div>
+-->
+</div>
+<hr/>
+<div class="row">
+    <div class="col-sm-6 offset-sm-1">
+        <img src="{{ profileImageUrl }}"  alt="..." width="100%" class="img-fuild rounded">
+    </div>
+    <div class="col-sm-4 offset-sm-1">
+      <div class="row">
+        <div class="col-sm-12">
+              <p class="lead"><strong>${{ donation_amount|number_format(2, '.', ',') }}</strong> of ${{team.fundingGoal|number_format(2, '.', ',')}} goal</p>
+              <div class="progress">
+                  <div
+                      class="progress-bar progress-bar-warning"
+                      role="progressbar"
+                      aria-valuenow="{{ 0 / team.fundingGoal * 100}}"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      style="width:{{ donation_amount / team.fundingGoal * 100}}%;">
+                      {{ (donation_amount / team.fundingGoal * 100)|number_format(2, '.', ',')}}% Complete
+                  </div>
+              </div>
+              <p>Raised by {{ number_of_donations }} donors<p>
+              <hr>
+              <p><a href="{{ path('donation_index', {'campaignUrl': campaign.url, 'teamUrl': team.url, 'type': 'team' }) }}" class="btn btn-primary btn-lg btn-block">DONATE NOW!</a></p>
+              <p><a href="http://www.facebook.com/share.php?u={{ app.request.uri }}" target="_blank" class="btn btn-info btn-block"><i class="fa fa-facebook-official" aria-hidden="true"></i> Share on Facebook</a></p>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-sm-12">
+          <p>Created By <strong>{{team.user.firstName}} {{team.user.lastName}}</strong></p>
+        </div>
+      </div>
+    </div>
+</div>
+<hr/>
+<div class="row">
+    <div class="col-sm-12">
+      <h3>About this Team</h3>
+      <p class="lead">{{ team.description }}</p>
+    </div>
+</div>
+<hr>
+{% if team.teamType.value == "family" %}
+<div class="row">
+    <div class="col-sm-12">
+      <h3>Children</h3>
+    </div><!-- ./column -->
+</div><!-- ./row -->
+<div class="row">
+    {% for teamStudent in teamStudents %}
+    <div class="col-sm-6">
+      <div class="card card-outline-primary my-1">
+        <div class="card-block" style="padding-top: 5px;padding-bottom: 5px;">
+          <div class="row">
+            <div class="col-sm-2" style="padding: 0px 0px 0px 5px;">
+              <img class="img-fluid rounded" src="/static/img/child-avatar-default128.png" alt="Child Avatar Image">
+            </div>
+            <div class="col-sm-10">
+              <p class="card-text">
+                <strong><u>{{ teamStudent.name }}</u></strong>
+                <br>
+                {{ teamStudent.classroom.grade.name }} - {{ teamStudent.classroom.name }}
+              </p>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- ./column -->
+    {% endfor %}
+</div><!-- ./row -->
+{% endif %}
+
+
+{% if team.donations is defined and team.donations|length > 0 %}
+<hr>
+<div class="row">
+    <div class="col-sm-12">
+      <h3>Donations</h3>
+    </div><!-- ./column -->
+</div><!-- ./row -->
+<div class="row">
+    {% for donation in team.donations %}
+      {% if donation.donationStatus == "ACCEPTED" %}
+        <div class="col-sm-6 ">
+          <div class="card card-outline-primary my-1">
+            <div class="card-block" style="padding-top: 5px;padding-bottom: 5px;">
+                  <p class="card-text">
+                    <strong>${{donation.amount|number_format(2, '.', ',')}}</strong> on {{ donation.donatedAt|date('m/d') }}
+                    <br>
+                    {% if donation.donorComment is defined and donation.donorComment != '' %}"{{ donation.donorComment }}" ~ {{donation.donorFirstName|capitalize}} {{donation.donorLastName|capitalize}}{% else %}{{donation.donorFirstName|capitalize}} {{donation.donorLastName|capitalize}}{% endif %}
+                  </p>
+              </div><!-- ./card-block -->
+          </div><!-- ./card -->
+        </div><!-- ./column -->
+      {% endif %}
+    {% endfor %}
+</div><!-- ./row -->
+{% endif %}
+
+
+{% endblock %}
