@@ -92,7 +92,7 @@ class RegistrationController extends Controller
             $fail = true;
           }      
 
-          $userCheck = $em->getRepository('App:User')->findOneByEmail($user->getEmail());
+          $userCheck = $em->getRepository('App:User')->findOneByEmail($params['user']['email']);
           if(!is_null($userCheck)){
             $this->addFlash('warning', 'We apologize, an account already exists with this email.');
             $fail = true;
