@@ -61,27 +61,52 @@ class RegistrationController extends Controller
 
         // 1) build the form
         $user = new User();
-        $form = $this->createForm(UserType::class, $user);
 
-        // 2) handle the submit (will only happen on POST)
-        $form->handleRequest($request);
-        if ($form->isSubmitted()) {
+        if ($request->isMethod('POST')) {
+          $params = $request->request->all();
 
-            $userCheck = $em->getRepository('App:User')->findOneByEmail($user->getEmail());
-            if(!is_null($userCheck)){
-              $this->get('session')->getFlashBag()->add('warning', 'We apologize, an account already exists with this email.');
-              return $this->render('registration/register.html.twig',
-                  array(
-                    'form' => $form->createView(),
-                    'campaign' => $campaign
-                  )
-              );
-            }
+          $fail = false;
 
+          if(!$fail && empty($params['user']['firstName'])){
+            $this->addFlash('warning','First Name is required');
+            $fail = true;
+          }
+
+          if(!$fail && empty($params['user']['lastName'])){
+            $this->addFlash('warning','Last Name is required');
+            $fail = true;
+          }
+
+          if(!$fail && empty($params['user']['email'])){
+            $this->addFlash('warning','Email Address is required');
+            $fail = true;
+          }
+
+          if(!$fail && empty($params['user']['Password']['first'])){
+            $this->addFlash('warning','Password is required');
+            $fail = true;
+          }         
+
+          if($params['user']['Password']['second'] !== $params['user']['Password']['first']){
+            $this->addFlash('warning','Passwords must match');
+            $fail = true;
+          }      
+
+          $userCheck = $em->getRepository('App:User')->findOneByEmail($user->getEmail());
+          if(!is_null($userCheck)){
+            $this->addFlash('warning', 'We apologize, an account already exists with this email.');
+            $fail = true;
+          }
+
+
+          if(!$fail){
             $password = $passwordEncoder->encodePassword($user, $user->getPassword());
+            $user->setUsername($params['user']['email']);
+            $user->setEmail($params['user']['email']);            
+            $user->setFirstName($params['user']['firstName']);
+            $user->setLastName($params['user']['lastName']);            
             $user->setPassword($password);
             $user->setApiKey($password);
-            $user->setUsername($user->getEmail());
             $user->setFundraiserFlag(true);
             $user->setEmailConfirmationCode($this->generateRandomString(8));
             $user->setEmailConfirmationCodeTimestamp(new \DateTime());
@@ -93,7 +118,6 @@ class RegistrationController extends Controller
             }
 
             $user->setUserStatus($userStatus);
-
 
             // 4) save the User!
             $em = $this->getDoctrine()->getManager();
@@ -125,11 +149,12 @@ class RegistrationController extends Controller
             $this->addFlash('success','Thanks for registering. You should receive an email with instructions on how to fully activate your account.');
 
             return $this->redirectToRoute('confirm_email', array('campaignUrl' => $campaign->getUrl()));
+          }
         }
 
         return $this->render('registration/register.html.twig',
             array(
-              'form' => $form->createView(),
+              'user' => $user,
               'campaign' => $campaign
             )
         );
@@ -212,7 +237,7 @@ class RegistrationController extends Controller
 
                 $this->get('mailer')->send($message);
 
-                $this->get('session')->getFlashBag()->add('info', 'New code has been sent to your email, please check your inbox');
+                $this->addFlash('info', 'New code has been sent to your email, please check your inbox');
                 return $this->redirectToRoute('confirm_email', array('campaignUrl' => $campaign->getUrl()));
               }
           }
