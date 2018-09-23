@@ -138,3 +138,6 @@ typings/
 
 # Serverless directories
 .serverless
+
+# Temporary block for Swiftmailer
+/config/packages/swiftmailer.yaml
