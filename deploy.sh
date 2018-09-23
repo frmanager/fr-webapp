@@ -8,6 +8,21 @@ then
     echo "Grabbing .env and swiftmailer config files" 
     cp ../config/dev.env ./.env
     cp ../config/dev.swiftmailer.yaml ./config/packages/swiftmailer.yaml
+elif [ "$1" = "test" ]
+then
+    echo "Environment set to test"
+
+    echo "Setting PHP Paths to support Dreamhost Shared"
+    export PATH=/usr/local/php71/bin:$PATH
+    export PATH=/home/$USER/.php/composer:$PATH
+
+    echo "Grabbing latest from Repo and stashing changes"    
+    git stash
+    git pull
+
+    echo "Grabbing .env and swiftmailer config files"  
+    cp ../config/test.env ./.env
+    cp ../config/prod.swiftmailer.yaml ./config/packages/swiftmailer.yaml    
 elif [ "$1" = "prod" ]
 then
     echo "Environment set to prod"
@@ -24,7 +39,7 @@ then
     cp ../config/prod.env ./.env
     cp ../config/prod.swiftmailer.yaml ./config/packages/swiftmailer.yaml
 else
-    echo 'Must identify "dev" or "prod" environment'
+    echo 'Must identify "dev", "test", or "prod" environment'
     exit 1 # terminate and indicate error
 fi
 
@@ -54,6 +69,11 @@ then
     echo "Dev Composer/Symfony Install/Updates"  
     composer install
     php bin/console cache:clear
+elif [ "$1" = "test" ]
+then
+    echo " Production Composer/Symfony Install/Updates"  
+    composer install --no-dev --optimize-autoloader
+    php bin/console cache:clear --env=prod --no-debug    
 elif [ "$1" = "prod" ]
 then
     echo " Production Composer/Symfony Install/Updates"  
