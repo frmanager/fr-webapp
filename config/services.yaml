@@ -15,7 +15,6 @@ parameters:
     mailer_password: '%env(MAILER_PASSWORD)%'
     mailer_host: '%env(MAILER_HOST)%'  
     
-    
     team_profile_photos_directory: '%kernel.project_dir%/public/uploads/team_profile_photos'
     temp_upload_directory: '%kernel.project_dir%/public/uploads/temp'
 
