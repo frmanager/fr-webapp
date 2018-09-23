@@ -1,8 +1,5 @@
 #!/bin/bash
 echo "FR Manager Application Deploy Script"
-source .env
-
-
 
 if [ "$1" = "dev" ]
 then
@@ -33,6 +30,7 @@ fi
 
 
 echo "Setting Environment Variables"
+source .env
 export APP_ENV=${APP_ENV}
 export MAIN_APP_URL=${MAIN_APP_URL}
 export DATABASE_URL=${DATABASE_URL}
