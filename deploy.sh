@@ -24,7 +24,7 @@ then
     git pull
 
     echo "Grabbing .env and swiftmailer config files"  
-    cp ../config/prod.env ./
+    cp ../config/prod.env ./.env
     cp ../config/prod.swiftmailer.yaml ./config/packages/swiftmailer.yaml
 else
     echo 'Must identify "dev" or "prod" environment'
