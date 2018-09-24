@@ -4,18 +4,19 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 {% block meta %}{% endblock %}
-
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 <title>{% block title %}{% endblock %}</title>
+{% if campaign is defined and campaign.theme is not null %}
+ {% set theme = campaign.theme %}
+{% else %}
+  {% set theme = 'cerulean' %}
+{% endif %}
+ <link rel="shortcut icon" href="{{ asset('static/favicon.ico') }}">
+ <link rel="icon" type="image/x-icon" href="{{ asset('static/favicon.ico') }}"/>
 
-<link rel="stylesheet" href="{{ asset('assets/css/bootswatch_v4/superhero.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/template.css') }}">
-<link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
-
-<!-- Icons -->
-<link href="{{ asset('assets/css/font-awesome.min.css') }}" rel="stylesheet">
-<link href="{{ asset('assets/css/simple-line-icons.css') }}" rel="stylesheet">
+  <!-- WebPack CSS -->
+  <link rel="stylesheet" href="{{ asset('build/app.css') }}">
 
 {% block css %}{% endblock %}
 
@@ -69,59 +70,10 @@
 	<a id="back-to-top" href="#" class="btn btn-primary btn-lg back-to-top" role="button" data-toggle="tooltip" data-placement="left">
 	<i class="fa fa-chevron-up"></i>
 	</a>
-<script type='application/javascript' src="{{ asset('assets/js/libs/jquery-3.2.1.min.js') }}"></script>
-<script type='application/javascript' src="{{ asset('assets/js/libs/tether.min.js') }}"></script>
-<script type='application/javascript' src="{{ asset('assets/js/libs/bootstrap-v4.0.0-alpha.6.min.js') }}"></script>
-<script type='application/javascript' src="{{ asset('assets/js/libs/fastclick.js') }}"></script>
-<script type='application/javascript' src="{{ asset('assets/js/libs/moment.js') }}"></script>
-<script type='application/javascript' src="{{ asset('assets/js/libs/jquery.matchHeight-min.js') }}"></script>
 
- {% block javascripts %}{% endblock %}
-<!-- IE 10 Viewport Bug Fix -->
-<script src="{{ asset('assets/js/ie10-viewport-bug-workaround.js') }}"></script>
-<script type="text/javascript">
-$(document).ready(function() {
-    /*
-    $(".alert-success").fadeTo(2000, 1000).slideUp(1000, function() {
-        $(".alert-success").slideUp(1000);
-    });
-    $(".alert-default").fadeTo(2000, 1000).slideUp(2000, function() {
-        $(".alert-success").slideUp(2000);
-    });
-    $(".alert-info").fadeTo(2000, 1000).slideUp(2000, function() {
-        $(".alert-success").slideUp(2000);
-    });
-*/
-    $(window).scroll(function() {
-        if ($(this).scrollTop() > 50) {
-            $('#back-to-top').fadeIn();
-        } else {
-            $('#back-to-top').fadeOut();
-        }
-    });
-    // scroll body to 0px on click
-    $('#back-to-top').click(function() {
-        $('#back-to-top').tooltip('hide');
-        $('body,html').animate({
-            scrollTop: 0
-        }, 800);
-        return false;
-    });
-    $('#back-to-top').tooltip('show');
-    $(function() {
-        FastClick.attach(document.body);
-    });
+  <!-- WebPack JS -->
+  <script src="{{ asset('build/app.js') }}"></script>
 
-
-      $(document).ready(function($) {
-          $(".clickable-row").click(function() {
-              window.location = $(this).data("href");
-          });
-          $(".clickable-row").css('cursor', 'pointer');
-
-      });
-
-});
-</script>
+{% block javascripts %}{% endblock %}
 </body>
 </html>
