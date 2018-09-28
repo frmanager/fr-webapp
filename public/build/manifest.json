@@ -3,7 +3,7 @@
   "build/app.css": "/build/app.css",
   "build/homepage.js": "/build/homepage.js",
   "build/homepage.css": "/build/homepage.css",
-  "build/donation.js": "/build/donation.js",
-  "build/donation.css": "/build/donation.css",
+  "build/donation-index.js": "/build/donation-index.js",
+  "build/donation-index.css": "/build/donation-index.css",
   "build/team-edit.js": "/build/team-edit.js"
 }
