@@ -94,3 +94,13 @@ a.anchor {
   text-align:center
 
 }
+
+.thumb {
+  display: inline-block;
+  max-width: 200px;
+  max-height: 200px;
+  margin: 5px;
+  overflow:hidden; /* this is important */
+  background-position: center center;
+  background-size: cover;
+}

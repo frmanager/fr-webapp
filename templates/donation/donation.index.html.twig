@@ -1,7 +1,10 @@
 {% extends 'template.html.twig' %}
 
 {% block title %}Donate to the {{ campaign.name}} Campaign{% endblock %}
-{% block css %}<link rel="stylesheet" href="{{ asset('build/donation.css') }}">{% endblock%}
+{% block css %}
+  <link rel="stylesheet" href="{{ asset('build/donation-index.css') }}">
+{% endblock %}
+
 {% block body %}
   {% set campaignUrl = null %}
   {% set campaignUrl = app.request.attributes.get('_route_params')['campaignUrl'] %}
@@ -546,7 +549,7 @@
         <div class="col-md-12">
           <input type="hidden" id="donation_campaignID" name="donation[campaignID]" value="{{campaign.id}}">
           <input type="hidden" id="donation_donationType" name="donation[donationType]" value="{{donationType}}">
-          <button type="submit" id="submit" class="btn btn-primary btn-lg btn-block">DONATE</button>
+          <button type="button" id="submitButton" class="btn btn-primary btn-lg btn-block">DONATE</button>
         </div>
         <!-- ./column -->
       </div>
@@ -664,5 +667,5 @@
 {% endblock %}
 
 {% block javascripts %}
-<script src="{{ asset('build/donation.js') }}"></script>
+<script src="{{ asset('build/donation-index.js') }}"></script>
 {% endblock %}
