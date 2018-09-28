@@ -94,3 +94,9 @@ a.anchor {
   text-align:center
 
 }
+
+#yourId {
+  width: 200px;
+  height: 150px;
+  position:relative; /* or fixed or absolute */
+}
