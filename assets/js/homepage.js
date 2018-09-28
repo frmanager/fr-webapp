@@ -6,7 +6,6 @@ const $ = require('jquery');
 require('bootstrap');
 require('pace');
 require('perfect-scrollbar');
-require('datatables.net-bs4');
 
 import '../css/simple-line-icons.css';
 import '../css/fontawesome.min.css';

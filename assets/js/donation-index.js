@@ -10,6 +10,8 @@ require('fastclick');
 import {Spinner} from '../js/libs/spin.js';
 import '../css/spin.css';
 
+$(document).ready(function($){
+
   //called when key is pressed in textbox
   $("#donation_amount, #donation_cc_expirationMonth, #donation_cc_expirationYear, #donation_cc_cvv").keypress(function(e) {
     //if the letter is not digit then display error and don't type anything
@@ -33,8 +35,7 @@ import '../css/spin.css';
   })
 
   var submitted = false;
-
-  $( "#submit" ).click(function() {
+  $( "#submitButton" ).click(function() {
     if(!submitted){
       console.log('Submitting form');
       var failed = false;
@@ -78,12 +79,13 @@ import '../css/spin.css';
 
         var target = document.getElementById('overlay_center');
         var spinner = new Spinner(opts).spin(target);
-        $("#submit").prop("disabled",true);
-        $( "#form" ).submit();
+        $("#submitButton").prop("disabled",true);
+        document.getElementById("form").submit();
 
       }else{
         console.log('Form was already submitted');
       }
     }
-});
+  });
 
+});
