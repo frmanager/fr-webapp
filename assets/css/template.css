@@ -95,8 +95,12 @@ a.anchor {
 
 }
 
-#yourId {
-  width: 200px;
-  height: 150px;
-  position:relative; /* or fixed or absolute */
+.thumb {
+  display: inline-block;
+  max-width: 200px;
+  max-height: 200px;
+  margin: 5px;
+  overflow:hidden; /* this is important */
+  background-position: center center;
+  background-size: cover;
 }
