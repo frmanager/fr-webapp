@@ -1,11 +1,7 @@
 // ...
 
 const $ = require('jquery');
-require('popper.js')
-require('tether')
-require('pace');
-require('bootstrap');
-require('fastclick');
+import 'perfect-scrollbar';
 import 'datatables.net-bs4';
 
 import '../js/libs/jquery.countdown.min.js';

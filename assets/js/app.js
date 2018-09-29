@@ -4,7 +4,6 @@ import 'jquery';
 const $ = require('jquery');
 // JS is equivalent to the normal "bootstrap" package
 // no need to set this to a variable, just require it
-import 'popper.js';
 import 'tether';
 import 'pace';
 import 'perfect-scrollbar';
@@ -19,7 +18,6 @@ import '../css/template.css';
 //Custom scripts required by this view -->
 
 //LEGACY -->
-import '../js/libs/bootstrap.min.js';
 import '../js/libs/jquery.countdown.min.js';
 import '../js/ie10-viewport-bug-workaround.js';
 
