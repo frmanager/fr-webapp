@@ -6,9 +6,6 @@ body {
   background-size: cover;
   filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/static/img/header-bg.jpg', sizingMethod='scale');
   -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/static/img/header-bg.jpg', sizingMethod='scale')";
-  
-  min-width:800px; /* suppose you want minimun width of 1000px */
-  width: auto !important;  /* Firefox will set width as auto */
 }
 
 a.anchor {

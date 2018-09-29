@@ -11,7 +11,7 @@
     "perfect-scrollbar": "^1.4.0",
     "popper.js": "^1.14.4",
     "spin.js": "^4.0.0",
-    "tether": "^1.4.4",
+    "tether": "^1.4.5",
     "webpack-notifier": "^1.6.0"
   }
 }
