@@ -1,16 +1,16 @@
 // ...
+import 'jquery';
 
 const $ = require('jquery');
 // JS is equivalent to the normal "bootstrap" package
 // no need to set this to a variable, just require it
-require('popper.js');
-require('tether');
-require('pace');
-require('perfect-scrollbar');
-require('datatables.net-bs4');
-require('fastclick');
-
+import 'popper.js';
+import 'tether';
+import 'pace';
+import 'perfect-scrollbar';
+import 'datatables.net-bs4';
 import 'bootstrap';
+
 import '../css/simple-line-icons.css';
 import '../css/fontawesome.min.css';
 import '../css/bootswatch_v4/litera.min.css';
