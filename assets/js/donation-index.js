@@ -5,7 +5,6 @@ require('popper.js')
 require('tether')
 require('pace');
 require('bootstrap');
-require('fastclick');
 
 import {Spinner} from '../js/libs/spin.js';
 import '../css/spin.css';

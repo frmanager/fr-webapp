@@ -1,15 +1,14 @@
 // ...
+import 'jquery';
 
 const $ = require('jquery');
 // JS is equivalent to the normal "bootstrap" package
 // no need to set this to a variable, just require it
-require('popper.js')
-require('tether')
-require('pace');
-require('perfect-scrollbar');
-require('datatables.net-bs4');
-require('fastclick');
-
+import 'tether';
+import 'pace';
+import 'perfect-scrollbar';
+import 'datatables.net-bs4';
+import 'bootstrap';
 
 import '../css/simple-line-icons.css';
 import '../css/fontawesome.min.css';
@@ -19,7 +18,6 @@ import '../css/template.css';
 //Custom scripts required by this view -->
 
 //LEGACY -->
-import '../js/libs/bootstrap.min.js';
 import '../js/libs/jquery.countdown.min.js';
 import '../js/ie10-viewport-bug-workaround.js';
 
@@ -117,7 +115,7 @@ $(document).ready(function($){
       window.dispatchEvent(new Event('resize'));
     }, 62.5);
   }
-
+  $('.navbar-collapse')
   /* ---------- Main Menu Open/Close, Min/Full ---------- */
   $('.navbar-toggler').click(function(){
 

@@ -48,6 +48,7 @@
     <div class="col-sm-4 offset-sm-1">
       <div class="row">
         <div class="col-sm-12">
+              {% if is_granted('ROLE_USER') and app.user.id == team.user.id %}<p><small><a href="{{ path('team_edit', {'campaignUrl':campaign.url, 'teamUrl': team.url }) }}" class="btn btn-warning pull-right"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Your Team</a></small></p>{% endif %}
               <p class="lead"><strong>${{ donation_amount|number_format(2, '.', ',') }}</strong> of ${{team.fundingGoal|number_format(2, '.', ',')}} goal</p>
               <div class="progress">
                   <div
@@ -92,7 +93,7 @@
     {% for teamStudent in teamStudents %}
     <div class="col-sm-6">
       <div class="card card-outline-primary my-1">
-        <div class="card-block" style="padding-top: 5px;padding-bottom: 5px;">
+        <div class="card-body" style="padding-top: 5px;padding-bottom: 5px;">
           <div class="row">
             <div class="col-sm-2" style="padding: 0px 0px 0px 5px;">
               <img class="img-fluid rounded" src="/static/img/child-avatar-default128.png" alt="Child Avatar Image">
@@ -123,9 +124,9 @@
 <div class="row">
     {% for donation in team.donations %}
       {% if donation.donationStatus == "ACCEPTED" %}
-        <div class="col-sm-6 ">
+        <div class="col-sm-6">
           <div class="card card-outline-primary my-1">
-            <div class="card-block" style="padding-top: 5px;padding-bottom: 5px;">
+            <div class="card-body" style="padding-top: 5px;padding-bottom: 5px;">
                   <p class="card-text">
                     <strong>${{donation.amount|number_format(2, '.', ',')}}</strong> on {{ donation.donatedAt|date('m/d') }}
                     <br>

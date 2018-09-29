@@ -87,18 +87,20 @@
 
 </head>
 <body id="body">
-<nav class="navbar fixed-top navbar-toggleable-sm bg-primary">
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+ {% if campaign is defined %}
+   <a class="navbar-brand d-none d-sm-block" href="{{ path('campaign_index', {'campaignUrl': campaignUrl}) }}">{{campaign.name}}</a>
+ {% endif %}
   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
   </button>
    {% if campaign is defined %}
-  <a class="navbar-brand" href="{{ path('campaign_index', {'campaignUrl': campaignUrl}) }}">{{campaign.name}}</a>
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
     {% if campaign is defined and not notStarted and not isEnded %}
 		<ul class="navbar-nav mr-auto">
   			<li class="nav-item{% if app.request.attributes.get('_route')=='campaign_index'%} active{% endif %}">
   			     <a href="{{ path('campaign_dashboard', {'campaignUrl': campaignUrl}) }}" class="nav-link">
-  			     <i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard </a>
+  			     <i class="fas fa-tachometer-alt" aria-hidden="true"></i> Home </a>
   			</li>
         <li class="nav-item{% if app.request.attributes.get('_route')=='donation_index'%} active{% endif %}">
           {% if app.request.attributes.get('_route') == 'team_show' %}
@@ -106,7 +108,7 @@
           {% elseif app.request.attributes.get('_route') == 'classroom_show' %}
             <a href="{{ path('donation_index', {'campaignUrl':campaign.url, 'classroomID':classroom.id, 'type':'classroom'}) }}" class="nav-link">Donate</a>
           {% else %}
-            <a href="{{ path('donation_index', {'campaignUrl':campaign.url}) }}" class="nav-link">Donate</a>
+            <a href="{{ path('donation_index', {'campaignUrl':campaign.url}) }}" class="nav-link"><i class="fas fa-donate" aria-hidden="true"></i> Donate</a>
           {% endif %}
 
         </li>
@@ -146,7 +148,7 @@
               <a class="dropdown-item" href="{{ path('profile_show', {'campaignUrl': campaignUrl}) }}"><i class="fa fa-user" aria-hidden="true"></i> View Profile</a>
               {% if hasTeamFlag and userTeam is defined %}
               <hr/>
-              <a class="dropdown-item" href="{{ path('team_edit', {'campaignUrl': campaignUrl, 'teamUrl': userTeam.url}) }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Manage Team</a>
+              <a class="dropdown-item" href="{{ path('team_edit', {'campaignUrl': campaignUrl, 'teamUrl': userTeam.url}) }}"><i class="fas fa-pencil-alt" aria-hidden="true"></i> Manage Team</a>
               <a class="dropdown-item" href="{{ path('team_show', {'campaignUrl': campaignUrl, 'teamUrl': userTeam.url}) }}"><i class="fa fa-users" aria-hidden="true"></i> View Team</a>
               {% else %}
               <a class="dropdown-item" href="{{ path('register_team_select', {'campaignUrl': campaignUrl}) }}">Register Team</a>
