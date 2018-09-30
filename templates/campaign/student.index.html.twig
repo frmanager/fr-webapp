@@ -1,0 +1,48 @@
+{% extends 'template.html.twig' %}
+
+{% block title %}Student Rankings{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col">
+        <h1>Student Rankings</h1>
+    </div>
+</div>
+<div class="clearfix"></div>
+<hr/>
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-10 offset-md-1">
+          <table id="studentIndexTable" class="table table-hover table-outline mb-0">
+              <thead class="thead-default">
+                  <tr>
+                      <th>Grade</th>
+                      <th>Classroom's Name</th>
+                      <th>Student's Name</th>
+                      <th>Donations</th>
+                      <th>Rank</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for student in students %}
+                    {% if student.donation_amount > 0 %}
+                        <tr>
+                            <td>{{ student.grade_name}}</td>
+                            <td><a href="{{ path('classroom_show', {'campaignUrl': campaign.url, 'id': student.classroom_id }) }}">{{ student.classroom_name }}</a></td>
+                            <td>{{ student.student_name }}</td>
+                            <td style="text-align:right;">{% if not student.donation_amount == 0 %}${{ student.donation_amount|number_format(2, '.', ',')}}{% endif %}</td>
+                            <td style="text-align:center;vertical-align: middle;"><span class="badge badge-{% if student.rank == 1 %}success{% elseif student.rank == 2 %}warning{% elseif student.rank == 3 %}primary{% else %}default{% endif %}">{{ student.rank}}</span></td>
+                        </tr>
+                    {% endif %}
+                  {% endfor %}
+              </tbody>
+          </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

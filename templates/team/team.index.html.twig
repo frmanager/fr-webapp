@@ -1,22 +1,21 @@
 {% extends 'template.html.twig' %}
-{% use 'bootstrap_3_layout.html.twig' %}
 
 {% block css %}
-<!-- Datatables styles -->
-<link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 {% endblock %}
+
+{% block title %}Team Rankings{% endblock %}
 
 {% block body %}
     <div class="row">
-        <div class="col-md-12">
-            <h1>Teams</h1>
+        <div class="col">
+            <h1>Team Rankings</h1>
             <hr/>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-8 offset-md-2">
+        <div class="col-sm-8 offset-md-2">
             <br/>
-            <table class="table table-responsive table-hover table-outline mb-0">
+            <table id="teamIndexTable" class="table table-hover table-outline mb-0">
                 <thead>
                     <tr>
                         <th>Type</th>
@@ -45,11 +44,4 @@
 {% endblock %}
 
 {% block javascripts %}
-  <script type="application/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
-  <script type="application/javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('.table').DataTable({ "pageLength": 50, "order": [[ 2, "desc" ]]});
-        });
-    </script>
 {% endblock %}

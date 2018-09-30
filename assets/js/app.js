@@ -7,8 +7,8 @@ const $ = require('jquery');
 import 'tether';
 import 'pace';
 import 'perfect-scrollbar';
-import 'datatables.net-bs4';
 import 'bootstrap';
+import 'datatables.net-bs4';
 
 import '../css/simple-line-icons.css';
 import '../css/fontawesome.min.css';
@@ -58,14 +58,15 @@ $(document).ready(function($){
 
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
+        $('#teamIndexTable').DataTable({ "pageLength": 20, "order": [[ 2, "desc" ]]});
+        $('#gradeIndexTable').DataTable({ "pageLength": 50, "order": [[ 2, "desc" ]]});   
+        $('#classroomIndexTable').DataTable({ "pageLength": 50, "order": [[ 2, "desc" ]]});          
+        $('#studentIndexTable').DataTable({ "pageLength": 50, "order": [[ 3, "desc" ]]});  
 
         $('#donationIndexTable').DataTable({ "pageLength": 100, "order": [[ 0, "desc" ]]})
-        $('#teamIndexTable').DataTable({ "pageLength": 20, "order": [[ 1, "asc" ]]});
         $('#teamVerifyTable').DataTable({ "pageLength": 50, "order": [[ 3, "asc" ]]});        
         $('#campaignAwardIndexTable').DataTable({ "pageLength": 20, "order": [[ 1, "asc" ]]});       
-        $('#classroomIndexTable').DataTable({ "pageLength": 50, "order": [[ 3, "asc" ]]});    
-        $('#studentIndexTable').DataTable({ "pageLength": 50, "order": [[ 3, "asc" ]]});  
-        $('#gradeIndexTable').DataTable({ "pageLength": 50, "order": [[ 1, "asc" ]]});          
+
         $('#userIndexTable').DataTable({ "pageLength": 50, "order": [[ 4, "desc" ]]});     
         $('#teacherIndexTable').DataTable({ "pageLength": 50, "order": [[ 3, "asc" ]]});  
         $('#donationVerifyTable').DataTable({ "pageLength": 50, "order": [[ 3, "asc" ]]});                  
