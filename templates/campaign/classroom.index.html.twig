@@ -1,16 +1,14 @@
 {% extends 'template.html.twig' %}
 
-{% block title %}Classrooms{% endblock %}
+{% block title %}Classroom Rankings{% endblock %}
 
 {% block css %}
-<!-- Datatables styles -->
-<link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
-<div class="row" style="border-bottom:1px;">
-    <div class="col-md-4">
-        <h1>Classrooms</h1>
+<div class="row">
+    <div class="col">
+        <h1>Classroom Rankings</h1>
     </div>
 </div>
 <div class="clearfix"></div>
@@ -18,7 +16,7 @@
 <div class="clearfix"></div>
 <div class="row">
     <div class="col-md-10 offset-md-1">
-          <table class="table table-hover table-outline mb-0">
+          <table id="classroomIndexTable" class="table table-hover table-outline mb-0">
               <thead class="thead-default">
                   <tr>
                       <th>Grade</th>
@@ -43,11 +41,4 @@
 {% endblock %}
 
 {% block javascripts %}
-  <script type="application/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
-  <script type="application/javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('.table').DataTable({ "pageLength": 50, "order": [[ 2, "desc" ]]});
-        });
-    </script>
 {% endblock %}

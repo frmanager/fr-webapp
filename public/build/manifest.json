@@ -4,8 +4,8 @@
   "build/homepage.js": "/build/homepage.js",
   "build/homepage.css": "/build/homepage.css",
   "build/campaign-dashboard.js": "/build/campaign-dashboard.js",
-  "build/campaign-index.js": "/build/campaign-index.js",
   "build/donation-index.js": "/build/donation-index.js",
   "build/donation-index.css": "/build/donation-index.css",
+  "build/campaign-index.js": "/build/campaign-index.js",
   "build/team-edit.js": "/build/team-edit.js"
 }
