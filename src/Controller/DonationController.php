@@ -27,6 +27,9 @@ use PayPal\Exception\PayPalConnectionException;
 use App\Utils\CampaignHelper;
 use App\Entity\Donation;
 use App\Utils\DonationHelper;
+use App\Entity\Classroom;
+use App\Entity\Team;
+use App\Entity\Campaign;
 
 
 use \DateTime;
@@ -52,7 +55,7 @@ class DonationController extends Controller
 
     $em = $this->getDoctrine()->getManager();
 
-    $campaign = $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
+    $campaign = $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
 
     /*
     * There are 4 types of donations:
@@ -70,7 +73,7 @@ class DonationController extends Controller
             $classroomID = $request->query->get('classroomID');
             $logger->debug("ClassroomID is found and set to ".$classroomID);
             //CODE TO CHECK TO SEE IF CLASSROOM EXISTS
-            $classroom = $em->getRepository('App:Classroom')->findOneBy(array('id'=>$classroomID, 'campaign' => $campaign));
+            $classroom = $em->getRepository(Classroom::class)->findOneBy(array('id'=>$classroomID, 'campaign' => $campaign));
             if(!is_null($classroom)){
               $logger->debug("Using Classroom #".$classroom->getId()." in donation form.");
               $donation['classroom'] = $classroom;
@@ -81,7 +84,7 @@ class DonationController extends Controller
               $teamUrl = $request->query->get('teamUrl');
               $logger->debug("teamUrl is found and set to ".$teamUrl);
               //CODE TO CHECK TO SEE IF TEAM EXISTS
-              $team = $em->getRepository('App:Team')->findOneBy(array('url'=>$teamUrl, 'campaign' => $campaign));
+              $team = $em->getRepository(Team::class)->findOneBy(array('url'=>$teamUrl, 'campaign' => $campaign));
               if(!is_null($team)){
               $logger->debug("Using Team #".$team->getId()." in donation form.");
                 $donation['team'] = $team;
@@ -129,7 +132,7 @@ class DonationController extends Controller
             $fail = true;
           }
           if(!$fail){
-            $teamCheck = $em->getRepository('App:Team')->findOneBy(array('id'=>$params['donation']['teamId'], 'campaign' => $campaign));
+            $teamCheck = $em->getRepository(Team::class)->findOneBy(array('id'=>$params['donation']['teamId'], 'campaign' => $campaign));
             if(is_null($teamCheck)){
               $this->addFlash('warning','No Valid Team was selected');
               $fail = true;
@@ -141,7 +144,7 @@ class DonationController extends Controller
             $fail = true;
           }
           if(!$fail){
-            $classroomCheck = $em->getRepository('App:Classroom')->findOneBy(array('id'=>$params['donation']['classroomID'], 'campaign' => $campaign));
+            $classroomCheck = $em->getRepository(Classroom::class)->findOneBy(array('id'=>$params['donation']['classroomID'], 'campaign' => $campaign));
             if(is_null($classroomCheck)){
               $this->addFlash('warning','No Valid Classroom was selected');
               $fail = true;
@@ -154,7 +157,7 @@ class DonationController extends Controller
           }
 
           if(!$fail){
-            $classroomCheck = $em->getRepository('App:Classroom')->findOneBy(array('id'=>$params['donation']['classroomID'], 'campaign' => $campaign));
+            $classroomCheck = $em->getRepository(Classroom::class)->findOneBy(array('id'=>$params['donation']['classroomID'], 'campaign' => $campaign));
             if(is_null($classroomCheck)){
               $this->addFlash('warning','No Valid Classroom was selected');
               $fail = true;
@@ -463,8 +466,8 @@ class DonationController extends Controller
     $data = array(
       'donation' => $donation,
       'donationType' => $donationType,
-      'teams' => $em->getRepository('App:Team')->findByCampaign($campaign),
-      'classrooms' => $em->getRepository('App:Classroom')->findByCampaign($campaign),
+      'teams' => $em->getRepository(Team::class)->findByCampaign($campaign),
+      'classrooms' => $em->getRepository(Classroom::class)->findByCampaign($campaign),
       'campaign' => $campaign,
     );
 
@@ -494,7 +497,7 @@ class DonationController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $campaign = $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
+        $campaign = $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
 
 
         $failure = false;
@@ -508,7 +511,7 @@ class DonationController extends Controller
 
         if(!$failure){
           $logger->debug("Looking for donation record with Transaction ID ".$transactionId);
-          $donation = $em->getRepository('App:Donation')->findOneBy(array('transactionId'=>$transactionId, 'campaign' => $campaign));
+          $donation = $em->getRepository(Donation::class)->findOneBy(array('transactionId'=>$transactionId, 'campaign' => $campaign));
         }
 
         if(!$failure && is_null($donation)){

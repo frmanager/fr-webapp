@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Classroom;
+use App\Entity\Campaign;
 use App\Entity\Grade;
 use App\Utils\ValidationHelper;
 use App\Utils\CSVHelper;
@@ -35,7 +36,7 @@ class ClassroomController extends Controller
       $entity = 'Classroom';
       $em = $this->getDoctrine()->getManager();
 
-      $campaign = $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
+      $campaign = $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
 
       $queryHelper = new QueryHelper($em, $logger);
       $tempDate = new DateTime();
@@ -64,11 +65,11 @@ class ClassroomController extends Controller
         //$logger->debug(print_r($student->getDonations()));
         $em = $this->getDoctrine()->getManager();
 
-        $campaign = $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
-        $classroom = $this->getDoctrine()->getRepository('App:'.strtolower($entity))->findOneById($classroom->getId());
+        $campaign = $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
+        $classroom = $this->getDoctrine()->getRepository(Classroom::class)->findOneById($classroom->getId());
 
         $qb = $em->createQueryBuilder()->select('u')
-               ->from('App:Campaignaward', 'u')
+               ->from('App\Entity\Campaignaward', 'u')
                ->andWhere('u.campaign = :campaignID')
                ->setParameter('campaignID', $campaign->getId())
                ->orderBy('u.amount', 'DESC');

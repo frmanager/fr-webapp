@@ -33,7 +33,7 @@ class CampaignawardController extends Controller
         $em = $this->getDoctrine()->getManager();
 
 
-        $campaignawards = $em->getRepository('App:'.$entity)->findAll();
+        $campaignawards = $em->getRepository(Campaignaward::class)->findAll();
 
         return $this->render(strtolower($entity).'/index.html.twig', array(
             'campaignawards' => $campaignawards,
@@ -55,7 +55,7 @@ class CampaignawardController extends Controller
     {
       $limit = 3;
       $em = $this->getDoctrine()->getManager();
-      $campaign =  $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
+      $campaign =  $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
       $queryHelper = new QueryHelper($em, $logger);
       $reportDate = $queryHelper->convertToDay(new DateTime());
 

@@ -5,6 +5,13 @@
 namespace App\Utils;
 
 use Doctrine\ORM\EntityManager;
+use App\Entity\DonationDatabase;
+use App\Entity\Classroom;
+use App\Entity\Campaign;
+use App\Entity\CampaignAward;
+use App\Entity\Team;
+use App\Entity\Campaignawardtype;
+use App\Entity\Campaignawardstyle;
 use DateTime;
 use Monolog\Logger;
 
@@ -78,10 +85,10 @@ class QueryHelper
                       g.name as grade_name,
                       sum(d.amount) as donation_amount,
                       count(d.amount) as total_donations
-                 FROM App:Grade g
-      LEFT OUTER JOIN App:Classroom c
+                 FROM App\Entity\Grade g
+      LEFT OUTER JOIN App\Entity\Classroom c
                  WITH g.id = c.grade
-      LEFT OUTER JOIN App:DonationDatabase d
+      LEFT OUTER JOIN App\Entity\DonationDatabase d
                  WITH c.id = d.classroom
                    %s
                    %s
@@ -129,11 +136,11 @@ class QueryHelper
                       t.fundingGoal as team_funding_goal,
                       sum(d.amount) as donation_amount,
                       count(d.amount) as total_donations
-                 FROM App:Team t
-                 JOIN App:TeamType tt
+                 FROM App\Entity\Team t
+                 JOIN App\Entity\TeamType tt
                  WITH tt.id = t.teamType
                    %s
-      LEFT OUTER JOIN App:DonationDatabase d
+      LEFT OUTER JOIN App\Entity\DonationDatabase d
                  WITH t.id = d.team
                    %s
                    %s
@@ -172,13 +179,13 @@ class QueryHelper
                       g.name as grade_name,
                       sum(d.amount) as donation_amount,
                       count(d.amount) as total_donations
-                 FROM App:Student s
-      LEFT OUTER JOIN App:Classroom c
+                 FROM App\Entity\Student s
+      LEFT OUTER JOIN App\Entity\Classroom c
                  WITH c.id = s.classroom
-      LEFT OUTER JOIN App:DonationDatabase d
+      LEFT OUTER JOIN App\Entity\DonationDatabase d
                  WITH s.id = d.student
                    %s
-      LEFT OUTER JOIN App:Grade g
+      LEFT OUTER JOIN App\Entity\Grade g
                  WITH g.id = c.grade
                    %s
                 WHERE s.campaign = %s
@@ -202,7 +209,7 @@ class QueryHelper
 
         $queryString = sprintf('SELECT sum(d.amount) as donation_amount,
                                        count(d.amount) as total_donations
-                                  FROM App:Donation d
+                                  FROM App\Entity\Donation d
                                  WHERE d.campaign = %s
                                    AND d.donationStatus = \'ACCEPTED\'
                                   %s', $campaign->getId(), $date);
@@ -236,11 +243,11 @@ class QueryHelper
                                        g.name as grade_name,
                                        sum(d.amount) as donation_amount,
                                        count(d.amount) as total_donations
-                                  FROM App:Classroom t
-                       LEFT OUTER JOIN App:DonationDatabase d
+                                  FROM App\Entity\Classroom t
+                       LEFT OUTER JOIN App\Entity\DonationDatabase d
                                   WITH t.id = d.classroom
                                    %s
-                                  JOIN App:Grade g
+                                  JOIN App\Entity\Grade g
                                   WITH g.id = t.grade
                                     %s
                                  WHERE t.campaign = %s
@@ -277,11 +284,11 @@ class QueryHelper
                         d.donatedAt as donated_at,
                         sum(d.amount) as donation_amount,
                         count(d.amount) as total_donations
-                   FROM App:Classroom t
-                   JOIN App:DonationDatabase d
+                   FROM App\Entity\Classroom t
+                   JOIN App\Entity\DonationDatabase d
                    WITH t.id = d.classroom
                       %s
-                   JOIN App:Grade g
+                   JOIN App\Entity\Grade g
                    WITH g.id = t.grade
                       %s
                   WHERE t.campaign = %s
@@ -319,10 +326,10 @@ class QueryHelper
                       t.funding_goal as team_funding_goal
                       sum(d.amount) as donation_amount,
                       count(d.amount) as total_donations
-                 FROM App:Teams t
-      LEFT OUTER JOIN App:TeamType tt
+                 FROM App\Entity\Teams t
+      LEFT OUTER JOIN App\Entity\TeamType tt
                  WITH tt.id = t.teamType
-      LEFT OUTER JOIN App:DonationDatabase d
+      LEFT OUTER JOIN App\Entity\DonationDatabase d
                  WITH t.id = d.team
                    %s
                    %s
@@ -479,10 +486,10 @@ class QueryHelper
     public function getCampaignAwards($campaign, $type, $style)
     {
 
-        $campaignawardtype = $this->em->getRepository('App:Campaignawardtype')->findOneByValue('classroom');
-        $campaignawardstyle = $this->em->getRepository('App:Campaignawardstyle')->findOneByValue('level');
+        $campaignawardtype = $this->em->getRepository(Campaignawardtype::class)->findOneByValue('classroom');
+        $campaignawardstyle = $this->em->getRepository(Campaignawardstyle::class)->findOneByValue('level');
         $qb = $this->em->createQueryBuilder()->select('u')
-             ->from('App:Campaignaward', 'u')
+             ->from('App\Entity\Campaignaward', 'u')
              ->andWhere('u.campaignawardtype = :awardType')
              ->andWhere('u.campaignawardstyle = :awardStyle')
              ->andWhere('u.campaign = :campaignID')

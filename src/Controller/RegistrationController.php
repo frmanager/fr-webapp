@@ -6,6 +6,7 @@ use Psr\Log\LoggerInterface;
 use App\Form\UserType;
 use App\Entity\User;
 use App\Entity\Team;
+use App\Entity\Grade;
 use App\Entity\TeamStudent;
 use App\Entity\Campaign;
 use App\Entity\CampaignUser;
@@ -39,7 +40,7 @@ class RegistrationController extends Controller
           $routeParams = $request->attributes->get('_route_params');
           if (array_key_exists('campaignUrl', $routeParams)){
             $em = $this->getDoctrine()->getManager();
-            $campaign = $em->getRepository('App:Campaign')->findOneByUrl($routeParams['campaignUrl']);
+            $campaign = $em->getRepository(Campaign::class)->findOneByUrl($routeParams['campaignUrl']);
           }
         }
 
@@ -49,7 +50,7 @@ class RegistrationController extends Controller
           $logger->debug("User is already logged in and has an account. Checking for email confirmation");
           $user = $this->get('security.token_storage')->getToken()->getUser();
           if($user->getUserStatus()->getName() == "Confirmed"){
-            $team = $em->getRepository('App:Team')->findOneBy(array('user' => $user, 'campaign' => $campaign));
+            $team = $em->getRepository(Team::class)->findOneBy(array('user' => $user, 'campaign' => $campaign));
             if(is_null($team)){
               $this->get('session')->getFlashBag()->add('warning', 'Hi, it looks like you have not completed your team registration yet');
               return $this->redirectToRoute('register_team_select', array('campaignUrl' => $campaign->getUrl()));
@@ -92,7 +93,7 @@ class RegistrationController extends Controller
             $fail = true;
           }      
 
-          $userCheck = $em->getRepository('App:User')->findOneByEmail($params['user']['email']);
+          $userCheck = $em->getRepository(User::class)->findOneByEmail($params['user']['email']);
           if(!is_null($userCheck)){
             $this->addFlash('warning', 'We apologize, an account already exists with this email.');
             $fail = true;
@@ -111,7 +112,7 @@ class RegistrationController extends Controller
             $user->setEmailConfirmationCode($this->generateRandomString(8));
             $user->setEmailConfirmationCodeTimestamp(new \DateTime());
             //Get User Status
-            $userStatus = $em->getRepository('App:UserStatus')->findOneByName('Registered');
+            $userStatus = $em->getRepository(UserStatus::class)->findOneByName('Registered');
 
             if(!empty($userStatus)){
               $logger->debug('UserStatus of Registered could not be found');
@@ -171,10 +172,10 @@ class RegistrationController extends Controller
       $this->denyAccessUnlessGranted('ROLE_USER');
 
       $em = $this->getDoctrine()->getManager();
-      $campaign =  $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
-      $teamTypes =  $em->getRepository('App:TeamType')->findAll();
+      $campaign =  $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
+      $teamTypes =  $em->getRepository(TeamType::class)->findAll();
 
-      $campaign = $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
+      $campaign = $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
 
       //Verifying if user has completed email confirmation
       $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -184,7 +185,7 @@ class RegistrationController extends Controller
       }
 
       //Make sure user doesn't already have a team setup for this campaign.
-      $teamCheck = $em->getRepository('App:Team')->findOneBy(array('campaign' => $campaign, 'user' => $this->get('security.token_storage')->getToken()->getUser()));
+      $teamCheck = $em->getRepository(Team::class)->findOneBy(array('campaign' => $campaign, 'user' => $this->get('security.token_storage')->getToken()->getUser()));
       if(!is_null($teamCheck)){
         $this->get('session')->getFlashBag()->add('warning', 'Unfortunatley, you can only have one team per campaign.');
         return $this->redirectToRoute('team_show', array('campaignUrl' => $campaign->getUrl(), 'teamUrl' => $teamCheck->getUrl()));
@@ -214,7 +215,7 @@ class RegistrationController extends Controller
 
           $this->denyAccessUnlessGranted('ROLE_USER');
 
-          $campaign = $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
+          $campaign = $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
 
           $user = $this->get('security.token_storage')->getToken()->getUser();
           if(null !== $request->query->get('action')){
@@ -275,14 +276,14 @@ class RegistrationController extends Controller
               if(!$fail){
                 $this->addFlash('warning','Thank you for confirming your account');
                 $user->setEmailConfirmationCode = null;
-                $userStatus =  $em->getRepository('App:UserStatus')->findOneByName("CONFIRMED");
+                $userStatus =  $em->getRepository(UserStatus::class)->findOneByName("CONFIRMED");
                 $user->setUserStatus($userStatus);
                 $user->setIsActive(true);
                 $em->persist($user);
                 $em->flush();
 
                 $logger->debug("User is confirmed, checking to see if they have already registered their team");
-                $team = $em->getRepository('App:Team')->findOneBy(array('user' => $user, 'campaign' => $campaign));
+                $team = $em->getRepository(Team::class)->findOneBy(array('user' => $user, 'campaign' => $campaign));
                 if(is_null($team)){
                   $logger->debug("Team is not registered, forwarding them to the correct page");
                   return $this->redirectToRoute('register_team_select', array('campaignUrl' => $campaign->getUrl()));
@@ -314,8 +315,8 @@ class RegistrationController extends Controller
       $this->denyAccessUnlessGranted('ROLE_USER');
 
       $em = $this->getDoctrine()->getManager();
-      $campaign = $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
-      $teamType = $em->getRepository('App:TeamType')->findOneByValue($teamTypeValue);
+      $campaign = $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
+      $teamType = $em->getRepository(TeamType::class)->findOneByValue($teamTypeValue);
 
       if(is_null($campaign)){
         $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
@@ -327,7 +328,7 @@ class RegistrationController extends Controller
         return $this->redirectToRoute('register_team_select', array('campaignUrl' => $campaign->getUrl()));
       }
 
-      $teamCheck = $em->getRepository('App:Team')->findOneBy(array('campaign'=>$campaign, 'user'=>$this->get('security.token_storage')->getToken()->getUser()));
+      $teamCheck = $em->getRepository(Team::class)->findOneBy(array('campaign'=>$campaign, 'user'=>$this->get('security.token_storage')->getToken()->getUser()));
       if(!is_null($teamCheck)){
         $this->get('session')->getFlashBag()->add('warning', 'You already have a team and do not need to register a new one');
         return $this->redirectToRoute('team_show', array('campaignUrl'=>$campaign->getUrl(), 'teamUrl' => $teamCheck->getUrl()));
@@ -389,7 +390,7 @@ class RegistrationController extends Controller
 
             //If it is a "Teacher" team, set the classroom
             if($teamType->getValue() == "teacher"){
-                $team->setClassroom($em->getRepository('App:Classroom')->find($params['team']['classroom']['classroomID']));
+                $team->setClassroom($em->getRepository(Classroom::class)->find($params['team']['classroom']['classroomID']));
             }
 
             $team->setUser($this->get('security.token_storage')->getToken()->getUser());
@@ -397,7 +398,7 @@ class RegistrationController extends Controller
             $em->persist($team);
             $em->flush();
 
-            $user = $em->getRepository('App:User')->find($this->get('security.token_storage')->getToken()->getUser()->getId());
+            $user = $em->getRepository(User::class)->find($this->get('security.token_storage')->getToken()->getUser()->getId());
             $user->setFundraiserFlag(true);
             $em->persist($user);
             $em->flush();
@@ -408,10 +409,10 @@ class RegistrationController extends Controller
               foreach ($params['team']['students'] as $key => $student) {
                 if(!empty($student['classroomID']) && !empty($student['name']) && !$student['classroomID'] !== '' && $student['name'] !== ''){
                   $teamStudent = new TeamStudent();
-                  $classroom = $em->getRepository('App:Classroom')->find($student['classroomID']);
+                  $classroom = $em->getRepository(Classroom::class)->find($student['classroomID']);
                   $teamStudent->setTeam($team);
                   $teamStudent->setClassroom($classroom);
-                  $teamStudent->setGrade($em->getRepository('App:Grade')->find($classroom->getGrade()));
+                  $teamStudent->setGrade($em->getRepository(Grade::user)->find($classroom->getGrade()));
                   $teamStudent->setName($student['name']);
                   $teamStudent->setCreatedBy($this->get('security.token_storage')->getToken()->getUser());
                   $em->persist($teamStudent);
@@ -426,8 +427,8 @@ class RegistrationController extends Controller
       }
 
       $qb = $em->createQueryBuilder()->select('u')
-           ->from('App:Classroom', 'u')
-           ->join('App:Grade', 'g')
+           ->from(Classroom::class, 'u')
+           ->join('App\Entity\Grade', 'g')
            ->where('u.grade = g.id')
            ->andWhere('u.campaign = :campaignID')
            ->setParameter('campaignID', $campaign->getId())
@@ -499,12 +500,12 @@ class RegistrationController extends Controller
       //this logic looks to see if URL is in use and then iterates on it
       $newUrl = preg_replace("/[^ \w]+/", "", $teamName);
       $newUrl = str_replace(' ', '-', strtolower($newUrl));
-      $teamCheck = $em->getRepository('App:Team')->findOneBy(array('url' => $newUrl, 'campaign' => $campaign));
+      $teamCheck = $em->getRepository(Team::class)->findOneBy(array('url' => $newUrl, 'campaign' => $campaign));
       if(!empty($teamCheck)){
         $fixed = false;
         $count = 1;
         while(!$fixed){
-          $teamCheck = $em->getRepository('App:Team')->findOneBy(array('url' => $newUrl.$count, 'campaign' => $campaign));
+          $teamCheck = $em->getRepository(Team::class)->findOneBy(array('url' => $newUrl.$count, 'campaign' => $campaign));
           if(empty($teamCheck)){
             $newUrl = $newUrl.$count;
             $fixed = true;

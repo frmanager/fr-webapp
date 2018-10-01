@@ -11,6 +11,8 @@ use App\Entity\Team;
 use App\Entity\Grade;
 use App\Entity\TeamStudent;
 use App\Entity\Campaign;
+use App\Entity\Classroom;
+use App\Entity\User;
 use App\Utils\ValidationHelper;
 use App\Utils\CSVHelper;
 use App\Utils\CampaignHelper;
@@ -39,7 +41,7 @@ class TeamController extends Controller
       $entity = 'Team';
       $em = $this->getDoctrine()->getManager();
 
-      $campaign = $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
+      $campaign = $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
 
       $queryHelper = new QueryHelper($em, $logger);
       $tempDate = new DateTime();
@@ -66,10 +68,10 @@ class TeamController extends Controller
         $entity = 'Team';
         $em = $this->getDoctrine()->getManager();
 
-        $campaign = $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
+        $campaign = $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
 
         //CODE TO CHECK TO SEE IF TEAM EXISTS
-        $team = $em->getRepository('App:Team')->findOneBy(array('url'=>$teamUrl, 'campaign' => $campaign));
+        $team = $em->getRepository(Team::class)->findOneBy(array('url'=>$teamUrl, 'campaign' => $campaign));
         if(is_null($team)){
           $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this team.');
           return $this->redirectToRoute('team_index', array('campaignUrl'=>$campaign->getUrl()));
@@ -104,10 +106,10 @@ class TeamController extends Controller
         
         $em = $this->getDoctrine()->getManager();
 
-        $campaign = $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
+        $campaign = $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
 
         //CODE TO CHECK TO SEE IF TEAM EXISTS
-        $team = $em->getRepository('App:Team')->findOneBy(array('url'=>$teamUrl, 'campaign' => $campaign));
+        $team = $em->getRepository(Team::class)->findOneBy(array('url'=>$teamUrl, 'campaign' => $campaign));
         if(is_null($team)){
           $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this team.');
           return $this->redirectToRoute('team_index', array('campaignUrl'=>$campaign->getUrl()));
@@ -130,7 +132,7 @@ class TeamController extends Controller
                 return $this->redirectToRoute('team_edit', array('campaignUrl' => $campaign->getUrl(), 'teamUrl' => $teamUrl));
               }
 
-              $teamStudent = $em->getRepository('App:TeamStudent')->find($request->query->get('teamStudentID'));
+              $teamStudent = $em->getRepository(TeamStudent::class)->find($request->query->get('teamStudentID'));
               if(empty($teamStudent)){
                 $this->get('session')->getFlashBag()->add('warning', 'Could not find student to delete');
                 return $this->redirectToRoute('team_edit', array('campaignUrl' => $campaign->getUrl(), 'teamUrl' => $teamUrl));
@@ -259,13 +261,13 @@ class TeamController extends Controller
 
               //If it is a "Teacher" team, set the classroom
               if($team->getTeamType()->getValue() == "teacher"){
-                  $team->setClassroom($em->getRepository('App:Classroom')->find($params['team']['classroom']['classroomID']));
+                  $team->setClassroom($em->getRepository(Classroom::class)->find($params['team']['classroom']['classroomID']));
               }
 
               $em->persist($team);
               $em->flush();
 
-              $user = $em->getRepository('App:User')->find($this->get('security.token_storage')->getToken()->getUser()->getId());
+              $user = $em->getRepository(User::class)->find($this->get('security.token_storage')->getToken()->getUser()->getId());
               $user->setFundraiserFlag(true);
               $em->persist($user);
               $em->flush();
@@ -274,11 +276,11 @@ class TeamController extends Controller
               if($team->getTeamType()->getValue() == "family"){
                 if(!empty($params['team']['students'])){
                   foreach ($params['team']['students'] as $key => $student) {
-                    $teamStudent = $em->getRepository('App:TeamStudent')->find($student['id']);
+                    $teamStudent = $em->getRepository(TeamStudent::class)->find($student['id']);
                     if(!empty($teamStudent)){
                       if($teamStudent->getClassroom()->getId() !== $student['classroomID'] || $teamStudent->getName() !== $student['name']){
-                        $teamStudent->setClassroom($em->getRepository('App:Classroom')->find($student['classroomID']));
-                        $teamStudent->setGrade($em->getRepository('App:Grade')->find($teamStudent->getClassroom()->getGrade()));
+                        $teamStudent->setClassroom($em->getRepository(Classroom::class)->find($student['classroomID']));
+                        $teamStudent->setGrade($em->getRepository(Grade::class)->find($teamStudent->getClassroom()->getGrade()));
                         $teamStudent->setName($student['name']);
                         $em->persist($teamStudent);
                       }
@@ -294,8 +296,8 @@ class TeamController extends Controller
                       $logger->debug("Adding TeamStudents to Team ".$team->getId());
                       $teamStudent = new TeamStudent();
                       $teamStudent->setTeam($team);
-                      $teamStudent->setClassroom($em->getRepository('App:Classroom')->find($student['classroomID']));
-                      $teamStudent->setGrade($em->getRepository('App:Grade')->find($teamStudent->getClassroom()->getGrade()));
+                      $teamStudent->setClassroom($em->getRepository(Classroom::class)->find($student['classroomID']));
+                      $teamStudent->setGrade($em->getRepository(Grade::class)->find($teamStudent->getClassroom()->getGrade()));
                       $teamStudent->setName($student['name']);
                       $teamStudent->setCreatedBy($this->get('security.token_storage')->getToken()->getUser());
                       $em->persist($teamStudent);
@@ -305,13 +307,13 @@ class TeamController extends Controller
                 }else if($team->getTeamType()->getValue() == "student"){
                   $student = $params['team']['student'];
                   $logger->debug("Adding TeamStudents".$team->getId());
-                  $teamStudent = $em->getRepository('App:TeamStudent')->findOneBy(array('team'=>$team));
+                  $teamStudent = $em->getRepository(TeamStudent::class)->findOneBy(array('team'=>$team));
                   if(empty($teamStudent)){
                     $teamStudent = new TeamStudent();
                   }
                   $teamStudent->setTeam($team);
-                  $teamStudent->setClassroom($em->getRepository('App:Classroom')->find($student['classroomID']));
-                  $teamStudent->setGrade($em->getRepository('App:Grade')->find($teamStudent->getClassroom()->getGrade()));
+                  $teamStudent->setClassroom($em->getRepository(Classroom::class)->find($student['classroomID']));
+                  $teamStudent->setGrade($em->getRepository(Grade::class)->find($teamStudent->getClassroom()->getGrade()));
                   $teamStudent->setName($student['name']);
                   $teamStudent->setCreatedBy($this->get('security.token_storage')->getToken()->getUser());
                   $em->persist($teamStudent);
@@ -326,8 +328,8 @@ class TeamController extends Controller
         }
 
         $qb = $em->createQueryBuilder()->select('u')
-             ->from('App:Classroom', 'u')
-             ->join('App:Grade', 'g')
+             ->from(Classroom::class, 'u')
+             ->join('App\Entity\Grade', 'g')
              ->where('u.grade = g.id')
              ->andWhere('u.campaign = :campaignID')
              ->setParameter('campaignID', $campaign->getId())
@@ -391,12 +393,12 @@ class TeamController extends Controller
           //this logic looks to see if URL is in use and then iterates on it
           $newUrl = preg_replace("/[^ \w]+/", "", $teamName);
           $newUrl = str_replace(' ', '-', strtolower($newUrl));
-          $teamCheck = $em->getRepository('App:Team')->findOneBy(array('url' => $newUrl, 'campaign' => $campaign));
+          $teamCheck = $em->getRepository(Team::class)->findOneBy(array('url' => $newUrl, 'campaign' => $campaign));
           if(!empty($teamCheck)){
             $fixed = false;
             $count = 1;
             while(!$fixed){
-              $teamCheck = $em->getRepository('App:Team')->findOneBy(array('url' => $newUrl.$count, 'campaign' => $campaign));
+              $teamCheck = $em->getRepository(Team::class)->findOneBy(array('url' => $newUrl.$count, 'campaign' => $campaign));
               if(empty($teamCheck)){
                 $newUrl = $newUrl.$count;
                 $fixed = true;

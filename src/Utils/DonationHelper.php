@@ -6,9 +6,16 @@ namespace App\Utils;
 
 use Psr\Log\LoggerInterface;
 use App\Entity\DonationDatabase;
+use App\Entity\Classroom;
+use App\Entity\Campaign;
+use App\Entity\CampaignAward;
+use App\Entity\Team;
+use App\Entity\Campaignawardtype;
+use App\Entity\Campaignawardstyle;
 use Doctrine\ORM\EntityManager;
 use DateTime;
 use Monolog\Logger;
+
 
 class DonationHelper
 {
@@ -29,12 +36,12 @@ class DonationHelper
 
         if (isset($options['donation'])){
             $this->logger->info("DonationHelper::reloadDonationDatabase - Refreshing Donation #".$options['donation']->getId());
-            $donations = $this->em->getRepository('App:Donation')->findBy(array('id'=>$options['donation']->getId()));
+            $donations = $this->em->getRepository('App\Entity\Donation')->findBy(array('id'=>$options['donation']->getId()));
         }elseif (isset($options['campaign'])) {
             $this->logger->info("DonationHelper::reloadDonationDatabase - Refreshing a Campaign");
-            $donations = $this->em->getRepository('App:Donation')->findByCampaign($options['campaign']);
+            $donations = $this->em->getRepository('App\Entity\Donation')->findByCampaign($options['campaign']);
         }else {
-            $donations = $this->em->getRepository('App:Donation')->findAll();
+            $donations = $this->em->getRepository('App\Entity\Donation')->findAll();
         }
 
 
@@ -203,15 +210,15 @@ class DonationHelper
         $qb = $this->em->createQueryBuilder();
 
         if (isset($options['donation'])) {
-            $qb->delete('App:DonationDatabase', 'd');
+            $qb->delete('App\Entity\DonationDatabase', 'd');
             $qb->where('d = :donation');
             $qb->setParameter('donation', $options['donation']);
         }else if (isset($options['campaign'])) {
-            $qb->delete('App:DonationDatabase', 'd');
+            $qb->delete('App\Entity\DonationDatabase', 'd');
             $qb->where('d.campaign = :campaign');
             $qb->setParameter('campaign', $options['campaign']);
         } else {
-            $qb->delete('App:DonationDatabase', 'd');
+            $qb->delete('App\Entity\DonationDatabase', 'd');
         }
 
         $result = $qb->getQuery()->getResult();
@@ -221,9 +228,9 @@ class DonationHelper
     private function calculateFundsRaised(array $options)
     {
       if (isset($options['campaign'])) {
-          $teams = $this->em->getRepository('App:Team')->findByCampaign($options['campaign']);
+          $teams = $this->em->getRepository('App\Entity\Team')->findByCampaign($options['campaign']);
       } else {
-          $teams = $this->em->getRepository('App:Team')->findAll();
+          $teams = $this->em->getRepository('App\Entity\Team')->findAll();
       }
 
       foreach ($teams as $team) {

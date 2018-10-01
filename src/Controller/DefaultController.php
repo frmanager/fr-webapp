@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 use App\Utils\CampaignHelper;
+use App\Entity\Campaign;
 use App\Entity\Classroom;
 use App\Utils\QueryHelper;
 
@@ -33,7 +34,7 @@ class DefaultController extends Controller
                 $em = $this->getDoctrine()->getManager();
 
                 return $this->render('campaign/campaign.list.html.twig', array(
-                    'campaigns' => $em->getRepository('App:Campaign')->findBy(array('onlineFlag'=>true)),
+                    'campaigns' => $em->getRepository(Campaign::class)->findBy(array('onlineFlag'=>true)),
                     'entity' => $entity,
                 ));
             }else{

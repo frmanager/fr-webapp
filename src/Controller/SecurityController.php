@@ -9,6 +9,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use App\Entity\Campaign;
+use App\Entity\Team;
+use App\Entity\User;
 
 /**
  * Security controller.
@@ -36,7 +39,7 @@ class SecurityController extends Controller
           $routeParams = $request->attributes->get('_route_params');
           if (array_key_exists('campaignUrl', $routeParams)) {
               $em = $this->getDoctrine()->getManager();
-              $campaign = $em->getRepository('App:Campaign')->findOneByUrl($routeParams['campaignUrl']);
+              $campaign = $em->getRepository(Campaign::class)->findOneByUrl($routeParams['campaignUrl']);
           }
       }
 
@@ -67,7 +70,7 @@ class SecurityController extends Controller
       if (!empty($request->attributes->get('_route_params'))) {
           $routeParams = $request->attributes->get('_route_params');
           if (array_key_exists('campaignUrl', $routeParams)) {
-              $campaign = $em->getRepository('App:Campaign')->findOneByUrl($routeParams['campaignUrl']);
+              $campaign = $em->getRepository(Campaign::class)->findOneByUrl($routeParams['campaignUrl']);
           }
       }
 
@@ -81,7 +84,7 @@ class SecurityController extends Controller
       //CODE TO CHECK TO SEE IF A USERS TEAM EXISTS, IF NOT, THEY NEED TO CREATE ONE
       if($user->getUserStatus()->getName() == "Confirmed"){
         $logger->debug("User is confirmed, checking to see if they have already registered their team");
-        $team = $em->getRepository('App:Team')->findOneBy(array('user' => $user, 'campaign' => $campaign));
+        $team = $em->getRepository(Team::class)->findOneBy(array('user' => $user, 'campaign' => $campaign));
         if(is_null($team)){
           $logger->debug("Team is not registered, forwarding them to the correct page");
           $this->get('session')->getFlashBag()->add('warning', 'Hi, it looks like you have not completed your team registration yet');
@@ -113,7 +116,7 @@ class SecurityController extends Controller
           $routeParams = $request->attributes->get('_route_params');
           if (array_key_exists('campaignUrl', $routeParams)) {
               $em = $this->getDoctrine()->getManager();
-              $campaign = $em->getRepository('App:Campaign')->findOneByUrl($routeParams['campaignUrl']);
+              $campaign = $em->getRepository(Campaign::class)->findOneByUrl($routeParams['campaignUrl']);
           }
       }
 
@@ -136,7 +139,7 @@ class SecurityController extends Controller
         $logger->debug("Entering RegistrationController->passwordResetAction");
         $em = $this->getDoctrine()->getManager();
 
-        $campaign = $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
+        $campaign = $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
 
         if ($request->isMethod('POST')) {
             $fail = false;
@@ -148,7 +151,7 @@ class SecurityController extends Controller
             }
 
             if(!$fail){
-              $user = $em->getRepository('App:User')->findOneByEmail($params['user']['email']);
+              $user = $em->getRepository(User::class)->findOneByEmail($params['user']['email']);
               if(empty($user)){
                 $this->addFlash('warning','We are sorry, we could not find this account');
                 $fail = true;
@@ -200,13 +203,13 @@ class SecurityController extends Controller
           $logger->debug("Entering RegistrationController->passwordResetAction");
           $em = $this->getDoctrine()->getManager();
 
-          $campaign = $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
+          $campaign = $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
 
           if(null !== $request->query->get('password_reset_token') && null !== $request->query->get('email')){
               $fail = false;
               $passwordResetToken = $request->query->get('password_reset_token');
               $userEmail = $request->query->get('email');
-              $user = $em->getRepository('App:User')->findOneByEmail(urldecode($userEmail));
+              $user = $em->getRepository(User::class)->findOneByEmail(urldecode($userEmail));
 
               if(empty($user)){
                 $this->addFlash('warning','We are sorry, we could not find this account');

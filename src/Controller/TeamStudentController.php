@@ -9,6 +9,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Team;
 use App\Entity\Grade;
+use App\Entity\Classroom;
+use App\Entity\User;
+use App\Entity\Campaign;
+use App\Entity\TeamStudent;
 use App\Utils\ValidationHelper;
 use App\Utils\CSVHelper;
 use App\Utils\CampaignHelper;
@@ -34,10 +38,10 @@ class TeamStudentController extends Controller
   {
     
 
-    $campaign = $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
+    $campaign = $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
 
     //CODE TO CHECK TO SEE IF TEAM EXISTS
-    $team = $em->getRepository('App:Team')->findOneBy(array('url'=>$teamUrl, 'campaign' => $campaign));
+    $team = $em->getRepository(Team::class)->findOneBy(array('url'=>$teamUrl, 'campaign' => $campaign));
     if(is_null($team)){
       $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this team.');
       return $this->redirectToRoute('team_index', array('campaignUrl'=>$campaign->getUrl()));
@@ -65,10 +69,10 @@ class TeamStudentController extends Controller
         $this->denyAccessUnlessGranted('ROLE_USER');
         $em = $this->getDoctrine()->getManager();
 
-        $campaign = $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
+        $campaign = $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
 
         //CODE TO CHECK TO SEE IF TEAM EXISTS
-        $team = $em->getRepository('App:Team')->findOneBy(array('url'=>$teamUrl, 'campaign' => $campaign));
+        $team = $em->getRepository(Team::class)->findOneBy(array('url'=>$teamUrl, 'campaign' => $campaign));
         if(is_null($team)){
           $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this team.');
           return $this->redirectToRoute('team_index', array('campaignUrl'=>$campaign->getUrl()));
@@ -81,7 +85,7 @@ class TeamStudentController extends Controller
         }
 
         //CODE TO CHECK TO SEE IF STUDENT EXISTS
-        $teamStudent = $em->getRepository('App:TeamStudent')->findOneBy(array('team'=>$team, 'id'=>$teamStudentId));
+        $teamStudent = $em->getRepository(TeamStudent::class)->findOneBy(array('team'=>$team, 'id'=>$teamStudentId));
         if(is_null($teamStudent)){
           $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this child.');
           return $this->redirectToRoute('team_show', array('campaignUrl'=>$campaign->getUrl(), 'teamUrl'=>$campaign->getUrl()));
@@ -97,8 +101,8 @@ class TeamStudentController extends Controller
             //If is a "family" page, we need to add students
               if(!empty($params['teamStudent']['classroomID']) && !empty($params['teamStudent']['name']) && !$params['teamStudent']['classroomID'] !== '' && $params['teamStudent']['name'] !== ''){
                 $logger->debug("Updating TeamStudent ".$teamStudent->getId()." in Team ".$team->getId());
-                $teamStudent->setClassroom($em->getRepository('App:Classroom')->find($params['teamStudent']['classroomID']));
-                $teamStudent->setGrade($em->getRepository('App:Grade')->find($teamStudent->getClassroom()->getGrade()));
+                $teamStudent->setClassroom($em->getRepository(Classroom::class)->find($params['teamStudent']['classroomID']));
+                $teamStudent->setGrade($em->getRepository(Grade::class)->find($teamStudent->getClassroom()->getGrade()));
                 $teamStudent->setName($params['teamStudent']['name']);
                 $teamStudent->setConfirmedFlag(false);
                 $teamStudent->setStudent(null);
@@ -112,8 +116,8 @@ class TeamStudentController extends Controller
         }
 
         $qb = $em->createQueryBuilder()->select('u')
-             ->from('App:Classroom', 'u')
-             ->join('App:Grade', 'g')
+             ->from(Classroom::class, 'u')
+             ->join(Grade::class, 'g')
              ->where('u.grade = g.id')
              ->andWhere('u.campaign = :campaignID')
              ->setParameter('campaignID', $campaign->getId())
