@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 // DON'T forget this use statement!!!
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Doctrine\Common\Collections\ArrayCollection;
+
 
 /**
  * @ORM\Entity

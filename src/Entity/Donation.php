@@ -1082,7 +1082,7 @@ class Donation
     /**
      * Get donationDatabases
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Collection
      */
     public function getDonationDatabases()
     {

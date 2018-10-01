@@ -5,7 +5,6 @@ namespace App\Controller;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Student;
 use App\Entity\Campaign;
@@ -25,8 +24,8 @@ class StudentController extends Controller
     /**
      * Lists all Student entities.
      *
-     * @Route("/", name="student_index")
-     * @Method("GET")
+     * @Route("/", name="student_index", methods={"GET"})
+     * 
      */
     public function indexAction($campaignUrl, LoggerInterface $logger)
     {
@@ -35,7 +34,7 @@ class StudentController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $campaign = $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
+        $campaign = $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
 
         $queryHelper = new QueryHelper($em, $logger);
         $tempDate = new DateTime();
@@ -54,8 +53,8 @@ class StudentController extends Controller
     /**
      * Finds and displays a Student entity.
      *
-     * @Route("/{id}", name="student_show")
-     * @Method("GET")
+     * @Route("/{id}", name="student_show", methods={"GET"})
+     * 
      */
     public function showAction(Student $student, $campaignUrl, LoggerInterface $logger)
     {
@@ -64,7 +63,7 @@ class StudentController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         //CODE TO CHECK TO SEE IF CAMPAIGN EXISTS
-        $campaign = $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
+        $campaign = $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
         if(is_null($campaign)){
           $this->get('session')->getFlashBag()->add('warning', 'We are sorry, we could not find this campaign.');
           return $this->redirectToRoute('homepage');
@@ -78,17 +77,17 @@ class StudentController extends Controller
         }
 
         $deleteForm = $this->createDeleteForm($student, $campaignUrl);
-        $student = $this->getDoctrine()->getRepository('App:'.strtolower($entity))->findOneById($student->getId());
+        $student = $this->getDoctrine()->getRepository(Student::class)->findOneById($student->getId());
         //$logger->debug(print_r($student->getDonations()));
 
         $qb = $em->createQueryBuilder()->select('u')
-               ->from('App:Campaignaward', 'u')
+               ->from('App\Entity\Campaignaward', 'u')
                ->where('u.campaign = :campaign')
                ->setParameter('campaign', $campaign->getId())
                ->orderBy('u.amount', 'DESC');
 
 
-        $campaign = $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
+        $campaign = $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
         $campaignAwards = $qb->getQuery()->getResult();
 
         $queryHelper = new QueryHelper($em);

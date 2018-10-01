@@ -4,11 +4,12 @@ namespace App\Controller;
 
 use Psr\Log\LoggerInterface;
 use App\Entity\User;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use App\Entity\Team;
+use App\Entity\Campaign;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
@@ -26,8 +27,8 @@ class ProfileController extends Controller
   /**
    * Finds and displays users Profile entity.
    *
-   * @Route("/", name="profile_show")
-   * @Method("GET")
+   * @Route("/", name="profile_show", methods={"GET", "POST"})
+   * 
    */
     public function indexAction(Request $request, $campaignUrl, LoggerInterface $logger)
     {
@@ -35,10 +36,10 @@ class ProfileController extends Controller
         
         $em = $this->getDoctrine()->getManager();
 
-        $campaign = $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
+        $campaign = $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
 
         $this->denyAccessUnlessGranted('ROLE_USER');
-        $user = $em->getRepository('App:User')->find($this->get('security.token_storage')->getToken()->getUser()->getId());
+        $user = $em->getRepository(User::class)->find($this->get('security.token_storage')->getToken()->getUser()->getId());
 
 
         if(null !== $request->query->get('action')){
@@ -48,7 +49,7 @@ class ProfileController extends Controller
             }
         }
 
-        $team = $em->getRepository('App:Team')->findOneBy(array('campaign'=>$campaign,'user'=>$user));
+        $team = $em->getRepository(Team::class)->findOneBy(array('campaign'=>$campaign,'user'=>$user));
         return $this->render('profile/profile.show.html.twig',
             array(
               'user' => $user,
@@ -71,10 +72,10 @@ class ProfileController extends Controller
           
           $em = $this->getDoctrine()->getManager();
 
-          $campaign = $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
+          $campaign = $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
 
           $this->denyAccessUnlessGranted('ROLE_USER');
-          $user = $em->getRepository('App:User')->find($this->get('security.token_storage')->getToken()->getUser()->getId());
+          $user = $em->getRepository(User::class)->find($this->get('security.token_storage')->getToken()->getUser()->getId());
 
 
            if ($request->isMethod('POST')) {

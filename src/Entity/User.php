@@ -5,7 +5,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\Common\Collections\ArrayCollection;
+
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -411,7 +411,7 @@ class User implements UserInterface
     /**
      * Get campaignUsers
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Collection
      */
     public function getCampaignUsers()
     {
@@ -568,7 +568,7 @@ class User implements UserInterface
     /**
      * Get teams
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Collection
      */
     public function getTeams()
     {

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 // DON'T forget this use statement!!!
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Doctrine\Common\Collections\ArrayCollection;
+
 
 /**
  * @ORM\Entity
@@ -198,12 +198,12 @@ Class Campaign
      */
     public function __construct()
     {
-        $this->campaignUsers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->classrooms = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->donations = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->campaignawards = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->students = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->teams = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->campaignUsers = new \ArrayCollection();
+        $this->classrooms = new \ArrayCollection();
+        $this->donations = new \ArrayCollection();
+        $this->campaignawards = new \ArrayCollection();
+        $this->students = new \ArrayCollection();
+        $this->teams = new \ArrayCollection();
         $this->createdAt= new \DateTime();
         $this->updatedAt= new \DateTime();
     }
@@ -424,7 +424,7 @@ Class Campaign
     /**
      * Get campaignUsers
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Collection
      */
     public function getCampaignUsers()
     {
@@ -458,7 +458,7 @@ Class Campaign
     /**
      * Get classrooms
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Collection
      */
     public function getClassrooms()
     {
@@ -492,7 +492,7 @@ Class Campaign
     /**
      * Get donations
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Collection
      */
     public function getDonations()
     {
@@ -526,7 +526,7 @@ Class Campaign
     /**
      * Get campaignawards
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Collection
      */
     public function getCampaignawards()
     {
@@ -560,7 +560,7 @@ Class Campaign
     /**
      * Get students
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Collection
      */
     public function getStudents()
     {
@@ -666,7 +666,7 @@ Class Campaign
     /**
      * Get grades
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Collection
      */
     public function getGrades()
     {
@@ -932,7 +932,7 @@ Class Campaign
     /**
      * Get teams
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Collection
      */
     public function getTeams()
     {
@@ -966,7 +966,7 @@ Class Campaign
     /**
      * Get donationDatabases
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Collection
      */
     public function getDonationDatabases()
     {

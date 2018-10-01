@@ -3,13 +3,14 @@
 namespace App\Controller;
 
 use Psr\Log\LoggerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 use App\Utils\CampaignHelper;
 use App\Entity\Classroom;
 use App\Entity\Campaign;
+use App\Entity\CampaignAward;
+use App\Entity\Team;
 use App\Utils\QueryHelper;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -35,7 +36,7 @@ class CampaignController extends Controller
      $em = $this->getDoctrine()->getManager();
 
      //CODE TO CHECK TO SEE IF CAMPAIGN EXISTS
-     $campaign = $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
+     $campaign = $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
 
      $queryHelper = new QueryHelper($em, $logger);
 
@@ -48,8 +49,8 @@ class CampaignController extends Controller
        'classroom_rankings' => $queryHelper->getClassroomRanks(array('campaign' => $campaign)),
        'report_date' => $reportDate,
        'ranking_limit' => $limit,
-       'campaign_awards' =>  $em->getRepository('App:Campaignaward')->findBy(array('campaign'=>$campaign)),
-       'teams' => $em->getRepository('App:Team')->findBy(array('campaign'=>$campaign),array('fundsRaised' => 'DESC')),
+       'campaign_awards' =>  $em->getRepository(CampaignAward::class)->findBy(array('campaign'=>$campaign)),
+       'teams' => $em->getRepository(Team::class)->findBy(array('campaign'=>$campaign),array('fundsRaised' => 'DESC')),
        'totals' => $queryHelper->getTotalDonations(array('campaign' => $campaign)),
        'campaign' => $campaign
      ));
@@ -69,7 +70,7 @@ class CampaignController extends Controller
      $em = $this->getDoctrine()->getManager();
 
      //CODE TO CHECK TO SEE IF CAMPAIGN EXISTS
-     $campaign = $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
+     $campaign = $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
 
      $queryHelper = new QueryHelper($em, $logger);
 
@@ -96,8 +97,8 @@ class CampaignController extends Controller
   /**
    * Displays Coming Soon Splash Page
    *
-   * @Route("/coming_soon", name="campaign_splash")
-   * @Method("GET")
+   * @Route("/coming_soon", name="campaign_splash", methods={"GET"})
+   * 
    */
   public function spashAction($campaignUrl, LoggerInterface $logger)
   {
@@ -106,7 +107,7 @@ class CampaignController extends Controller
       $em = $this->getDoctrine()->getManager();
 
       //CODE TO CHECK TO SEE IF CAMPAIGN EXISTS
-      $campaign = $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
+      $campaign = $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
 
       return $this->render('campaign/campaign.splash.html.twig', array(
           'campaign' => $campaign,
@@ -117,8 +118,7 @@ class CampaignController extends Controller
   /**
    * Displays Coming Soon Splash Page
    *
-   * @Route("/thank_you", name="campaign_end_splash")
-   * @Method("GET")
+   * @Route("/thank_you", name="campaign_end_splash", methods={"GET"})
    */
   public function endSpashAction($campaignUrl, LoggerInterface $logger)
   {
@@ -127,7 +127,7 @@ class CampaignController extends Controller
     $em = $this->getDoctrine()->getManager();
 
     //CODE TO CHECK TO SEE IF CAMPAIGN EXISTS
-    $campaign = $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
+    $campaign = $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
 
     $queryHelper = new QueryHelper($em, $logger);
 
@@ -153,8 +153,8 @@ class CampaignController extends Controller
     /**
      * Finds and displays a Campaign entity.
      *
-     * @Route("/show/{id}", name="campaign_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="campaign_show", methods={"GET"})
+     * 
      */
     public function showAction(Campaign $campaign, LoggerInterface $logger)
     {
@@ -178,7 +178,7 @@ class CampaignController extends Controller
       
       $em = $this->getDoctrine()->getManager();
       $queryHelper = new QueryHelper($em, $logger);
-      $campaign =  $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
+      $campaign =  $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
 
       return $this->render('campaign/campaign.faq.html.twig', array(
         'campaign' => $campaign,
@@ -194,7 +194,7 @@ class CampaignController extends Controller
       
       $em = $this->getDoctrine()->getManager();
       $queryHelper = new QueryHelper($em, $logger);
-      $campaign =  $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
+      $campaign =  $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
 
       if ($request->isMethod('POST')) {
           $params = $request->request->all();
@@ -252,7 +252,7 @@ class CampaignController extends Controller
       
       $em = $this->getDoctrine()->getManager();
 
-      $campaign =  $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
+      $campaign =  $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
 
       return $this->render('default/termsOfService.html.twig', array(
         'campaign' => $campaign,

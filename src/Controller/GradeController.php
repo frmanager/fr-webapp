@@ -5,9 +5,9 @@ namespace App\Controller;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Grade;
+use App\Entity\Campaign;
 use App\Utils\CSVHelper;
 use App\Utils\CampaignHelper;
 use App\Utils\QueryHelper;
@@ -25,8 +25,8 @@ class GradeController extends Controller
     /**
      * Lists all Grade entities.
      *
-     * @Route("/", name="grade_index")
-     * @Method("GET")
+     * @Route("/", name="grade_index", methods={"GET"})
+     * 
      */
     public function indexAction($campaignUrl, LoggerInterface $logger)
     {
@@ -35,14 +35,14 @@ class GradeController extends Controller
         
         $limit = 3;
 
-        $campaign = $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl);
+        $campaign = $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl);
 
         $queryHelper = new QueryHelper($em, $logger);
 
         return $this->render('campaign/grade.index.html.twig', array(
             'grades' => $queryHelper->getGradeRanks(array('campaign' => $campaign, 'limit'=> 0)),
             'entity' => $entity,
-            'campaign' => $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl),
+            'campaign' => $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl),
         ));
     }
 
@@ -50,8 +50,8 @@ class GradeController extends Controller
     /**
      * Finds and displays a Grade entity.
      *
-     * @Route("/show/{id}", name="grade_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="grade_show", methods={"GET"})
+     * 
      */
     public function showAction(Grade $grade, $campaignUrl, LoggerInterface $logger)
     {
@@ -61,7 +61,7 @@ class GradeController extends Controller
         return $this->render('campaign/grade.show.html.twig', array(
             'grade' => $grade,
             'entity' => $entity,
-            'campaign' => $em->getRepository('App:Campaign')->findOneByUrl($campaignUrl),
+            'campaign' => $em->getRepository(Campaign::class)->findOneByUrl($campaignUrl),
         ));
     }
 

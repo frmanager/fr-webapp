@@ -5,8 +5,7 @@ namespace App\Controller;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 /**
  * User controller.
@@ -18,15 +17,15 @@ class UserController extends Controller
     /**
      * Lists all User entities.
      *
-     * @Route("/", name="user_index")
-     * @Method("GET")
+     * @Route("/", name="user_index", methods={"GET"})
+     * 
      */
     public function indexAction(LoggerInterface $logger)
     {
         $entity = 'User';
         $em = $this->getDoctrine()->getManager();
 
-        $users = $em->getRepository('App:User')->findAll();
+        $users = $em->getRepository(User::class)->findAll();
 
         return $this->render('user/index.html.twig', array(
             'users' => $users,
@@ -37,8 +36,8 @@ class UserController extends Controller
     /**
      * Creates a new User entity.
      *
-     * @Route("/new", name="user_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="user_new", methods={"GET", "POST"})
+     * 
      */
     public function newAction(Request $request, LoggerInterface $logger)
     {
@@ -65,8 +64,8 @@ class UserController extends Controller
     /**
      * Finds and displays a User entity.
      *
-     * @Route("/{id}", name="user_show")
-     * @Method("GET")
+     * @Route("/{id}", name="user_show", methods={"GET"})
+     * 
      */
     public function showAction(User $user, LoggerInterface $logger)
     {
@@ -83,8 +82,8 @@ class UserController extends Controller
     /**
      * Displays a form to edit an existing User entity.
      *
-     * @Route("/{id}/edit", name="user_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="user_edit", methods={"GET", "POST"})
+     * 
      */
     public function editAction(Request $request, User $user, LoggerInterface $logger)
     {
@@ -112,8 +111,8 @@ class UserController extends Controller
     /**
      * Deletes a User entity.
      *
-     * @Route("/{id}", name="user_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="user_delete", methods={"DELETE"})
+     * 
      */
     public function deleteAction(Request $request, User $user, LoggerInterface $logger)
     {

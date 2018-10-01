@@ -34,7 +34,7 @@ class UserStatus
      */
     public function __construct()
     {
-        $this->User = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->User = new \ArrayCollection();
     }
 
     /**
@@ -98,7 +98,7 @@ class UserStatus
     /**
      * Get user
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Collection
      */
     public function getUser()
     {

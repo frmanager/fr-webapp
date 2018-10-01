@@ -45,7 +45,7 @@ class TeamType
      */
     public function __construct()
     {
-        $this->teams = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->teams = new \ArrayCollection();
     }
 
     /**
@@ -157,7 +157,7 @@ class TeamType
     /**
      * Get teams
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Collection
      */
     public function getTeams()
     {

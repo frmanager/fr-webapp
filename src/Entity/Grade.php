@@ -83,7 +83,7 @@ class Grade
      */
     public function __construct()
     {
-        $this->classrooms = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->classrooms = new \ArrayCollection();
     }
 
     /**
@@ -113,7 +113,7 @@ class Grade
     /**
      * Get classrooms.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Collection
      */
     public function getClassrooms()
     {
@@ -172,7 +172,7 @@ class Grade
     /**
      * Get students
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Collection
      */
     public function getStudents()
     {
