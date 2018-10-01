@@ -326,7 +326,7 @@ class TeamController extends Controller
         }
 
         $qb = $em->createQueryBuilder()->select('u')
-             ->from(Classroom::class, 'u')
+             ->from('App\Entity\Classroom', 'u')
              ->join('App\Entity\Grade', 'g')
              ->where('u.grade = g.id')
              ->andWhere('u.campaign = :campaignID')
