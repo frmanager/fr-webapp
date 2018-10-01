@@ -11,7 +11,7 @@ parameters:
     paypal_rest_client_secret: '%env(PAYPAL_REST_CLIENT_SECRET)%'
 
     mailer_url: '%env(MAILER_URL)%'
-    mailer_username: '%env(MAILER_USERNAME)%'
+    mailer_user: '%env(MAILER_USER)%'
     mailer_password: '%env(MAILER_PASSWORD)%'
     mailer_host: '%env(MAILER_HOST)%'  
     
