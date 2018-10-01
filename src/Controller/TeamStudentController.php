@@ -115,8 +115,8 @@ class TeamStudentController extends Controller
         }
 
         $qb = $em->createQueryBuilder()->select('u')
-             ->from(Classroom::class, 'u')
-             ->join(Grade::class, 'g')
+             ->from('App\Entity\Classroom', 'u')
+             ->join('App\Entity\Grade', 'g')
              ->where('u.grade = g.id')
              ->andWhere('u.campaign = :campaignID')
              ->setParameter('campaignID', $campaign->getId())
