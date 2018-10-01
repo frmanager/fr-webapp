@@ -185,7 +185,7 @@ class Student
     /**
      * Get donations.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Collection
      */
     public function getDonations()
     {
@@ -283,7 +283,7 @@ class Student
     /**
      * Get teamStudents
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Collection
      */
     public function getTeamStudents()
     {
@@ -341,7 +341,7 @@ class Student
     /**
      * Get donationDatabases
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Collection
      */
     public function getDonationDatabases()
     {

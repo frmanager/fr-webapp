@@ -5,7 +5,6 @@ namespace App\Controller;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Student;
 use App\Entity\Campaign;
@@ -25,8 +24,8 @@ class StudentController extends Controller
     /**
      * Lists all Student entities.
      *
-     * @Route("/", name="student_index")
-     * @Method("GET")
+     * @Route("/", name="student_index", methods={"GET"})
+     * 
      */
     public function indexAction($campaignUrl, LoggerInterface $logger)
     {
@@ -54,8 +53,8 @@ class StudentController extends Controller
     /**
      * Finds and displays a Student entity.
      *
-     * @Route("/{id}", name="student_show")
-     * @Method("GET")
+     * @Route("/{id}", name="student_show", methods={"GET"})
+     * 
      */
     public function showAction(Student $student, $campaignUrl, LoggerInterface $logger)
     {

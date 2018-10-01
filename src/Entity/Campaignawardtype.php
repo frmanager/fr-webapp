@@ -49,7 +49,7 @@ class Campaignawardtype
      */
     public function __construct()
     {
-        $this->campaignawards = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->campaignawards = new \ArrayCollection();
     }
 
     /**
@@ -161,7 +161,7 @@ class Campaignawardtype
     /**
      * Get campaignawards
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Collection
      */
     public function getCampaignawards()
     {

@@ -168,7 +168,7 @@ class Classroom
      */
     public function __construct()
     {
-        $this->students = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->students = new \ArrayCollection();
         $this->createdAt= new \DateTime();
         $this->updatedAt= new \DateTime();
     }
@@ -208,7 +208,7 @@ class Classroom
     /**
      * Get students.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Collection
      */
     public function getStudents()
     {
@@ -272,7 +272,7 @@ class Classroom
     /**
      * Get donations
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Collection
      */
     public function getDonations()
     {
@@ -354,7 +354,7 @@ class Classroom
     /**
      * Get teams
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Collection
      */
     public function getTeams()
     {
@@ -484,7 +484,7 @@ class Classroom
     /**
      * Get teamStudents
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Collection
      */
     public function getTeamStudents()
     {
@@ -518,7 +518,7 @@ class Classroom
     /**
      * Get donationDatabases
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Collection
      */
     public function getDonationDatabases()
     {

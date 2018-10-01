@@ -5,7 +5,6 @@ namespace App\Controller;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Team;
 use App\Entity\Grade;
@@ -32,8 +31,7 @@ class TeamController extends Controller
   /**
    * Lists all Team entities.
    *
-   * @Route("/", name="team_index")
-   * @Method({"GET", "POST"})
+   * @Route("/", name="team_index", methods={"GET", "POST"})
    */
   public function teamIndexAction($campaignUrl, LoggerInterface $logger)
   {
@@ -95,8 +93,8 @@ class TeamController extends Controller
     /**
      * Displays a form to edit an existing Team entity.
      *
-     * @Route("/{teamUrl}/edit", name="team_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{teamUrl}/edit", name="team_edit", methods={"GET", "POST"})
+     * 
      */
     public function editAction(Request $request, $campaignUrl, $teamUrl, LoggerInterface $logger)
     {

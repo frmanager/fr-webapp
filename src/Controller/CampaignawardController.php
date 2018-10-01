@@ -5,7 +5,6 @@ namespace App\Controller;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Campaignaward;
 use App\Entity\Campaignawardtype;
@@ -24,8 +23,8 @@ class CampaignawardController extends Controller
     /**
      * Lists all Campaignaward entities.
      *
-     * @Route("/", name="campaignaward_index")
-     * @Method("GET")
+     * @Route("/", name="campaignaward_index", methods={"GET"})
+     * 
      */
     public function indexAction(LoggerInterface $logger)
     {
@@ -48,8 +47,8 @@ class CampaignawardController extends Controller
     /**
      * Lists all Awards for classrooms.
      *
-     * @Route("/awards", name="public_classroom_awards")
-     * @Method({"GET", "POST"})
+     * @Route("/awards", name="public_classroom_awards", methods={"GET", "POST"})
+     * 
      */
     public function ClassroomAwardsAction($campaignUrl, LoggerInterface $logger)
     {
@@ -73,8 +72,8 @@ class CampaignawardController extends Controller
     /**
      * Finds and displays a Campaignaward entity.
      *
-     * @Route("/show/{id}", name="campaignaward_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="campaignaward_show", methods={"GET"})
+     * 
      */
     public function showAction(Campaignaward $campaignaward, LoggerInterface $logger)
     {

@@ -411,7 +411,7 @@ class User implements UserInterface
     /**
      * Get campaignUsers
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Collection
      */
     public function getCampaignUsers()
     {
@@ -568,7 +568,7 @@ class User implements UserInterface
     /**
      * Get teams
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Collection
      */
     public function getTeams()
     {

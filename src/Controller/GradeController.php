@@ -5,7 +5,6 @@ namespace App\Controller;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Grade;
 use App\Entity\Campaign;
@@ -26,8 +25,8 @@ class GradeController extends Controller
     /**
      * Lists all Grade entities.
      *
-     * @Route("/", name="grade_index")
-     * @Method("GET")
+     * @Route("/", name="grade_index", methods={"GET"})
+     * 
      */
     public function indexAction($campaignUrl, LoggerInterface $logger)
     {
@@ -51,8 +50,8 @@ class GradeController extends Controller
     /**
      * Finds and displays a Grade entity.
      *
-     * @Route("/show/{id}", name="grade_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="grade_show", methods={"GET"})
+     * 
      */
     public function showAction(Grade $grade, $campaignUrl, LoggerInterface $logger)
     {

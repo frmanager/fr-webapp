@@ -10,7 +10,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
@@ -28,8 +27,8 @@ class ProfileController extends Controller
   /**
    * Finds and displays users Profile entity.
    *
-   * @Route("/", name="profile_show")
-   * @Method("GET")
+   * @Route("/", name="profile_show", methods={"GET", "POST"})
+   * 
    */
     public function indexAction(Request $request, $campaignUrl, LoggerInterface $logger)
     {

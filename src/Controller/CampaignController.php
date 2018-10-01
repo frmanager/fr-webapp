@@ -5,7 +5,6 @@ namespace App\Controller;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 use App\Utils\CampaignHelper;
 use App\Entity\Classroom;
@@ -98,8 +97,8 @@ class CampaignController extends Controller
   /**
    * Displays Coming Soon Splash Page
    *
-   * @Route("/coming_soon", name="campaign_splash")
-   * @Method("GET")
+   * @Route("/coming_soon", name="campaign_splash", methods={"GET"})
+   * 
    */
   public function spashAction($campaignUrl, LoggerInterface $logger)
   {
@@ -119,8 +118,7 @@ class CampaignController extends Controller
   /**
    * Displays Coming Soon Splash Page
    *
-   * @Route("/thank_you", name="campaign_end_splash")
-   * @Method("GET")
+   * @Route("/thank_you", name="campaign_end_splash", methods={"GET"})
    */
   public function endSpashAction($campaignUrl, LoggerInterface $logger)
   {
@@ -155,8 +153,8 @@ class CampaignController extends Controller
     /**
      * Finds and displays a Campaign entity.
      *
-     * @Route("/show/{id}", name="campaign_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="campaign_show", methods={"GET"})
+     * 
      */
     public function showAction(Campaign $campaign, LoggerInterface $logger)
     {

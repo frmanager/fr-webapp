@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use PayPal\Api\Amount;
 use PayPal\Api\Details;
 use PayPal\Api\Address;
@@ -45,9 +44,8 @@ class DonationController extends Controller
 
 
   /**
-   * @Route("/", name="donation_index")
+   * @Route("/", name="donation_index", methods={"GET", "POST"})
    *
-   * @Method({"GET", "POST"})
    */
   public function indexAction(Request $request, $campaignUrl, LoggerInterface $logger)
   {
