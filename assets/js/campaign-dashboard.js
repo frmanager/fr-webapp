@@ -3,12 +3,8 @@
 import $ from 'jquery';
 // JS is equivalent to the normal "bootstrap" package
 // no need to set this to a variable, just require it
-require('popper.js');
-require('tether');
-require('bootstrap');
-require('pace');
-require('perfect-scrollbar');
-require('datatables.net-bs4');
+
+import 'datatables.net-bs4';
 
 
 //LEGACY -->

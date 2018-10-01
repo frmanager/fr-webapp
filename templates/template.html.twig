@@ -90,6 +90,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
  {% if campaign is defined %}
    <a class="navbar-brand d-none d-sm-block" href="{{ path('campaign_index', {'campaignUrl': campaignUrl}) }}">{{campaign.name}}</a>
+   <a class="navbar-brand d-block d-sm-none" href="{{ path('campaign_index', {'campaignUrl': campaignUrl}) }}">Home</a>   
  {% endif %}
   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -98,10 +99,6 @@
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
     {% if campaign is defined and not notStarted and not isEnded %}
 		<ul class="navbar-nav mr-auto">
-  			<li class="nav-item{% if app.request.attributes.get('_route')=='campaign_index'%} active{% endif %}">
-  			     <a href="{{ path('campaign_dashboard', {'campaignUrl': campaignUrl}) }}" class="nav-link">
-  			     <i class="fas fa-tachometer-alt" aria-hidden="true"></i> Home </a>
-  			</li>
         <li class="nav-item{% if app.request.attributes.get('_route')=='donation_index'%} active{% endif %}">
           {% if app.request.attributes.get('_route') == 'team_show' %}
             <a href="{{ path('donation_index', {'campaignUrl':campaign.url, 'teamUrl':team.url, 'type':'team'}) }}" class="nav-link">Donate</a>
@@ -117,6 +114,8 @@
           Rankings <span class="caret"></span>
           </a>
             <div class="dropdown-menu" aria-labelledby="drop2">
+        			<a class="dropdown-item {% if app.request.attributes.get('_route')=='campaign_dashboard'%} active {% endif %}" href="{{ path('campaign_dashboard', {'campaignUrl': campaignUrl}) }}">
+        			<i class="fas fa-tachometer-alt" aria-hidden="true"></i> Dashboard</a>
         			<a class="dropdown-item {% if app.request.attributes.get('_route')=='grade_index'%} active {% endif %}" href="{{ path('grade_index', {'campaignUrl': campaignUrl}) }}">
         			<span class="fa fa-graduation-cap"></span> Grade Rankings</a>
         			<a class="dropdown-item {% if app.request.attributes.get('_route')=='classroom_index'%} active {% endif %}" href="{{ path('classroom_index', {'campaignUrl': campaignUrl}) }}">
