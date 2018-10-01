@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Campaignaward;
+use App\Entity\Campaign;
 use App\Entity\Campaignawardtype;
 use App\Entity\Campaignawardstyle;
 use App\Utils\CampaignHelper;
