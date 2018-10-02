@@ -6,7 +6,7 @@
 <div class="row">
   <div class="col-md-8 offset-md-2">
     <div class="card">
-      <div class="card-block">
+      <div class="card-body">
       <h4 class="card-title">Email Support</h4>
       <hr>
       <form  name="emailSupport" action="{{ path("email_support", {'campaignUrl': campaign.url}) }}" method="post" class="form" role="form">
@@ -15,7 +15,11 @@
           <div class="col-sm-8">
             <label for="username" class="control-label required">Your Email Address</label>
             <div class="input-group">
-             <span class="input-group-addon" id="basic-addon1"><i class="fa fa-at" aria-hidden="true"></i></span>
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="basic-addon">
+                    <i class="fa fa-at" aria-hidden="true"></i>
+                  </span>
+                </div>     
              <input class="form-control" type="text" id="emailSupport_email" placeholder="enter your email" name="emailSupport[email]" value="" required="required"/>
             </div>
           </div>
@@ -40,7 +44,7 @@
         </div>
         </div>
       </form>
-    </div><!-- ./card-block -->
+    </div><!-- ./card-body -->
     </div><!-- ./card -->
   </div><!-- ./col -->
 </div><!-- ./row -->
