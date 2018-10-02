@@ -9,11 +9,11 @@
     <div class="col-sm-4 offset-sm-1">
       <div class="card">
         <img class="card-img-top img-fluid" src="/static/img/FunRun2017-banner.png"/>
-        <div class="card-block">
+        <div class="card-body">
           <h4 class="card-title">Join the Campaign!</h4>
           <p class="text">{{campaign.description|raw}}</p>
         </div>
-        <!-- ./card-block -->
+        <!-- ./card-body -->
       </div>
       <!-- ./card -->
     </div>
@@ -49,9 +49,11 @@
             <div class="col-sm-8">
               <label class="required" for="user_email">Email</label>
               <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">
-                  <i class="fa fa-at" aria-hidden="true"></i>
-                </span>
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="basic-addon">
+                    <i class="fa fa-at" aria-hidden="true"></i>
+                  </span>
+                </div>                
                 <input type="email" id="user_email" name="user[email]" required="required" class="form-control">
               </div>
             </div>
@@ -60,9 +62,11 @@
             <div class="col-sm-8">
               <label class="required" for="user_Password_first">Password</label>
               <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">
-                  <i class="fa fa-key" aria-hidden="true"></i>
-                </span>
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="basic-addon">
+                    <i class="fa fa-key" aria-hidden="true"></i>
+                  </span>
+                </div>                  
                 <input type="password" id="user_Password_first" name="user[Password][first]" required="required" class="form-control">
               </div>
             </div>
@@ -71,9 +75,11 @@
             <div class="col-sm-8">
               <label class="required" for="user_Password_second">Confirm Password</label>
               <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">
-                  <i class="fa fa-key" aria-hidden="true"></i>
-                </span>
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="basic-addon">
+                    <i class="fa fa-key" aria-hidden="true"></i>
+                  </span>
+                </div>                  
                 <input type="password" id="user_Password_second" name="user[Password][second]" required="required" class="form-control">
               </div>
             </div>

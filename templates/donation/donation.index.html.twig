@@ -34,12 +34,16 @@
               <label class="control-label required" for="donation_amount">Donation Amount:
                 <small>U.S. Dollar (USD)</small>
               </label>
-              <div class="input-group col-sm-6">
-                <span class="input-group-addon" id="basic-addon1">
-                  <i class="fa fa-usd" aria-hidden="true"></i>
-                </span>
-                <input type="number" class="form-control form-control-lg" style="text-align:right;" min="0" id="donation_amount" value="{% if donation is null or formData.amount is not defined %}5{% else %}{{ formData.amount }}{% endif %}" name="donation[amount]" required>
-                <span class="input-group-addon" id="basic-addon1">.00</span>
+              <div class="input-group  col-sm-6">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="basic-addon0">
+                    <i class="fas fa-dollar-sign" aria-hidden="true"></i>
+                  </span>
+                </div>
+                <input type="number" class="form-control" style="text-align:right;" min="0" id="donation_amount" value="{% if donation is null or formData.amount is not defined %}5{% else %}{{ formData.amount }}{% endif %}" name="donation[amount]" required>
+                <div class=" input-group-append">
+                  <span class="input-group-text">.00</span>
+                </div>
               </div>
             </div>
           </div>
@@ -55,7 +59,7 @@
                   <div class="form-group">
                     <label class="control-label required" for="donation_classroomID">Select Classroom</label>
                     <div class="input-group col-md-12">
-                      <select id="donation_classroomID" name="donation[classroomID]" class="form-control form-control-lg">
+                      <select id="donation_classroomID" name="donation[classroomID]" class="form-control">
                         <option value="" selected="selected">Select Classroom</option>
                         {% for thisClassroom in classrooms %}
                           <option value="{{thisClassroom.id}}" {% if formData is defined and classroom.id is defined and classroom.id == thisClassroom.id %} selected{% endif %}>{{thisClassroom.grade.name}} - {{thisClassroom.name}}</option>
@@ -68,7 +72,7 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <label class="control-label required" for="donation_studentName">Student Name</label>
-                    <input type="text" id="donation_studentName" class="form-control form-control-lg" value="{% if donation is not empty and formData.studentName is defined %}{{ formData.studentName }}{% endif %}" placeholder="Charles S." name="donation[studentName]">
+                    <input type="text" id="donation_studentName" class="form-control" value="{% if donation is not empty and formData.studentName is defined %}{{ formData.studentName }}{% endif %}" placeholder="Charles S." name="donation[studentName]">
                   </div>
                 </div>
                 <!-- ./column -->
@@ -83,7 +87,7 @@
             {% elseif donationType == "classroom" %}
               <div class="form-group">
                 <label class="control-label required" for="donation_classroomID">Classroom</label>
-                <select id="donation_classroomID" name="donation[classroomID]" class="form-control form-control-lg">
+                <select id="donation_classroomID" name="donation[classroomID]" class="form-control">
                   <option value="" selected="selected">Select Classroom</option>
                   {% for thisClassroom in classrooms %}
                     <option value="{{thisClassroom.id}}" {% if formData is defined and classroom.id is defined and classroom.id == thisClassroom.id %} selected{% endif %}>{{thisClassroom.grade.name}} - {{thisClassroom.name}}</option>
@@ -94,8 +98,8 @@
             {% elseif donationType == "team" %}
               <div class="form-group">
                 <label class="control-label required" for="donation_teamName">Team</label>
-                <input type="text" id="donation_teamName" name="donation[teamName]" class="form-control form-control-lg" readonly value="{{ team.name }}">
-                <input type="hidden" id="donation_teamId" name="donation[teamId]" class="form-control form-control-lg" value="{{ team.id }}">
+                <input type="text" id="donation_teamName" name="donation[teamName]" class="form-control" readonly value="{{ team.name }}">
+                <input type="hidden" id="donation_teamId" name="donation[teamId]" class="form-control" value="{{ team.id }}">
               </div>
               <hr>
             {% endif %}
@@ -108,14 +112,14 @@
           <div class="col-md-6">
             <div class="form-group">
               <label class="control-label required" for="donation_firstName">First Name</label>
-              <input type="text" class="form-control form-control-lg" placeholder="First Name" id="donation_firstName" name="donation[firstName]" value="{% if formData is defined and formData.firstName is defined %}{{ formData.firstName }}{% endif %}" required>
+              <input type="text" class="form-control" placeholder="First Name" id="donation_firstName" name="donation[firstName]" value="{% if formData is defined and formData.firstName is defined %}{{ formData.firstName }}{% endif %}" required>
             </div>
           </div>
           <!-- ./column -->
           <div class="col-md-6">
             <div class="form-group">
               <label class="control-label required" for="donation_lastName">Last Name</label>
-              <input type="text" class="form-control form-control-lg" placeholder="Last Name" id="donation_lastName" name="donation[lastName]" value="{% if formData is defined and formData.lastName is defined %}{{ formData.lastName }}{% endif %}" required>
+              <input type="text" class="form-control" placeholder="Last Name" id="donation_lastName" name="donation[lastName]" value="{% if formData is defined and formData.lastName is defined %}{{ formData.lastName }}{% endif %}" required>
             </div>
           </div>
           <!-- ./column -->
@@ -125,11 +129,13 @@
           <div class="col-md-12">
             <div class="form-group">
               <label class="control-label required" for="donation_email">Email Address</label>
-              <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">
-                  <i class="fa fa-at" aria-hidden="true"></i>
-                </span>
-                <input type="text" class="form-control form-control-lg" id="donation_email" value="{% if formData is defined and formData.email is defined %}{{ formData.email }}{% endif %}" name="donation[email]" required>
+              <div class="input-group ">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="basic-addon">
+                    <i class="fa fa-at" aria-hidden="true"></i>
+                  </span>
+                </div>                  
+                <input type="text" class="form-control" id="donation_email" value="{% if formData is defined and formData.email is defined %}{{ formData.email }}{% endif %}" name="donation[email]" required>
               </div>
             </div>
           </div>
@@ -142,7 +148,7 @@
               <label class="control-label" for="donation_message">Include a Message with your donation
                 <sup>(optional)</sup>
               </label>
-              <textarea type="text" class="form-control form-control-lg text-left" maxlength="500" id="donation_message" rows="3" name="donation[message]">{% if formData is defined and formData.message is defined %}{{ formData.message }}{% endif %}</textarea>
+              <textarea type="text" class="form-control  text-left" maxlength="500" id="donation_message" rows="3" name="donation[message]">{% if formData is defined and formData.message is defined %}{{ formData.message }}{% endif %}</textarea>
             </div>
           </div>
           <!-- ./column -->
@@ -180,21 +186,21 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label class="control-label required" for="donation_cc_cardholderFirstName">First Name</label>
-                    <input type="text" class="form-control form-control-lg" id="donation_cc_cardholderFirstName" name="donation[cc][cardholderFirstName]">
+                    <input type="text" class="form-control" id="donation_cc_cardholderFirstName" name="donation[cc][cardholderFirstName]">
                   </div>
                 </div>
                 <!-- ./column -->
                 <div class="col-md-5">
                   <div class="form-group">
                     <label class="control-label required" for="donation_cc_cardholderLastName">Last Name</label>
-                    <input type="text" class="form-control form-control-lg" id="donation_cc_cardholderLastName" name="donation[cc][cardholderLastName]">
+                    <input type="text" class="form-control" id="donation_cc_cardholderLastName" name="donation[cc][cardholderLastName]">
                   </div>
                 </div>
                 <!-- ./column -->
                 <div class="col-md-4">
                   <div class="form-group">
                     <label class="control-label required" for="donation_cc_country">Country</label>
-                    <select id="donation_cc_country" name="donation[cc][country]" class="form-control form-control-lg">
+                    <select id="donation_cc_country" name="donation[cc][country]" class="form-control">
                       <option value="US" selected="selected">United States</option>
                       <option value="AF">Afghanistan</option>
                       <option value="AX">Aland Islands</option>
@@ -458,14 +464,14 @@
                 <div class="col-md-8">
                   <div class="form-group">
                     <label class="control-label required" for="donation_cc_number">Card Number</label>
-                    <input type="number" class="form-control form-control-lg" id="donation_cc_number" name="donation[cc][number]">
+                    <input type="number" class="form-control" id="donation_cc_number" name="donation[cc][number]">
                   </div>
                 </div>
                 <!-- ./column -->
                 <div class="col-md-4">
                   <div class="form-group">
                     <label class="control-label required" for="donation_cc_zipCode">Zip code</label>
-                    <input type="text" maxlength="20" class="form-control form-control-lg" id="donation_cc_zipCode" name="donation[cc][zipCode]">
+                    <input type="text" maxlength="20" class="form-control" id="donation_cc_zipCode" name="donation[cc][zipCode]">
                   </div>
                 </div>
                 <!-- ./column -->
@@ -483,7 +489,7 @@
                     <label class="control-label required" for="donation_cc_expirationMonth">Expiration Date</label>
                     <div class="form-group">
                       <div class="col-sm-5" style="display: inline-block;">
-                        <select id="donation_cc_expirationMonth" name="donation[cc][expirationMonth]" class="form-control form-control-lg">
+                        <select id="donation_cc_expirationMonth" name="donation[cc][expirationMonth]" class="form-control">
                           <option value="0" selected="selected">MM</option>
                           <option value="1">Jan</option>
                           <option value="2">Feb</option>
@@ -503,7 +509,7 @@
                         <p>/</p>
                       </div>
                       <div class="col-sm-5" style="display: inline-block;">
-                          <select id="donation_cc_expirationYear" name="donation[cc][expirationYear]" class="form-control form-control-lg">
+                          <select id="donation_cc_expirationYear" name="donation[cc][expirationYear]" class="form-control">
                             <option value="0" selected="selected">YYYY</option>
                             <option value="2017">2017</option>
                             <option value="2018">2018</option>
@@ -522,16 +528,20 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <label class="control-label required" for="donation_cc_cvv">cvv code</label>
-                    <div class="input-group">
-                      <span
-                        class="input-group-addon"
+                    <div class="input-group ">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" 
                         id="basic-addon1"
                         data-toggle="tooltip"
                         data-placement="top"
                         title="CVV is a 3 or 4 digit code embossed or imprinted on the reverse side of Visa, MasterCard and Discover cards and on the front of American Express cards.">
-                        <i class="fa fa-credit-card" aria-hidden="true"></i>
-                    </span>
-                    <input type="text" maxlength="4" class="form-control form-control-lg" id="donation_cc_cvv" name="donation[cc][cvv]">
+                          <i class="fa fa-at" aria-hidden="true"></i>
+                        </span>
+                      </div>   
+
+
+
+                    <input type="text" maxlength="4" class="form-control" id="donation_cc_cvv" name="donation[cc][cvv]">
                   </div>
                 </div>
               </div>
@@ -568,7 +578,7 @@
           <div class="col">
             <div class="card my-1">
               <img src="{{ profileImageUrl }}" alt="Family Image" class="card-img-top img-fluid">
-              <div class="card-block">
+              <div class="card-body">
                 <h4 class="card-title">{{ team.name }}</h4>
                 <p class="card-text">{{ team.description[:100] }}...</p>
                 <p class="card-text lead" style="margin-bottom:5px;">$0</p>
@@ -581,7 +591,7 @@
                   <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="{{ 0 / team.fundingGoal * 100 }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ 0 / team.fundingGoal * 100 }}%"></div>
                 </div>
               </div>
-              <!-- ./card-block -->
+              <!-- ./card-body -->
             </div>
             <!-- ./card -->
           </div>
@@ -597,7 +607,7 @@
               {{donationType|capitalize}}
               Donation
             </div>
-            <div class="card-block">
+            <div class="card-body">
               {% if donationType == "campaign" %}
                 <p>This donation will be made to the general
                   {{ campaign.name }}
@@ -635,7 +645,7 @@
                 <a href="{{ path('team_index', {'campaignUrl': campaign.url }) }}" class="btn btn-info btn-sm btn-block">Donate to a Team</a>
               {% endif %}
             </div>
-            <!-- ./card-block -->
+            <!-- ./card-body -->
           </div>
           <!-- ./card -->
         </div>
@@ -646,12 +656,12 @@
         <div class="col">
           <div class="card my-1">
             <div class="card-header">Secure Donations</div>
-            <div class="card-block">
+            <div class="card-body">
               <p>We take security seriously at FRManager, which is why we have partnered with PayPal to provide the upmost level of security for your donation.</p>
               <!-- PayPal Logo --><table border="0" cellpadding="10" cellspacing="0" align="center"><tr><td align="center"></td></tr><tr><td align="center"><a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" onclick="javascript:window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700'); return false;">
               <img src="https://www.paypalobjects.com/digitalassets/c/website/marketing/na/us/logo-center/9_bdg_secured_by_pp_2line.png" border="0" alt="Secured by PayPal"></a></td></tr></table><!-- PayPal Logo -->
             </div>
-            <!-- ./card-block -->
+            <!-- ./card-body -->
           </div>
           <!-- ./card -->
         </div>

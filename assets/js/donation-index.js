@@ -1,10 +1,7 @@
 // ...
 
 const $ = require('jquery');
-require('popper.js')
-require('tether')
-require('pace');
-require('bootstrap');
+import 'bootstrap/js/dist/collapse'
 
 import {Spinner} from '../js/libs/spin.js';
 import '../css/spin.css';
