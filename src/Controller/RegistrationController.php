@@ -6,6 +6,7 @@ use Psr\Log\LoggerInterface;
 use App\Form\UserType;
 use App\Entity\User;
 use App\Entity\Team;
+use App\Entity\Classroom;
 use App\Entity\Grade;
 use App\Entity\TeamStudent;
 use App\Entity\TeamType;
@@ -412,7 +413,7 @@ class RegistrationController extends Controller
                   $classroom = $em->getRepository(Classroom::class)->find($student['classroomID']);
                   $teamStudent->setTeam($team);
                   $teamStudent->setClassroom($classroom);
-                  $teamStudent->setGrade($em->getRepository(Grade::user)->find($classroom->getGrade()));
+                  $teamStudent->setGrade($em->getRepository(Grade::class)->find($classroom->getGrade()));
                   $teamStudent->setName($student['name']);
                   $teamStudent->setCreatedBy($this->get('security.token_storage')->getToken()->getUser());
                   $em->persist($teamStudent);

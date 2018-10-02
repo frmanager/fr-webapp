@@ -44,13 +44,6 @@ class Campaignawardstyle
      * @ORM\OneToMany(targetEntity="Campaignaward", mappedBy="campaignawardstyle", cascade={"remove"})
      */
     private $campaignawards;
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->campaignawards = new \ArrayCollection();
-    }
 
     /**
      * Get id

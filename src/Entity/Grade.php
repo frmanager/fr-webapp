@@ -78,13 +78,6 @@ class Grade
     {
         return $this->name;
     }
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        $this->classrooms = new \ArrayCollection();
-    }
 
     /**
      * Add classroom.

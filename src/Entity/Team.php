@@ -149,7 +149,6 @@ class Team
     */
    public function __construct()
    {
-       $this->donations = new \ArrayCollection();
        $this->createdAt= new \DateTime();
        $this->updatedAt= new \DateTime();
    }

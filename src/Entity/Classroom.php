@@ -163,15 +163,6 @@ class Classroom
     {
         return $this->teacherName;
     }
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        $this->students = new \ArrayCollection();
-        $this->createdAt= new \DateTime();
-        $this->updatedAt= new \DateTime();
-    }
 
     /**
      * @ORM\PreUpdate()

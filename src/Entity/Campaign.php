@@ -193,22 +193,6 @@ Class Campaign
    */
   private $students;
 
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->campaignUsers = new \ArrayCollection();
-        $this->classrooms = new \ArrayCollection();
-        $this->donations = new \ArrayCollection();
-        $this->campaignawards = new \ArrayCollection();
-        $this->students = new \ArrayCollection();
-        $this->teams = new \ArrayCollection();
-        $this->createdAt= new \DateTime();
-        $this->updatedAt= new \DateTime();
-    }
-
-
    /**
     * @ORM\PreUpdate()
     */
