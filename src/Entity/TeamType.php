@@ -39,15 +39,7 @@ class TeamType
      * @ORM\OneToMany(targetEntity="Team", mappedBy="teamType")
      */
     private $teams;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->teams = new \ArrayCollection();
-    }
-
+    
     /**
      * Get id
      *

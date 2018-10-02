@@ -30,14 +30,6 @@ class UserStatus
     private $users;
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->User = new \ArrayCollection();
-    }
-
-    /**
      * Get id
      *
      * @return integer
