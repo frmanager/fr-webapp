@@ -18,6 +18,8 @@ parameters:
     team_profile_photos_directory: '%kernel.project_dir%/public/uploads/team_profile_photos'
     temp_upload_directory: '%kernel.project_dir%/public/uploads/temp'
 
+    protected_upload_directory: '%kernel.project_dir%/protected_uploads'
+    
 services:
     # default configuration for services in *this* file
     _defaults:
