@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 // DON'T forget this use statement!!!
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -127,6 +127,13 @@ Class Campaign
   private $paypalEmail;
 
   /**
+   * @var string
+   *
+   * @ORM\Column(type="string", length=100, nullable=true)
+   */
+  private $schoolCoordinatorEmail;
+
+  /**
    *  @var boolean
    *
    * @ORM\Column(type="boolean", length=100)
@@ -192,6 +199,22 @@ Class Campaign
    * @ORM\OneToMany(targetEntity="Student", mappedBy="campaign", cascade={"remove"})
    */
   private $students;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->campaignUsers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->classrooms = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->donations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->campaignawards = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->students = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->teams = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->createdAt= new \DateTime();
+        $this->updatedAt= new \DateTime();
+    }
+
 
    /**
     * @ORM\PreUpdate()
@@ -408,7 +431,7 @@ Class Campaign
     /**
      * Get campaignUsers
      *
-     * @return \Collection
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCampaignUsers()
     {
@@ -442,7 +465,7 @@ Class Campaign
     /**
      * Get classrooms
      *
-     * @return \Collection
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getClassrooms()
     {
@@ -476,7 +499,7 @@ Class Campaign
     /**
      * Get donations
      *
-     * @return \Collection
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getDonations()
     {
@@ -510,7 +533,7 @@ Class Campaign
     /**
      * Get campaignawards
      *
-     * @return \Collection
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCampaignawards()
     {
@@ -544,7 +567,7 @@ Class Campaign
     /**
      * Get students
      *
-     * @return \Collection
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getStudents()
     {
@@ -650,7 +673,7 @@ Class Campaign
     /**
      * Get grades
      *
-     * @return \Collection
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getGrades()
     {
@@ -721,6 +744,34 @@ Class Campaign
         return $this->onlineFlag;
     }
 
+
+    /**
+     * Set schoolCoordinatorEmail
+     *
+     * @param string $schoolCoordinatorEmail
+     *
+     * @return Campaign
+     */
+    public function setSchoolCoordinatorEmail($schoolCoordinatorEmail)
+    {
+        $this->schoolCoordinatorEmail = $schoolCoordinatorEmail;
+
+        return $this;
+    }
+
+
+    /**
+     * Get schoolCoordinatorEmail
+     *
+     * @return string
+     */
+    public function getSchoolCoordinatorEmail()
+    {
+        return $this->schoolCoordinatorEmail;
+    }   
+
+
+
     /**
      * Set paypalEmail
      *
@@ -735,6 +786,7 @@ Class Campaign
         return $this;
     }
 
+    
     /**
      * Get paypalEmail
      *
@@ -916,7 +968,7 @@ Class Campaign
     /**
      * Get teams
      *
-     * @return \Collection
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getTeams()
     {
@@ -950,7 +1002,7 @@ Class Campaign
     /**
      * Get donationDatabases
      *
-     * @return \Collection
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getDonationDatabases()
     {
