@@ -13,7 +13,7 @@ then
     echo "Environment set to test"
 
     echo "Setting PHP Paths to support Dreamhost Shared"
-    export PATH=/usr/local/php71/bin:$PATH
+    export PATH=/usr/local/php72/bin:$PATH
     export PATH=/home/$USER/.php/composer:$PATH
 
     echo "Grabbing latest from Repo and stashing changes"    
