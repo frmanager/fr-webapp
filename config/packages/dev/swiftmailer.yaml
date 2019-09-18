@@ -2,3 +2,4 @@
 swiftmailer:
     delivery_addresses: ['davidlarrimore@gmail.com']
     logging: true
+    spool: { type: 'memory' }
