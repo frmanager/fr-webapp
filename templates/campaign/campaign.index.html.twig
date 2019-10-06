@@ -32,12 +32,24 @@
               </div>
           </div>
           <p>Raised by {{ totals.total_donations }} donors</p>
+          {% if not isEnded and not notStarted %} 
           <p style="text-align:center;vertical-align: middle;">
               <div id="track" data-countdown="{{ campaign.endDate|date('Y/m/d') }}"></div>
           </p>
           <hr>
           <p><a href="{{ path('donation_index', {'campaignUrl':campaign.url}) }}" class="btn btn-primary btn-lg btn-block">DONATE NOW!</a></p>
           <p><a href="http://www.facebook.com/share.php?u={{ app.request.uri }}" target="_blank" class="btn btn-info btn-block"><i class="fa fa-facebook-official" aria-hidden="true"></i> Share on Facebook</a></p>
+          {% elseif isEnded %}
+          <hr>
+          <p>
+              This campaign has officially ended. Thank you for all of your support!
+          </p>     
+          {% elseif notStarted %}
+          <hr>
+          <p>
+              This campaign has not officially started yet, so check back soon!
+          </p>               
+          {% endif %}
         </div>
       </div>
       <hr>
