@@ -141,3 +141,11 @@ Until things get fixed, the vendor/paypal/rest-api-sdk-php/lib/PayPal/Core/PayPa
 Comment out:
 
   //CURLOPT_SSL_CIPHER_LIST => 'TLSv1:TLSv1.2'
+
+
+
+## Using Homestead
+
+Start by following [these instructions](https://symfony.com/doc/current/setup/homestead.html). Once Completed, Copy over the Homestead.yaml, user-customizations.sh, and an export of the frmanager database (ensure it is called frmanager.sql, otherwise nothing will happen!!!!). Also, check paths to ensure things are the same.
+
+Lastly put the .env and app/config/parameters.yml files in place.
